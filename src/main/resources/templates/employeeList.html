@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>직원 목록</title>
+</head>
+<body>
+<h1>직원 목록</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>사원번호</th>
+        <th>이름</th>
+        <th>주민번호</th>
+        <th>직급</th>
+        <th>직원 구분</th>
+        <th>부서</th>
+        <th>입사일</th>
+        <th>연락처</th>
+        <th>이메일</th>
+        <th>생년월일</th>
+        <th>주소</th>
+        <th>경력</th>
+        <th>계좌 번호</th>
+        <th>은행</th>
+    </tr>
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.employeeId}"></td>
+        <td th:text="${employee.employeeNumber}"></td>
+        <td th:text="${employee.name}"></td>
+        <td th:text="${employee.ssn}"></td>
+        <td th:text="${employee.position}"></td>
+        <td th:text="${employee.status}"></td>
+        <td th:text="${employee.department}"></td>
+        <td th:text="${employee.hireDate}"></td>
+        <td th:text="${employee.contactInfo}"></td>
+        <td th:text="${employee.email}"></td>
+        <td th:text="${employee.birthDate}"></td>
+        <td th:text="${employee.address}"></td>
+        <td th:text="${employee.experience}"></td>
+        <td th:text="${employee.accountNumber}"></td>
+        <td th:text="${employee.bank}"></td>
+    </tr>
+</table>
+<a href="/employee/new">직원 등록하기</a>
+</body>
+</html>

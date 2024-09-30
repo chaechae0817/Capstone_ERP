@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>직원 등록</title>
+</head>
+<body>
+<h1>직원 등록</h1>
+<form action="#" th:action="@{/employee}" th:object="${employee}" method="post">
+  <label for="name">이름:</label>
+  <input type="text" id="name" th:field="*{name}" required />
+
+  <label for="ssn">주민번호:</label>
+  <input type="text" id="ssn" th:field="*{ssn}" required />
+
+  <label for="position">직급:</label>
+  <input type="text" id="position"th:field="*{position}" required />
+
+  <label for="status">직원 구분:</label>
+  <select id="status" th:field="*{status}" required>
+    <option value="정규">정규</option>
+    <option value="계약">계약</option>
+    <option value="퇴사">퇴사</option>
+  </select>
+
+  <label for="department">부서:</label>
+  <input type="text" id="department" th:field="*{department}" required />
+
+  <label for="hireDate">입사일:</label>
+  <input type="date" id="hireDate" th:field="*{hireDate}" required />
+
+  <label for="contactInfo">연락처:</label>
+  <input type="text" id="contactInfo"  th:field="*{contactInfo}" required />
+
+  <label for="email">이메일:</label>
+  <input type="email" id="email" th:field="*{email}" required />
+
+  <label for="birthDate">생년월일:</label>
+  <input type="date" id="birthDate" th:field="*{birthDate}" required />
+
+  <label for="address">주소:</label>
+  <input type="text" id="address" th:field="*{address}" required />
+
+  <label for="experience">경력:</label>
+  <input type="text" id="experience" th:field="*{experience}" />
+
+  <label for="accountNumber">계좌 번호:</label>
+  <input type="text" id="accountNumber" th:field="*{accountNumber}" />
+
+  <label for="bank">은행:</label>
+  <input type="text" id="bank" th:field="*{bank}" />
+
+  <button type="submit">등록</button>
+</form>
+<a href="/list">직원 목록으로 돌아가기</a>
+</body>
+</html>
