@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
   <title>직원 등록</title>
-  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="stylesheet" type="text/css" href="/formstyle.css" />
 </head>
 <body>
 <h1>직원 등록</h1>
@@ -14,7 +14,13 @@
   <input type="text" id="ssn" th:field="*{ssn}" required />
 
   <label for="position">직급:</label>
-  <input type="text" id="position"th:field="*{position}" required />
+  <select id="position"th:field="*{position}" required />
+    <option value="신입">신입</option>
+    <option value="대리">대리</option>
+    <option value="과장">과장</option>
+    <option value="차장">차장</option>
+    <option value="부장">부장</option>
+  </select>
 
   <label for="status">직원 구분:</label>
   <select id="status" th:field="*{status}" required>
@@ -24,7 +30,12 @@
   </select>
 
   <label for="department">부서:</label>
-  <input type="text" id="department" th:field="*{department}" required />
+  <select id="department" th:field="*{department}" required />
+    <option value="인사부">인사부</option>
+    <option value="개발부">개발부</option>
+    <option value="영업부">영업부</option>
+    <option value="관리부">관리부</option>
+  </select>
 
   <label for="hireDate">입사일:</label>
   <input type="date" id="hireDate" th:field="*{hireDate}" required />
@@ -48,7 +59,13 @@
   <input type="text" id="accountNumber" th:field="*{accountNumber}" />
 
   <label for="bank">은행:</label>
-  <input type="text" id="bank" th:field="*{bank}" />
+  <select id="bank" th:field="*{bank}" />
+  <option value="국민은행">국민은행</option>
+  <option value="신한은행">신한은행</option>
+  <option value="하나은행">하나은행</option>
+  <option value="우리은행">우리은행</option>
+  <option value="토스뱅크">토스뱅크</option>
+  </select>
 
   <button type="submit">등록</button>
 </form>
