@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/attenstyle.css">
+    <title>근태 항목 등록</title>
+</head>
+<body>
+<div class="form-container">
+    <h2>근태 항목 등록</h2>
+    <form action="/attendance/create" method="post">
+        <!-- 근태 코드 -->
+        <label for="attendanceCode">근태 코드</label>
+        <input type="text" id="attendanceCode" name="attendanceCode" required>
+
+        <!-- 근태 명칭 -->
+        <label for="attendanceName">근태 명칭</label>
+        <input type="text" id="attendanceName" name="attendanceName" required>
+
+        <!-- 근태 그룹 -->
+        <label for="attendanceGroup">근태 그룹</label>
+        <input type="text" id="attendanceGroup" name="attendanceGroup" required>
+
+        <!-- 근태 유형 -->
+        <label for="attendanceType">근태 유형</label>
+        <select id="attendanceType" name="attendanceType" required>
+            <option value="basic">기본</option>
+            <option value="vacation">휴가</option>
+            <option value="attendance">출/퇴근</option>
+            <option value="reflectionStandard">출/퇴근 반영기준</option>
+        </select>
+
+        <!-- 등록 버튼 -->
+        <button type="submit">등록하기</button>
+    </form>
+</div>
+</body>
+</html>

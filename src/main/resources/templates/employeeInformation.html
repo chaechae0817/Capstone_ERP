@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>직원 정보</title>
+    <link rel="stylesheet" type="text/css" href="/liststyle.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>메뉴</h2>
+        <ul>
+            <li><a href="/hrm">인사관리</a></li>
+            <li><a href="/pay">급여관리</a></li>
+            <li><a href="/vac">휴가관리</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>직원 상세 정보</h1>
+        <div class="details-wrapper">
+            <div class="details-container">
+                <div class="detail-row"><span class="detail-label">ID:</span> <span th:text="${employee.employeeId}"></span></div>
+                <div class="detail-row"><span class="detail-label">이름:</span> <span th:text="${employee.name}"></span></div>
+                <div class="detail-row"><span class="detail-label">사원번호:</span> <span th:text="${employee.employeeNumber}"></span></div>
+                <div class="detail-row"><span class="detail-label">주민번호:</span> <span th:text="${employee.ssn}"></span></div>
+                <div class="detail-row"><span class="detail-label">직급:</span> <span th:text="${employee.position}"></span></div>
+                <div class="detail-row"><span class="detail-label">부서:</span> <span th:text="${employee.department}"></span></div>
+                <div class="detail-row"><span class="detail-label">입사일:</span> <span th:text="${employee.hireDate}"></span></div>
+                <div class="detail-row"><span class="detail-label">연락처:</span> <span th:text="${employee.contactInfo}"></span></div>
+                <div class="detail-row"><span class="detail-label">이메일:</span> <span th:text="${employee.email}"></span></div>
+                <div class="detail-row"><span class="detail-label">생년월일:</span> <span th:text="${employee.birthDate}"></span></div>
+                <div class="detail-row"><span class="detail-label">주소:</span> <span th:text="${employee.address}"></span></div>
+                <div class="detail-row"><span class="detail-label">경력:</span> <span th:text="${employee.experience}"></span></div>
+                <a href="/hrm" class="button">직원 목록보기</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
