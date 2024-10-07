@@ -12,10 +12,17 @@ import com.erp.techInovate.techInovate.service.EmployeeService;
 public class EmployeeController {
     private final EmployeeService employeeService;
 
-    @GetMapping("/list")
+    @GetMapping("/hrm")
     public String getEmployees(Model model){
         model.addAttribute("employees",employeeService.getAllEmployees());
         return "employeeList";
+    }
+    // 특정 직원의 상세 페이지
+    @GetMapping("/employee/{id}")
+    public String getEmployeeDetails(@PathVariable("id") Long id, Model model) {
+        EmployeeEntity employee = employeeService.getEmployeeById(id);
+        model.addAttribute("employee", employee);
+        return "employeeInformation"; // employee-details.html 파일로 이동
     }
 
     @GetMapping("/employee/new")

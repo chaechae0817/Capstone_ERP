@@ -11,7 +11,7 @@
     <ul>
         <li><a href="/hrm">인사관리</a></li>
         <li><a href="/pay">급여관리</a></li>
-        <li><a href="/vac">휴가관리</a></li>
+        <li><a href="/vac">근태관리</a></li>
 
     </ul>
 </div>
@@ -37,7 +37,8 @@
     <tr th:each="employee : ${employees}">
         <td th:text="${employee.employeeId}"></td>
         <td th:text="${employee.employeeNumber}"></td>
-        <td th:text="${employee.name}"></td>
+        <!--<td th:text="${employee.name}"></td>-->
+        <td><a th:href="@{/employee/{id}(id=${employee.employeeId})}" th:text="${employee.name}"></a></td>
         <td th:text="${employee.ssn}"></td>
         <td th:text="${employee.position}"></td>
         <td th:text="${employee.status}"></td>

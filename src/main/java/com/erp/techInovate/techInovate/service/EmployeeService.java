@@ -13,6 +13,11 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    public EmployeeEntity getEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("직원을 찾을 수 없습니다."));
+    }
+
     public List<EmployeeEntity> getAllEmployees() {
         return employeeRepository.findAll();
     }
