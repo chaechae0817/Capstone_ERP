@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>퇴사자 목록</title>
+</head>
+<body>
+<h1>퇴사자 목록</h1>
+<table>
+    <tr>
+        <th>이름</th>
+        <th>전화번호</th>
+        <th>직급</th>
+        <th>부서</th>
+        <th>퇴사일</th>
+        <th>입사일</th>
+        <th>작업</th> <!-- 작업 열 추가 -->
+    </tr>
+    <tr th:each="resignation : ${resignations}">
+        <td>
+            <a th:href="@{/resignation/manage(resignationId=${resignation.resignationId})}" th:text="${resignation.employee.name}"></a>
+        </td>
+        <td th:text="${resignation.employee.contactInfo}"></td>
+        <td th:text="${resignation.lastPosition}"></td>
+        <td th:text="${resignation.lastDepartment}"></td>
+        <td th:text="${resignation.resignationDate}"></td>
+        <td th:text="${resignation.employee.hireDate}"></td>
+    </tr>
+</table>
+</body>
+</html>

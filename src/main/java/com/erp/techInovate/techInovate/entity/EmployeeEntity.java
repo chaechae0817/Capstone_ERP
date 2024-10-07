@@ -48,10 +48,21 @@ public class EmployeeEntity {
     private String bank; // 은행
 
 
-    @PrePersist
+    @PostPersist
     public void generateEmployeeNumber() {
+        // employeeId가 설정된 후에 사원번호를 생성할 수 있도록 함
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMM");
         String yearMonth = hireDate.format(formatter);
-        this.employeeNumber = yearMonth + this.employeeId; // employeeId는 아직 생성되지 않았으므로 나중에 설정
+        this.employeeNumber = yearMonth + this.employeeId; // employeeId는 이제 존재하므로 올바르게 설정됨
+    }
+
+    // 추가: 업데이트 시 employeeNumber가 사라지지 않도록 방지
+    @PreUpdate
+    public void retainEmployeeNumber() {
+        if (this.employeeNumber == null || this.employeeNumber.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMM");
+            String yearMonth = hireDate.format(formatter);
+            this.employeeNumber = yearMonth + this.employeeId; // employeeId가 존재하므로 올바르게 설정됨
+        }
     }
 }
