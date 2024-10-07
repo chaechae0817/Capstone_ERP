@@ -5,6 +5,7 @@
   <link rel="stylesheet" type="text/css" href="/formstyle.css" />
 </head>
 <body>
+</div>
 <h1>직원 등록</h1>
 <form action="#" th:action="@{/employee}" th:object="${employee}" method="post">
   <label for="name">이름:</label>
@@ -31,10 +32,15 @@
 
   <label for="department">부서:</label>
   <select id="department" th:field="*{department}" required />
-    <option value="인사부">인사부</option>
-    <option value="개발부">개발부</option>
-    <option value="영업부">영업부</option>
-    <option value="관리부">관리부</option>
+    <option value="인사1팀">인사 1팀</option>
+    <option value="인사2팀">인사 2팀</option>
+    <option value="개발1팀">개발 1팀</option>
+    <option value="개발2팀">개발 2팀</option>
+    <option value="전산1팀">전산 1팀</option>
+    <option value="고객관리팀">고객관리팀</option>
+    <option value="국내영업팀">국내영업팀</option>
+    <option value="총무팀">총무팀</option>
+    <option value="경리팀">경리팀</option>
   </select>
 
   <label for="hireDate">입사일:</label>
@@ -65,6 +71,8 @@
   <option value="하나은행">하나은행</option>
   <option value="우리은행">우리은행</option>
   <option value="토스뱅크">토스뱅크</option>
+  <option value="기업은행">기업은행</option>
+  <option value="카카오뱅크">카카오뱅크</option>
   </select>
 
   <button type="submit">등록</button>

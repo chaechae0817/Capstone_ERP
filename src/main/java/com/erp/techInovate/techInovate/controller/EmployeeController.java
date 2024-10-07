@@ -20,6 +20,13 @@ public class EmployeeController {
         model.addAttribute("employees",employeeService.getAllEmployees());
         return "employeeList";
     }
+    // 특정 직원의 상세 페이지
+    @GetMapping("/employee/{id}")
+    public String getEmployeeDetails(@PathVariable("id") Long id, Model model) {
+        EmployeeEntity employee = employeeService.getEmployeeById(id);
+        model.addAttribute("employee", employee);
+        return "employeeInformation"; // employee-details.html 파일로 이동
+    }
 
     @GetMapping("/employee/new")
     public String createEmployeeForm(Model model) {
