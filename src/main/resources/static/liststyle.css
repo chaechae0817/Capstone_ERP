@@ -11,13 +11,16 @@ body {
     padding: 20px;
     height: 100vh;
     position: fixed;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
 }
 .sidebar h2 {
     color: white;
     text-align: center;
     margin-bottom: 30px;
+}
+.sidebar li {
+    margin: 5px 0;
 }
 
 .sidebar ul {
@@ -26,7 +29,18 @@ body {
 }
 
 .sidebar ul li {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.open {
+     max-height: 0;
+     overflow: hidden;
+     transition: max-height 0.5s ease;
+     margin-left: 10px;
+     }
+
+.active {
+        max-height: 1000px; /* 열렸을 때의 최대 높이 */
 }
 
 .sidebar ul li a {
@@ -34,7 +48,7 @@ body {
     text-decoration: none;
     font-weight: bold;
     display: block;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
     border-radius: 5px;
 }
@@ -47,9 +61,7 @@ body {
 .content {
     margin-left: 220px; /* 메뉴바의 너비 + 여백 */
     padding: 20px;
-    flex-grow: 1;
 }
-
 
 h1 {
     text-align: center;

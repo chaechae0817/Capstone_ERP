@@ -69,3 +69,8 @@ a {
 a:hover {
     text-decoration: underline;
 }
+#photoPreview {
+            display: none; /* 기본적으로 숨김 */
+            max-width: 300px; /* 최대 너비 설정 */
+            margin-top: 10px; /* 위쪽 여백 */
+        }

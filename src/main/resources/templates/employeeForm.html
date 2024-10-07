@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>직원 등록</h1>
-<form action="#" th:action="@{/employee}" th:object="${employee}" method="post">
+<form action="#" th:action="@{/employee/save}" th:object="${employee}" method="post" enctype="multipart/form-data">
   <label for="name">이름:</label>
   <input type="text" id="name" th:field="*{name}" required />
 
@@ -14,12 +14,11 @@
   <input type="text" id="ssn" th:field="*{ssn}" required />
 
   <label for="position">직급:</label>
-  <select id="position"th:field="*{position}" required />
-    <option value="신입">신입</option>
-    <option value="대리">대리</option>
-    <option value="과장">과장</option>
-    <option value="차장">차장</option>
-    <option value="부장">부장</option>
+  <select id="position" th:field="*{positionId}" required>
+    <option value="">직급 선택</option>
+    <tr th:each="position : ${positions}">
+      <option th:value="${position.id}" th:text="${position.name}"></option>
+    </tr>
   </select>
 
   <label for="status">직원 구분:</label>
@@ -30,18 +29,18 @@
   </select>
 
   <label for="department">부서:</label>
-  <select id="department" th:field="*{department}" required />
-    <option value="인사부">인사부</option>
-    <option value="개발부">개발부</option>
-    <option value="영업부">영업부</option>
-    <option value="관리부">관리부</option>
+  <select id="department" th:field="*{departmentId}" required>
+    <option value="">부서 선택</option>
+    <tr th:each="department : ${departments}">
+      <option th:value="${department.id}" th:text="${department.name}"></option>
+    </tr>
   </select>
 
   <label for="hireDate">입사일:</label>
   <input type="date" id="hireDate" th:field="*{hireDate}" required />
 
   <label for="contactInfo">연락처:</label>
-  <input type="text" id="contactInfo"  th:field="*{contactInfo}" required />
+  <input type="text" id="contactInfo" th:field="*{contactInfo}" required />
 
   <label for="email">이메일:</label>
   <input type="email" id="email" th:field="*{email}" required />
@@ -59,16 +58,40 @@
   <input type="text" id="accountNumber" th:field="*{accountNumber}" />
 
   <label for="bank">은행:</label>
-  <select id="bank" th:field="*{bank}" />
-  <option value="국민은행">국민은행</option>
-  <option value="신한은행">신한은행</option>
-  <option value="하나은행">하나은행</option>
-  <option value="우리은행">우리은행</option>
-  <option value="토스뱅크">토스뱅크</option>
+  <select id="bank" th:field="*{bank}" required>
+    <option value="국민은행">국민은행</option>
+    <option value="신한은행">신한은행</option>
+    <option value="하나은행">하나은행</option>
+    <option value="우리은행">우리은행</option>
+    <option value="토스뱅크">토스뱅크</option>
   </select>
+
+  <label for="photo">사진 업로드:</label>
+  <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)" />
+
+  <!-- 미리보기 이미지 표시 -->
+  <img id="photoPreview" src="" alt="사진 미리보기" />
 
   <button type="submit">등록</button>
 </form>
-<a href="/list">직원 목록으로 돌아가기</a>
+<a href="/employee/list">직원 목록으로 돌아가기</a>
+
+<script>
+  function previewImage(event) {
+      const file = event.target.files[0]; // 선택한 파일
+      const reader = new FileReader(); // FileReader 객체 생성
+
+      reader.onload = function(e) {
+          const img = document.getElementById('photoPreview'); // 미리보기 이미지 요소
+          img.src = e.target.result; // 읽은 파일의 데이터 URL을 이미지의 src에 설정
+          img.style.display = 'block'; // 이미지 요소를 보이도록 설정
+      }
+
+      if (file) {
+          reader.readAsDataURL(file); // 파일을 Data URL로 읽기
+      }
+  }
+</script>
+
 </body>
 </html>

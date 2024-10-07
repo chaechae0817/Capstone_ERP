@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>퇴사 신청 관리</title>
+</head>
+<body>
+<h1>퇴사 신청 관리</h1>
+<table>
+    <tr>
+        <th>사원번호</th>
+        <th>이름</th>
+        <th>퇴사일</th>
+        <th>퇴사 사유</th>
+        <th>비고</th>
+        <th>승인</th>
+        <th>거절</th>
+    </tr>
+    <tr>
+        <td th:text="${resignation.employee.employeeNumber}"></td>
+        <td th:text="${resignation.employee.name}"></td>
+        <td th:text="${resignation.resignationDate}"></td>
+        <td th:text="${resignation.resignationReason}"></td>
+        <td>
+            <form action="#" th:action="@{/resignation/approve/{resignationId}(resignationId=${resignation.resignationId})}" method="post">
+                <input type="text" name="notes" placeholder="비고 입력" />
+                <button type="submit">승인</button>
+            </form>
+        </td>
+        <td>
+            <form action="#" th:action="@{/resignation/reject/{resignationId}(resignationId=${resignation.resignationId})}" method="post">
+                <button type="submit">거절</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
