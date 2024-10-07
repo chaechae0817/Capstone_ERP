@@ -14,7 +14,7 @@
   <input type="text" id="ssn" th:field="*{ssn}" required />
 
   <label for="position">직급:</label>
-  <select id="position"th:field="*{position}" required />
+  <select id="position"th:field="*{position}" required >
     <option value="신입">신입</option>
     <option value="대리">대리</option>
     <option value="과장">과장</option>
@@ -69,6 +69,6 @@
 
   <button type="submit">등록</button>
 </form>
-<a href="/list">직원 목록으로 돌아가기</a>
+<a href="/hrm">직원 목록으로 돌아가기</a>
 </body>
 </html>
