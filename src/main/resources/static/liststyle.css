@@ -11,8 +11,8 @@ body {
     padding: 20px;
     height: 100vh;
     position: fixed;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
 }
 .sidebar h2 {
     color: white;
@@ -47,9 +47,7 @@ body {
 .content {
     margin-left: 220px; /* 메뉴바의 너비 + 여백 */
     padding: 20px;
-    flex-grow: 1;
 }
-
 
 h1 {
     text-align: center;

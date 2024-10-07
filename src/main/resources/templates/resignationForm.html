@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>퇴사 신청</title>
+</head>
+<body>
+<h1>퇴사 신청</h1>
+<form action="#" th:action="@{/resignation/submit}" method="post">
+  <input type="hidden" name="employeeId" th:value="${employee.employeeId}" /> <!-- 직원 ID를 숨은 필드로 추가 -->
+  <label>퇴사일:</label>
+  <input type="date" name="resignationDate" th:value="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}" readonly />
+
+  <label>퇴사 사유:</label>
+  <textarea name="resignationReason" required></textarea>
+
+  <h3>퇴사 당시 정보</h3>
+  <p>직급: <span th:text="${employee.position}"></span></p>
+  <p>부서: <span th:text="${employee.department}"></span></p>
+
+  <button type="submit">퇴사 신청</button>
+</form>
+</body>
+</html>
