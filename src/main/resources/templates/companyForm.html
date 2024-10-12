@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>회사 등록/수정</title>
+</head>
+<body>
+<h1 th:text="${company.id != null} ? '회사 수정' : '회사 등록'"></h1>
+<form th:action="@{${company.id} != null ? '/company/' + ${company.id} : '/company/save'}" method="post">
+    <input type="hidden" th:name="id" th:value="${company.id}"/>
+    <label>회사 이름:</label>
+    <input type="text" th:name="name" th:value="${company.name}" required/><br/>
+    <label>사업장 소재지:</label>
+    <input type="text" th:name="address" th:value="${company.address}"/><br/>
+    <label>연락처:</label>
+    <input type="text" th:name="contactNumber" th:value="${company.contactNumber}"/><br/>
+    <label>이메일:</label>
+    <input type="email" th:name="email" th:value="${company.email}"/><br/>
+    <label>사업자 등록번호:</label>
+    <input type="text" th:name="registrationNumber" th:value="${company.registrationNumber}"/><br/>
+    <label>대표명:</label>
+    <input type="text" th:name="representativeName" th:value="${company.representativeName}"/><br/>
+    <label>업종:</label>
+    <input type="text" th:name="businessType" th:value="${company.businessType}"/><br/>
+    <button type="submit">저장</button>
+</form>
+</body>
+</html>

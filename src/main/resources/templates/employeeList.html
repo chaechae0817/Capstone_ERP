@@ -9,18 +9,61 @@
 <div class="sidebar">
     <h2>메뉴</h2>
     <ul>
-        <li><a href="/hrm">인사관리</a></li>
-        <li><a href="/manage/resignations">퇴사자 명단</a></li>
-        <li><a href="/resignation">퇴사 신청</a></li> <!-- 퇴사 신청 메뉴 추가 -->
-        <li><a href="/vac">근태관리</a></li>
-        <li><a href="/pay">급여관리</a></li>
+<li><a href="#" onclick="toggleMenu(this)">인사관리</a>
+            <ul class="open">
+                <li><a href="#" onclick="toggleMenu(this)">직원 관리</a>
+                    <ul class="open">
+                        <li><a href="/employee/list">직원 목록</a></li>
+                        <li><a href="/employee/new">직원 등록</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMenu(this)">인사 발령</a>
+                    <ul class="open">
+                        <li><a href="#">인사 발령 조회</a></li>
+                        <li><a href="#">인사 발령 입력</a></li>
+                        <li><a href="#">수정(삭제)</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMenu(this)">퇴사자 관리</a>
+                    <ul class="open">
+                        <li><a href="/manage/resignations">퇴사자 명단</a></li>
+                        <li><a href="/resignation">퇴사 신청</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMenu(this)">증명서 관리</a>
+                    <ul class="open">
+                        <li><a href="#">재직 증명서</a></li>
+                        <li><a href="#">경력 증명서</a></li>
+                        <li><a href="#">급여 명세서</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><a href="#" onclick="toggleMenu(this)">회사 관리</a>
+            <ul class="open">
+                <li><a href="#" onclick="toggleMenu(this)">회사</a>
+                    <ul class="open">
+                        <li><a href="/company/list">회사 정보/수정</a></li>
+                        <li><a href="/company/new">회사 정보 등록</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMenu(this)">조직 개편</a>
+                    <ul class="open">
+                        <li><a href="/organization/position/list">직급 관리</a></li>
+                        <li><a href="/organization/department/list">부서 관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+
     </ul>
 </div>
+  
 <div class="content">
     <button id="toggleSearch">검색</button>
 
     <div class="search-fields" id="searchFields">
-        <form id="searchForm" action="/employee_search" method="get">
+        <form id="searchForm" action="/employee/search" method="get">
             <!-- 위치 1: 검색 필드 선택 -->
             <div class="search-field">
                 <label for="searchField">선택:</label>

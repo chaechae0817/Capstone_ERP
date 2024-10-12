@@ -38,14 +38,11 @@ public class EmployeeSpecifications {
     }
 
     // 직급으로 검색
-    public static Specification<EmployeeEntity> hasPosition(String position) {
-        return (root, query, criteriaBuilder) -> {
-            if (position == null || position.isEmpty()) {
-                return criteriaBuilder.conjunction();
-            }
-            return criteriaBuilder.equal(root.get("position"), position);
-        };
+    public static Specification<EmployeeEntity> hasPosition(Long positionId) {
+        return (root, query, criteriaBuilder) ->
+                positionId == null ? null : criteriaBuilder.equal(root.join("position").get("id"), positionId);
     }
+
 
     // 직원 구분으로 검색
     public static Specification<EmployeeEntity> hasStatus(String status) {
@@ -58,14 +55,11 @@ public class EmployeeSpecifications {
     }
 
     // 부서로 검색
-    public static Specification<EmployeeEntity> hasDepartment(String department) {
-        return (root, query, criteriaBuilder) -> {
-            if (department == null || department.isEmpty()) {
-                return criteriaBuilder.conjunction();
-            }
-            return criteriaBuilder.equal(root.get("department"), department);
-        };
+    public static Specification<EmployeeEntity> hasDepartment(Long departmentId) {
+        return (root, query, criteriaBuilder) ->
+                departmentId == null ? null : criteriaBuilder.equal(root.join("department").get("id"), departmentId);
     }
+
 
     // 입사일로 검색
     public static Specification<EmployeeEntity> hasHireDate(LocalDate hireDate) {

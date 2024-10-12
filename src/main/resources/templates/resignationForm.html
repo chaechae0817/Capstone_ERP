@@ -7,6 +7,7 @@
 <h1>퇴사 신청</h1>
 <form action="#" th:action="@{/resignation/submit}" method="post">
   <input type="hidden" name="employeeId" th:value="${employee.employeeId}" /> <!-- 직원 ID를 숨은 필드로 추가 -->
+
   <label>퇴사일:</label>
   <input type="date" name="resignationDate" th:value="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}" readonly />
 
@@ -14,8 +15,8 @@
   <textarea name="resignationReason" required></textarea>
 
   <h3>퇴사 당시 정보</h3>
-  <p>직급: <span th:text="${employee.position}"></span></p>
-  <p>부서: <span th:text="${employee.department}"></span></p>
+  <p>직급: <span th:text="${employee.position.name}"></span></p> <!-- 직급의 name 속성 사용 -->
+  <p>부서: <span th:text="${employee.department.name}"></span></p> <!-- 부서의 name 속성 사용 -->
 
   <button type="submit">퇴사 신청</button>
 </form>
