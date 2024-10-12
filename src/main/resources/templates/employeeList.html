@@ -12,10 +12,44 @@
         <li><a href="/hrm">인사관리</a></li>
         <li><a href="/manage/resignations">퇴사자 명단</a></li>
         <li><a href="/resignation">퇴사 신청</a></li> <!-- 퇴사 신청 메뉴 추가 -->
-        <li><a href="/pay">급여관리</a></li>
         <li><a href="/vac">근태관리</a></li>
-
+        <li><a href="/pay">급여관리</a></li>
     </ul>
+</div>
+<div class="content">
+    <button id="toggleSearch">검색</button>
+
+    <div class="search-fields" id="searchFields">
+        <form id="searchForm" action="/employee_search" method="get">
+            <!-- 위치 1: 검색 필드 선택 -->
+            <div class="search-field">
+                <label for="searchField">선택:</label>
+                <select id="searchField" name="searchField">
+                    <option value="">선택하세요</option>
+                    <option value="name">이름</option>
+                    <option value="ssn">주민번호</option>
+                    <option value="position">직급</option>
+                    <option value="status">직원 구분</option>
+                    <option value="department">부서</option>
+                    <option value="hireDateStr">입사일</option>
+                    <option value="contactInfo">연락처</option>
+                    <option value="email">이메일</option>
+                    <option value="birthDateStr">생년월일</option>
+                    <option value="address">주소</option>
+                    <option value="experience">경력</option>
+                    <option value="accountNumber">계좌번호</option>
+                    <option value="bank">은행</option>
+                </select>
+            </div>
+
+            <!-- 위치 2: 동적으로 생성된 입력 필드 -->
+            <div id="dynamicField" class="search-field">
+                <!-- 동적으로 필드가 생성될 부분 -->
+            </div>
+
+            <button type="submit">검색</button>
+        </form>
+    </div>
 </div>
 <h1>직원 목록</h1>
 <table>
@@ -56,67 +90,60 @@
     </tr>
 </table>
 <a href="/employee/new">직원 등록하기</a>
-        <li><a href="/vac">휴가관리</a></li>
-    </ul>
 </div>
+<script>
+    document.getElementById('searchField').addEventListener('change', function() {
+        var selectedField = this.value;
+        var dynamicFieldDiv = document.getElementById('dynamicField');
+        dynamicFieldDiv.innerHTML = ''; // 기존 필드 초기화
 
-<div class="content">
-    <form action="/employee_search" method="get">
-        <input type="text" name="name" placeholder="이름" />
-        <input type="text" name="ssn" placeholder="주민번호" />
-        <input type="text" name="position" placeholder="직급" />
-        <input type="text" name="status" placeholder="직원 구분" />
-        <input type="text" name="department" placeholder="부서" />
-        <input type="text" name="hireDateStr" placeholder="입사일 (yyyy-MM-dd)" />
-        <input type="text" name="contactInfo" placeholder="연락처" />
-        <input type="text" name="email" placeholder="이메일" />
-        <input type="text" name="birthDateStr" placeholder="생년월일 (yyyy-MM-dd)" />
-        <input type="text" name="address" placeholder="주소" />
-        <input type="text" name="experience" placeholder="경력" />
-        <input type="text" name="accountNumber" placeholder="계좌 번호" />
-        <input type="text" name="bank" placeholder="은행" />
-        <button type="submit">검색</button>
-    </form>
+        if (selectedField === 'position' || selectedField === 'status' || selectedField === 'department') {
+            var selectOptions = {
+                'position': ['신입', '대리', '과장', '차장', '부장'],
+                'status': ['정규', '계약', '퇴사'],
+                'department': ['인사1팀', '인사2팀', '개발1팀', '개발2팀', '전산1팀', '고객관리팀', '국내영업팀', '총무팀', '경리팀']
+            };
 
-    <h1>직원 목록</h1>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>사원번호</th>
-            <th>이름</th>
-            <th>주민번호</th>
-            <th>직급</th>
-            <th>직원 구분</th>
-            <th>부서</th>
-            <th>입사일</th>
-            <th>연락처</th>
-            <th>이메일</th>
-            <th>생년월일</th>
-            <th>주소</th>
-            <th>경력</th>
-            <th>계좌 번호</th>
-            <th>은행</th>
-        </tr>
-        <tr th:each="employee : ${employees}">
-        <td th:text="${employee.employeeId}"></td>
-        <td th:text="${employee.employeeNumber}"></td>
-        <!--<td th:text="${employee.name}"></td>-->
-        <td><a th:href="@{/employee/{id}(id=${employee.employeeId})}" th:text="${employee.name}"></a></td>
-        <td th:text="${employee.ssn}"></td>
-        <td th:text="${employee.position}"></td>
-        <td th:text="${employee.status}"></td>
-        <td th:text="${employee.department}"></td>
-        <td th:text="${employee.hireDate}"></td>
-        <td th:text="${employee.contactInfo}"></td>
-        <td th:text="${employee.email}"></td>
-        <td th:text="${employee.birthDate}"></td>
-        <td th:text="${employee.address}"></td>
-        <td th:text="${employee.experience}"></td>
-        <td th:text="${employee.accountNumber}"></td>
-        <td th:text="${employee.bank}"></td>
-    </tr>
-    </table>
-    <a href="/employee/new">직원 등록하기</a>
-</div>
+            var select = document.createElement('select');
+            select.name = selectedField;
+            select.id = selectedField;
+
+            var option = document.createElement('option');
+            option.value = '';
+            option.textContent = '선택하세요';
+            select.appendChild(option);
+
+            selectOptions[selectedField].forEach(function(item) {
+                var option = document.createElement('option');
+                option.value = item;
+                option.textContent = item;
+                select.appendChild(option);
+            });
+
+            dynamicFieldDiv.appendChild(select);
+        } else if (selectedField === 'hireDateStr' || selectedField === 'birthDateStr') {
+            var input = document.createElement('input');
+            input.type = 'date';
+            input.name = selectedField;
+            input.id = selectedField;
+            dynamicFieldDiv.appendChild(input);
+        } else if (selectedField !== '') {
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = selectedField;
+            input.id = selectedField;
+            input.placeholder = selectedField;
+            dynamicFieldDiv.appendChild(input);
+        }
+    });
+    document.getElementById('toggleSearch').addEventListener('click', function() {
+    var searchFields = document.getElementById('searchFields');
+    if (searchFields.style.display === 'none' || searchFields.style.display === '') {
+        searchFields.style.display = 'block';  // 검색창을 표시
+    } else {
+        searchFields.style.display = 'none';  // 검색창을 숨김
+    }
+});
+</script>
 </body>
 </html>
