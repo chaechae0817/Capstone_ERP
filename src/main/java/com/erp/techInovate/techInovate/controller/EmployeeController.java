@@ -82,6 +82,7 @@ public class EmployeeController {
                                   @RequestParam(required = false) String experience,
                                   @RequestParam(required = false) String accountNumber,
                                   @RequestParam(required = false) String bank,
+
                                   Model model) {
         LocalDate hireDate = hireDateStr != null && !hireDateStr.isEmpty() ? LocalDate.parse(hireDateStr) : null;
         LocalDate birthDate = birthDateStr != null && !birthDateStr.isEmpty() ? LocalDate.parse(birthDateStr) : null;
