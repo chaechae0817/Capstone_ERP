@@ -1,12 +1,21 @@
 package com.erp.techInovate.techInovate.service;
 
+import com.erp.techInovate.techInovate.dto.EmployeeDTO;
+import com.erp.techInovate.techInovate.entity.DepartmentEntity;
 import com.erp.techInovate.techInovate.entity.EmployeeEntity;
+import com.erp.techInovate.techInovate.entity.PositionEntity;
+import com.erp.techInovate.techInovate.repository.DepartmentRepository;
 import com.erp.techInovate.techInovate.repository.EmployeeRepository;
+import com.erp.techInovate.techInovate.repository.PositionRepository;
 import com.erp.techInovate.techInovate.specification.EmployeeSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +26,10 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    private final PositionRepository positionRepository;
+
+    private final DepartmentRepository departmentRepository;
+
     public Optional<EmployeeEntity> login(String employeeNumber, String email) {
         return employeeRepository.findByEmployeeNumberAndEmail(employeeNumber, email);
     }
@@ -25,19 +38,61 @@ public class EmployeeService {
     }
 
 
-    public EmployeeEntity saveEmployee(EmployeeEntity entity) {
-        return employeeRepository.save(entity);
+    public EmployeeEntity saveEmployee(EmployeeDTO employeeDTO, String fileName) {
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setEmployeeId(employeeDTO.getEmployeeId());
+        employeeEntity.setEmployeeNumber(employeeDTO.getEmployeeNumber());
+        employeeEntity.setName(employeeDTO.getName());
+        employeeEntity.setSsn(employeeDTO.getSsn());
+
+        // PositionEntity와 DepartmentEntity를 가져와서 설정
+        PositionEntity position = positionRepository.findById(employeeDTO.getPositionId())
+                .orElseThrow(() -> new RuntimeException("Position not found"));
+        employeeEntity.setPosition(position);
+
+        DepartmentEntity department = departmentRepository.findById(employeeDTO.getDepartmentId())
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+        employeeEntity.setDepartment(department);
+
+
+        employeeEntity.setStatus(employeeDTO.getStatus());
+        employeeEntity.setHireDate(employeeDTO.getHireDate());
+        employeeEntity.setContactInfo(employeeDTO.getContactInfo());
+        employeeEntity.setEmail(employeeDTO.getEmail());
+        employeeEntity.setBirthDate(employeeDTO.getBirthDate());
+        employeeEntity.setAddress(employeeDTO.getAddress());
+        employeeEntity.setExperience(employeeDTO.getExperience());
+        employeeEntity.setAccountNumber(employeeDTO.getAccountNumber());
+        employeeEntity.setBank(employeeDTO.getBank());
+        employeeEntity.setPhoto(fileName);
+        return employeeRepository.save(employeeEntity);
     }
 
-    public List<EmployeeEntity> searchEmployees(String name, String ssn, String position, String status,
-                                                String department, LocalDate hireDate, String contactInfo,
+    public String write(MultipartFile file) throws Exception{
+
+        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files";
+
+        String fileName =  file.getOriginalFilename();
+
+        File saveFile = new File(projectPath, fileName);
+
+        Files.createDirectories(Paths.get(projectPath));
+        file.transferTo(saveFile);
+
+//        boardDTO.setFilePath(file);  // 파일 경로 설정
+
+        return fileName;
+    }
+
+    public List<EmployeeEntity> searchEmployees(String name, String ssn, Long positionId, String status,
+                                                Long departmentId, LocalDate hireDate, String contactInfo,
                                                 String email, LocalDate birthDate, String address,
                                                 String experience, String accountNumber, String bank) {
         Specification<EmployeeEntity> spec = Specification.where(EmployeeSpecifications.hasName(name))
                 .and(EmployeeSpecifications.hasSsn(ssn))
-                .and(EmployeeSpecifications.hasPosition(position))
+                .and(EmployeeSpecifications.hasPosition(positionId)) // positionId로 변경
                 .and(EmployeeSpecifications.hasStatus(status))
-                .and(EmployeeSpecifications.hasDepartment(department))
+                .and(EmployeeSpecifications.hasDepartment(departmentId)) // departmentId로 변경
                 .and(EmployeeSpecifications.hasHireDate(hireDate))
                 .and(EmployeeSpecifications.hasContactInfo(contactInfo))
                 .and(EmployeeSpecifications.hasEmail(email))

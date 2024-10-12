@@ -16,11 +16,15 @@ public class LoginController {
     @Autowired
     private EmployeeService employeeService;
 
+
+    //로그인 HTML 페이지로 이동
     @GetMapping("/login")
     public String loginPage() {
         return "login"; // login.html로 이동
     }
 
+
+    //submit 버튼으로 로그인 처리
     @PostMapping("/login")
     public String login(@RequestParam String employeeNumber, @RequestParam String email, Model model, HttpSession session) {
         Optional<EmployeeEntity> employee = employeeService.login(employeeNumber, email);
@@ -30,7 +34,7 @@ public class LoginController {
             session.setAttribute("employeeId", employee.get().getEmployeeId()); // employeeId를 세션에 저장
 
             model.addAttribute("message", "로그인 성공!");
-            return "redirect:/hrm"; // 홈 페이지로 리다이렉트
+            return "redirect:/employee/list"; // 홈 페이지로 리다이렉트
         } else {
             model.addAttribute("error", "로그인 실패! 사원번호와 이메일을 확인하세요.");
             return "login"; // 다시 로그인 페이지로 이동

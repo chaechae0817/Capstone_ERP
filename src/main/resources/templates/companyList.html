@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>회사 정보</title>
+</head>
+<body>
+<h1>회사 정보</h1>
+
+<div th:if="${company != null}">
+    <p><strong>회사 이름:</strong> <span th:text="${company.name}"></span></p>
+    <p><strong>사업장 소재지:</strong> <span th:text="${company.address}"></span></p>
+    <p><strong처>연락처:</strong처> <span th:text="${company.contactNumber}"></span></p>
+    <p><strong>이메일:</strong> <span th:text="${company.email}"></span></p>
+    <p><strong>사업자 등록번호:</strong> <span th:text="${company.registrationNumber}"></span></p>
+    <p><strong>대표명:</strong> <span th:text="${company.representativeName}"></span></p>
+    <p><strong>업종:</strong> <span th:text="${company.businessType}"></span></p>
+    <a th:href="@{/companies/{id}/edit(id=${company.id})}">수정</a>
+</div>
+
+<div th:if="${company == null}">
+    <p>회사가 등록되어 있지 않습니다.</p>
+    <a href="/company/new">회사를 등록하세요.</a>
+</div>
+
+</body>
+</html>

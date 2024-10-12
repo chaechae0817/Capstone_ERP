@@ -11,21 +11,6 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @Table(name = "Employee")
-// id
-//- 사원번호 ( 자동 생성)
-//- name (이름)
-//- 주민번호
-//- position (직급)
-//- status ( 직원 구분 [ 정규 or 계약 or 퇴사 ] )
-//- department (부서)
-//- hire_date (입사일)
-//- contact_info (연락처)
-//- email (이메일)
-//- birth_date ( 생년월일)
-//- address ( 주소 )
-//- 경력
-//- 계좌 번호
-//- 은행
 public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +20,14 @@ public class EmployeeEntity {
 
     private String name; // 이름
     private String ssn; // 주민번호
-    private String position; // 직급
+    @ManyToOne // 다대일 관계 설정
+    @JoinColumn(name = "position_id") // 외래 키 컬럼 이름
+    private PositionEntity position; // 직급
+
+    @ManyToOne // 다대일 관계 설정
+    @JoinColumn(name = "department_id") // 외래 키 컬럼 이름
+    private DepartmentEntity department; // 부서
     private String status; // 직원 구분 (정규, 계약, 퇴사)
-    private String department; // 부서
     private LocalDate hireDate; // 입사일
     private String contactInfo; // 연락처
     private String email; // 이메일
@@ -46,6 +36,7 @@ public class EmployeeEntity {
     private String experience; // 경력
     private String accountNumber; // 계좌 번호
     private String bank; // 은행
+    private String photo; //사진
 
 
     @PostPersist

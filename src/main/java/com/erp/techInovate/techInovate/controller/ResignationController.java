@@ -5,8 +5,6 @@ import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.entity.ResignationEntity;
 import com.erp.techInovate.techInovate.service.ResignationService;
 import com.erp.techInovate.techInovate.service.EmployeeService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -46,10 +44,10 @@ public class ResignationController {
         resignation.setResignationDate(LocalDate.now()); // 퇴사일 설정
         resignation.setResignationReason(resignationReason);
         resignation.setLastPosition(employee.getPosition()); // 현재 직급을 lastPosition으로 설정
-        resignation.setLastDepartment(employee.getDepartment()); //
+        resignation.setLastDepartment(employee.getDepartment()); //현재 부서를 lastDepartment로 설정
 
         resignationService.save(resignation); // 퇴사 신청 저장
-        return "redirect:/hrm"; // 홈으로 리다이렉트
+        return "redirect:/employee/list"; // 홈으로 리다이렉트
     }
     @PostMapping("/resignation/approve/{resignationId}")
     public String approveResignation(@PathVariable Long resignationId, @RequestParam String notes) {
@@ -70,6 +68,8 @@ public class ResignationController {
         model.addAttribute("resignations", resignations); // 모델에 추가
         return "resignedEmployees"; //퇴사자 명단
     }
+
+    //퇴사자 정보 상세보기
     @GetMapping("/resignation/manage")
     public String manageResignation(@RequestParam Long resignationId, Model model) {
         ResignationEntity resignation = resignationService.findById(resignationId)

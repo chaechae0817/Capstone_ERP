@@ -21,8 +21,13 @@ public class ResignationEntity {
 
     private LocalDate resignationDate; // 퇴사일
     private String resignationReason; // 퇴사 사유
-    private String lastPosition; // 퇴사 당시 직급
-    private String lastDepartment; // 퇴사 당시 부서
+    @ManyToOne
+    @JoinColumn(name = "position_id", nullable = false) // 직급 외래키
+    private PositionEntity lastPosition; // 퇴사 당시 직급
+
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false) // 부서 외래키
+    private DepartmentEntity lastDepartment; // 퇴사 당시 부서
     private Double severancePay; // 퇴직금
     private String notes; // 비고
 }
