@@ -5,6 +5,7 @@
   <link rel="stylesheet" type="text/css" href="/formstyle.css" />
 </head>
 <body>
+</div>
 <h1>직원 등록</h1>
 <form action="#" th:action="@{/employee/save}" th:object="${employee}" method="post" enctype="multipart/form-data">
   <label for="name">이름:</label>
@@ -58,12 +59,14 @@
   <input type="text" id="accountNumber" th:field="*{accountNumber}" />
 
   <label for="bank">은행:</label>
-  <select id="bank" th:field="*{bank}" required>
-    <option value="국민은행">국민은행</option>
-    <option value="신한은행">신한은행</option>
-    <option value="하나은행">하나은행</option>
-    <option value="우리은행">우리은행</option>
-    <option value="토스뱅크">토스뱅크</option>
+  <select id="bank" th:field="*{bank}" />
+  <option value="국민은행">국민은행</option>
+  <option value="신한은행">신한은행</option>
+  <option value="하나은행">하나은행</option>
+  <option value="우리은행">우리은행</option>
+  <option value="토스뱅크">토스뱅크</option>
+  <option value="기업은행">기업은행</option>
+  <option value="카카오뱅크">카카오뱅크</option>
   </select>
 
   <label for="photo">사진 업로드:</label>

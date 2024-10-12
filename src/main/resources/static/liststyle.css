@@ -113,3 +113,37 @@ a {
 a:hover {
     background-color: #45a049;
 }
+.details-wrapper {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center;
+    min-height: calc(100vh - 100px); /* 화면에서 중앙 배치 */
+}
+
+/* 직원 상세 정보 디자인 */
+.details-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(50vh - 100px);
+}
+
+.details-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 100%; /* 작은 화면에서도 적절하게 크기 조정 */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail-row {
+    margin-bottom: 10px; /* 간격을 줄임 */
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #333;
+}
