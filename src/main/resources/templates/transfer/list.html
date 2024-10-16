@@ -4,6 +4,119 @@
     <meta charset="UTF-8">
     <title>인사 발령 목록</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 기본적인 페이지 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+    font-size: 2em;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background-color: #4CAF50;
+    color: white;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+/* 링크 스타일 */
+a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 버튼 같은 링크 스타일 */
+a[href="/transfer/new"] {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+a[href="/transfer/new"]:hover {
+    background-color: #45a049;
+}
+
+/* 수정 및 삭제 링크 스타일 */
+td a {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    background-color: #4CAF50;
+}
+
+td a:hover {
+    background-color: #45a049;
+}
+
+td a:nth-child(2) {
+    background-color: #e74c3c;
+}
+
+td a:nth-child(2):hover {
+    background-color: #c0392b;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        font-size: 0.9em;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+}
+    </style>
 </head>
 <body>
 <h1>인사 발령 목록</h1>

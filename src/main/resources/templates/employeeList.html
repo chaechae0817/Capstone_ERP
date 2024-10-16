@@ -9,7 +9,7 @@
 <div class="sidebar">
     <h2>메뉴</h2>
     <ul>
-<li><a href="#" onclick="toggleMenu(this)">인사관리</a>
+        <li><a href="#" onclick="toggleMenu(this)">인사관리</a>
             <ul class="open">
                 <li><a href="#" onclick="toggleMenu(this)">직원 관리</a>
                     <ul class="open">
@@ -19,9 +19,9 @@
                 </li>
                 <li><a href="#" onclick="toggleMenu(this)">인사 발령</a>
                     <ul class="open">
-                        <li><a href="#">인사 발령 조회</a></li>
-                        <li><a href="#">인사 발령 입력</a></li>
-                        <li><a href="#">수정(삭제)</a></li>
+                        <li><a href="/transfer/list">인사 발령 조회</a></li>
+                        <li><a href="/transfer/new">인사 발령 입력</a></li>
+                        <li><a href="/transfer/update">수정(삭제)</a></li>
                     </ul>
                 </li>
                 <li><a href="#" onclick="toggleMenu(this)">퇴사자 관리</a>
@@ -32,8 +32,8 @@
                 </li>
                 <li><a href="#" onclick="toggleMenu(this)">증명서 관리</a>
                     <ul class="open">
-                        <li><a href="#">재직 증명서</a></li>
-                        <li><a href="#">경력 증명서</a></li>
+                        <li><a href="/certificate/employee">재직 증명서</a></li>
+                        <li><a href="/certificate/career">경력 증명서</a></li>
                         <li><a href="#">급여 명세서</a></li>
                     </ul>
                 </li>
@@ -103,92 +103,93 @@
 
     </ul>
 </div>
-  
-<div class="search-fields" id="searchFields">
-    <form id="searchForm" action="/employee/search" method="get">
-        <div class="search-field">
-            <label for="searchField">선택:</label>
-            <select id="searchField" name="searchField" onchange="toggleFields(this.value)">
-                <option value="">선택하세요</option>
-                <option value="name">이름</option>
-                <option value="contactInfo">연락처</option>
-                <option value="email">이메일</option>
-                <option value="address">주소</option>
-                <option value="hireDateStr">입사일</option>
-                <option value="birthDateStr">생년월일</option>
-                <option value="experience">경력</option>
-                <option value="position">직급</option>
-                <option value="department">부서</option>
-            </select>
-        </div>
+<div class="content">
+    <div class="search-fields" id="searchFields">
+        <form id="searchForm" action="/employee/search" method="get">
+            <div class="search-field">
+                <label for="searchField">선택:</label>
+                <select id="searchField" name="searchField" onchange="toggleFields(this.value)">
+                    <option value="">선택하세요</option>
+                    <option value="name">이름</option>
+                    <option value="contactInfo">연락처</option>
+                    <option value="email">이메일</option>
+                    <option value="address">주소</option>
+                    <option value="hireDateStr">입사일</option>
+                    <option value="birthDateStr">생년월일</option>
+                    <option value="experience">경력</option>
+                    <option value="position">직급</option>
+                    <option value="department">부서</option>
+                </select>
+            </div>
 
-        <div id="nameField" class="dynamicField" style="display: none;">
-            <label for="name" id="name">이름:</label>
-            <input type="text" name="name" placeholder="이름 입력">
-        </div>
+            <div id="nameField" class="dynamicField" style="display: none;">
+                <label for="name" id="name">이름:</label>
+                <input type="text" name="name" placeholder="이름 입력">
+            </div>
 
-        <div id="contactInfoField" class="dynamicField" style="display: none;">
-            <label for="contactInfo" id="contactInfo">연락처:</label>
-            <input type="text" name="contactInfo" placeholder="연락처 입력">
-        </div>
+            <div id="contactInfoField" class="dynamicField" style="display: none;">
+                <label for="contactInfo" id="contactInfo">연락처:</label>
+                <input type="text" name="contactInfo" placeholder="연락처 입력">
+            </div>
 
-        <div id="emailField" class="dynamicField" style="display: none;">
-            <label for="email" id="email">이메일:</label>
-            <input type="text" name="email" placeholder="이메일 입력">
-        </div>
+            <div id="emailField" class="dynamicField" style="display: none;">
+                <label for="email" id="email">이메일:</label>
+                <input type="text" name="email" placeholder="이메일 입력">
+            </div>
 
-        <div id="addressField" class="dynamicField" style="display: none;">
-            <label for="address" id="address">주소:</label>
-            <input type="text" name="address" placeholder="주소 입력">
-        </div>
+            <div id="addressField" class="dynamicField" style="display: none;">
+                <label for="address" id="address">주소:</label>
+                <input type="text" name="address" placeholder="주소 입력">
+            </div>
 
-        <div id="hireDateField" class="dynamicField" style="display: none;">
-            <label for="hireDateStr" id="hireDateStr">입사일:</label>
-            <input type="date" name="hireDateStr">
-        </div>
+            <div id="hireDateStrField" class="dynamicField" style="display: none;">
+                <label for="hireDateStr" id="hireDateStr">입사일:</label>
+                <input type="date" name="hireDateStr" >
+            </div>
 
-        <div id="birthDateField" class="dynamicField" style="display: none;">
-            <label for="birthDateStr" id="birthDateStr">생년월일:</label>
-            <input type="date" name="birthDateStr">
-        </div>
+            <div id="birthDateStrField" class="dynamicField" style="display: none;">
+                <label for="birthDateStr" id="birthDateStr">생년월일:</label>
+                <input type="date" name="birthDateStr">
+            </div>
 
-        <div id="experienceField" class="dynamicField" style="display: none;">
-            <label for="experience" id="experience">경력:</label>
-            <select name="experience">
-                <option value="">경력 선택</option>
-                <option value="0">0년</option>
-                <option value="1">1년</option>
-                <option value="2">2년</option>
-                <option value="3">3년</option>
-                <option value="4">4년</option>
-                <option value="5">5년</option>
-                <option value="6">6년</option>
-                <option value="7">7년</option>
-                <option value="8">8년</option>
-                <option value="9">9년</option>
-                <option value="10">10년</option>
-            </select>
-        </div>
+            <div id="experienceField" class="dynamicField" style="display: none;">
+                <label for="experience" id="experience">경력:</label>
+                <select name="experience">
+                    <option value="">경력 선택</option>
+                    <option value="0">0년</option>
+                    <option value="1">1년</option>
+                    <option value="2">2년</option>
+                    <option value="3">3년</option>
+                    <option value="4">4년</option>
+                    <option value="5">5년</option>
+                    <option value="6">6년</option>
+                    <option value="7">7년</option>
+                    <option value="8">8년</option>
+                    <option value="9">9년</option>
+                    <option value="10">10년</option>
+                </select>
+            </div>
 
-        <div id="positionField" class="dynamicField" style="display: none;">
-            <label for="position" id="position">직급:</label>
-            <select name="positionId">
-                <option value="">직급 선택</option>
-                <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}"></option>
-            </select>
-        </div>
+            <div id="positionField" class="dynamicField" style="display: none;">
+                <label for="position" id="position">직급:</label>
+                <select name="positionId">
+                    <option value="">직급 선택</option>
+                    <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}"></option>
+                </select>
+            </div>
 
-        <div id="departmentField" class="dynamicField" style="display: none;">
-            <label for="department" id="department">부서:</label>
-            <select name="departmentId">
-                <option value="">부서 선택</option>
-                <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
-            </select>
-        </div>
+            <div id="departmentField" class="dynamicField" style="display: none;">
+                <label for="department" id="department">부서:</label>
+                <select name="departmentId">
+                    <option value="">부서 선택</option>
+                    <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                </select>
+            </div>
 
 
-        <button type="submit">검색</button>
-    </form>
+            <button type="submit">검색</button>
+        </form>
+    </div>
 </div>
 <h1>직원 목록</h1>
 <table>
@@ -233,16 +234,16 @@
 </div>
 <script>
     function toggleFields(selectedValue) {
-    var fields = document.querySelectorAll('.dynamicField');
-    fields.forEach(function(field) {
-        field.style.display = 'none'; // 모든 필드 숨기기
-    });
+        var fields = document.querySelectorAll('.dynamicField');
+        fields.forEach(function(field) {
+            field.style.display = 'none'; // 모든 필드 숨기기
+        });
 
-    if (selectedValue) {
-        document.getElementById(selectedValue + 'Field').style.display = 'block'; // 선택된 필드만 보이기
+        if (selectedValue) {
+            document.getElementById(selectedValue + 'Field').style.display = 'block'; // 선택된 필드만 보이기
+        }
     }
 
-});
     function toggleMenu(element) {
     // 클릭한 요소의 상위 메뉴를 확인
     const parentMenu = element.closest('li').parentNode;
@@ -267,8 +268,6 @@
     if (nestedMenu) {
         nestedMenu.classList.toggle('active');
     }
-}
-
 }
 
 </script>

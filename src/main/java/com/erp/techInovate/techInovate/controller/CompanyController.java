@@ -25,10 +25,10 @@ public class CompanyController {
 
     @GetMapping("/list")
     public String listCompany(Model model,@SessionAttribute("employeeId") Long employeeId) {
-        EmployeeEntity employee = employeeService.getEmployeeById(employeeId);
-        if(employee.getDepartment().getName().equals("인사부")){
-
-        }
+//        EmployeeEntity employee = employeeService.getEmployeeById(employeeId);
+//        if(employee.getDepartment().getName().equals("인사부")){
+//
+//        }
         Optional<CompanyEntity> company = companyService.getCompany();
         model.addAttribute("company", company.orElse(null));
         return "companyList"; // 회사 목록 페이지 (실제로는 단일 회사 정보)
