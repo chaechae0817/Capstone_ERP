@@ -5,6 +5,7 @@ import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.entity.ResignationEntity;
 import com.erp.techInovate.techInovate.service.ResignationService;
 import com.erp.techInovate.techInovate.service.EmployeeService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,9 @@ public class ResignationController {
 
     @GetMapping("/resignation")
     public String resignationForm(Model model, @SessionAttribute("employeeId") Long employeeId) {
+        if(employeeId == null){
+            return "redirect:/login";
+        }
         EmployeeEntity employee = employeeService.getEmployeeById(employeeId);
         model.addAttribute("employee", employee); // 가져온 EmployeeEntity를 모델에 추가
         return "resignationForm"; // 퇴사 신청 폼으로 이동
@@ -35,7 +39,7 @@ public class ResignationController {
         EmployeeEntity employee = employeeService.getEmployeeById(employeeId);
         if (employee == null) {
             // 직원이 존재하지 않을 경우 에러 처리
-            return "redirect:/error"; // 에러 페이지로 리다이렉트
+            return "redirect:/login"; // 로그인 페이지로 리다이렉트
         }
 
         // 퇴사 신청 엔티티 생성
@@ -47,11 +51,15 @@ public class ResignationController {
         resignation.setLastDepartment(employee.getDepartment()); //현재 부서를 lastDepartment로 설정
 
         resignationService.save(resignation); // 퇴사 신청 저장
+
         return "redirect:/employee/list"; // 홈으로 리다이렉트
     }
     @PostMapping("/resignation/approve/{resignationId}")
-    public String approveResignation(@PathVariable Long resignationId, @RequestParam String notes) {
+    public String approveResignation(@PathVariable Long resignationId, @RequestParam String notes,@SessionAttribute("employeeId") Long employeeId) {
         resignationService.approveResignation(resignationId, notes); // 승인 처리
+        EmployeeEntity employee = employeeService.getEmployeeById(employeeId);
+        employee.setStatus("퇴사");
+        employeeService.updateEmployee(employee);
         return "redirect:/manage/resignations"; // 승인 후 퇴사자 조회 메뉴로 리다이렉트
     }
 

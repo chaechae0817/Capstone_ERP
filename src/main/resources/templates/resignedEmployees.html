@@ -13,7 +13,7 @@
         <th>부서</th>
         <th>퇴사일</th>
         <th>입사일</th>
-        <th>작업</th> <!-- 작업 열 추가 -->
+        <th>비고</th>
     </tr>
     <tr th:each="resignation : ${resignations}">
         <td>
@@ -24,6 +24,7 @@
         <td th:text="${resignation.lastDepartment.name}"></td> <!-- lastDepartment의 name 속성 사용 -->
         <td th:text="${resignation.resignationDate}"></td>
         <td th:text="${resignation.employee.hireDate}"></td>
+        <td th:text="${resignation.notes}"></td>
 <!--        <td>-->
 <!--            <a th:href="@{/resignation/manage(resignationId=${resignation.resignationId})}">상세보기</a> &lt;!&ndash; 상세보기 링크 추가 &ndash;&gt;-->
 <!--        </td>-->

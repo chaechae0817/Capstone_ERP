@@ -18,7 +18,7 @@ public class CareerCertificateDTO {
     private String business_registration_number;    //사업자등록번호 -company
     private String representative_name; //대표명 - company
     private String industry;    //업종 - company
-    private String business_loaction;   //사업장 소재지 - company
+    private String business_location;   //사업장 소재지 - company
     private String department;  //근무 부서 - Department 테이블
     private String position;    //직위 - Position 테이블
     private String hireDate; //입사일 - employee

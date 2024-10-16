@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ResignationService {
     @Autowired
-    private ResignationRepository resignationRepository;
+    private final ResignationRepository resignationRepository;
 
     public void save(ResignationEntity resignation) {
         resignationRepository.save(resignation);
