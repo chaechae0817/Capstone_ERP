@@ -6,7 +6,7 @@ body {
 }
 
 .sidebar {
-    width: 140px;
+    width: 150px;
     background-color: #4CAF50;
     padding: 20px;
     height: 100vh;
@@ -43,20 +43,62 @@ body {
         max-height: 1000px; /* 열렸을 때의 최대 높이 */
 }
 
+/* 상위 메뉴 스타일 */
 .sidebar ul li a {
     color: white;
     text-decoration: none;
     font-weight: bold;
     display: block;
-    padding: 5px;
+    padding: 12px; /* 상위 메뉴의 패딩을 더 크게 설정 */
     text-align: center;
     border-radius: 5px;
+    font-size: 16px; /* 상위 메뉴는 더 큰 글씨 */
+    background-color: #4CAF50; /* 상위 메뉴의 배경색 */
 }
 
 .sidebar ul li a:hover {
-    background-color: #45a049;
+    background-color: #45a049; /* 상위 메뉴 호버시 */
 }
 
+/* 상위 메뉴 스타일 */
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    padding: 10px; /* 상위 메뉴의 패딩을 더 크게 설정 */
+    text-align: center;
+    border-radius: 5px;
+    font-size: 16px; /* 상위 메뉴는 더 큰 글씨 */
+    background-color: #4CAF50; /* 상위 메뉴의 배경색 */
+}
+
+.sidebar ul li a:hover {
+    background-color: #45a049; /* 상위 메뉴 호버시 */
+}
+
+/* 하위 메뉴 스타일 */
+.sidebar ul li ul li a {
+    padding: 10px;
+    font-size: 14px; /* 하위 메뉴는 작은 글씨 */
+    text-align: left; /* 하위 메뉴는 왼쪽 정렬 */
+    background-color: #66BB6A; /* 하위 메뉴의 배경색 */
+    margin-left: 15px; /* 하위 메뉴는 들여쓰기 */
+}
+
+.sidebar ul li ul li a:hover {
+    background-color: #60a865; /* 하위 메뉴 호버시 */
+}
+
+/* 하위 메뉴 들여쓰기 */
+.sidebar ul li ul {
+    margin-left: 15px;
+}
+
+/* 하위 메뉴 아이템 간 간격 조정 */
+.sidebar ul li ul li {
+    margin-bottom: 5px; /* 하위 메뉴 간격을 약간 추가 */
+}
 /* 콘텐츠 영역 스타일 */
 .content {
     margin-left: 220px; /* 메뉴바의 너비 + 여백 */
