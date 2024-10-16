@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>인사 발령 목록</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>인사 발령 목록</h1>
+<a href="/transfer/new">새로운 발령 추가</a>
+<table>
+    <thead>
+    <tr>
+        <th>발령 ID</th>
+        <th>직원 ID</th>
+        <th>발령 구분</th>
+        <th>이전 부서</th>
+        <th>현재 부서</th>
+        <th>이전 직급</th>
+        <th>발령 직급</th>
+        <th>발령일</th>
+        <th>작업</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="transfer : ${transfers}">
+        <td th:text="${transfer.transferId}"></td>
+        <td th:text="${transfer.employeeId}"></td>
+        <td th:text="${transfer.personnelAppointment}"></td>
+        <td th:text="${transfer.fromDepartment}"></td>
+        <td th:text="${transfer.toDepartment}"></td>
+        <td th:text="${transfer.fromPosition}"></td>
+        <td th:text="${transfer.toPosition}"></td>
+        <td th:text="${transfer.transferDate}"></td>
+        <td>
+            <a th:href="@{/transfer/update/{id}(id=${transfer.transferId})}">수정</a>
+            <a th:href="@{/transfer/delete/{id}(id=${transfer.transferId})}">삭제</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,14 +1,11 @@
 package com.erp.techInovate.techInovate.service;
 
-import com.erp.techInovate.techInovate.dto.ResignationDTO;
 import com.erp.techInovate.techInovate.entity.ResignationEntity;
-import com.erp.techInovate.techInovate.repository.EmployeeRepository;
 import com.erp.techInovate.techInovate.repository.ResignationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

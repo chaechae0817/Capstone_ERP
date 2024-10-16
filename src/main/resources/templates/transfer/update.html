@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>인사 발령 수정</title>
+</head>
+<body>
+<h1>인사 발령 수정</h1>
+<form action="/transfer/update" method="post">
+    <input type="hidden" id="transferId" name="transferId" th:value="${transfer.transferId}">
+
+    <label for="employeeId">직원 ID:</label>
+    <input type="number" id="employeeId" name="employeeId" th:value="${transfer.employeeId}" required>
+
+    <label for="personnelAppointment">발령 구분:</label>
+    <select id="personnelAppointment" name="personnelAppointment" required>
+        <option value="부서이동" th:selected="${transfer.personnelAppointment == '부서이동'}">부서이동</option>
+        <option value="승진" th:selected="${transfer.personnelAppointment == '승진'}">승진</option>
+    </select>
+
+    <label for="fromDepartment">이전 부서:</label>
+    <input type="text" id="fromDepartment" name="fromDepartment" th:value="${transfer.fromDepartment}" required>
+
+    <label for="toDepartment">현재 부서:</label>
+    <input type="text" id="toDepartment" name="toDepartment" th:value="${transfer.toDepartment}" required>
+
+    <label for="fromPosition">이전 직급:</label>
+    <input type="text" id="fromPosition" name="fromPosition" th:value="${transfer.fromPosition}" required>
+
+    <label for="toPosition">발령 직급:</label>
+    <input type="text" id="toPosition" name="toPosition" th:value="${transfer.toPosition}" required>
+
+    <label for="transferDate">발령일:</label>
+    <input type="date" id="transferDate" name="transferDate" th:value="${transfer.transferDate}" required>
+
+    <button type="submit">수정</button>
+</form>
+<a href="/transfer/list">목록으로 돌아가기</a>
+</body>
+</html>
