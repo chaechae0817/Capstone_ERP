@@ -14,4 +14,6 @@ public class PositionEntity {
     private Long id; // 기본키
 
     private String name; // 직급 이름 (예: 인턴, 직원, 대리, 과장, 차장, 부장)
+
+
 }

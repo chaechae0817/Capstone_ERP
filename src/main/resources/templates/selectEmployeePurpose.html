@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>재직 증명서</title>
+  <link rel="stylesheet" href="career_certificate.css"> <!-- CSS 파일 링크 -->
+  <script>
+    function openPurposeDialog() {
+        document.getElementById('purposeDialog').style.display = 'block';
+    }
+
+    function closePurposeDialog() {
+        document.getElementById('purposeDialog').style.display = 'none';
+    }
+
+    function submitPurpose() {
+        const purpose = document.getElementById('purposeSelect').value;
+        // 용도를 선택한 후 페이지를 새로고침하여 용도를 URL 파라미터로 전달
+        window.location.href = '/certificate/select_purpose?purpose=' + encodeURIComponent(purpose);
+    }
+  </script>
+</head>
+<body onload="openPurposeDialog()">
+
+<div id="purposeDialog" style="display:block;">
+  <h3>용도 선택</h3>
+  <select id="purposeSelect">
+    <option value="용도1">용도1</option>
+    <option value="용도2">용도2</option>
+    <option value="용도3">용도3</option>
+    <!-- 추가 용도 -->
+  </select>
+  <button onclick="submitPurpose()">확인</button>
+  <button onclick="closePurposeDialog()">취소</button>
+</div>
+
+</body>
+</html>

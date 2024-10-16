@@ -37,7 +37,6 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-
     public EmployeeEntity saveEmployee(EmployeeDTO employeeDTO, String fileName) {
         EmployeeEntity employeeEntity = new EmployeeEntity();
         employeeEntity.setEmployeeId(employeeDTO.getEmployeeId());
@@ -84,12 +83,11 @@ public class EmployeeService {
         return fileName;
     }
 
-    public List<EmployeeEntity> searchEmployees(String name, String ssn, Long positionId, String status,
+    public List<EmployeeEntity> searchEmployees(String name,Long positionId, String status,
                                                 Long departmentId, LocalDate hireDate, String contactInfo,
                                                 String email, LocalDate birthDate, String address,
-                                                String experience, String accountNumber, String bank) {
+                                                String experience) {
         Specification<EmployeeEntity> spec = Specification.where(EmployeeSpecifications.hasName(name))
-                .and(EmployeeSpecifications.hasSsn(ssn))
                 .and(EmployeeSpecifications.hasPosition(positionId)) // positionId로 변경
                 .and(EmployeeSpecifications.hasStatus(status))
                 .and(EmployeeSpecifications.hasDepartment(departmentId)) // departmentId로 변경
@@ -98,10 +96,7 @@ public class EmployeeService {
                 .and(EmployeeSpecifications.hasEmail(email))
                 .and(EmployeeSpecifications.hasBirthDate(birthDate))
                 .and(EmployeeSpecifications.hasAddress(address))
-                .and(EmployeeSpecifications.hasExperience(experience))
-                .and(EmployeeSpecifications.hasAccountNumber(accountNumber))
-                .and(EmployeeSpecifications.hasBank(bank));
-
+                .and(EmployeeSpecifications.hasExperience(experience));
         return employeeRepository.findAll(spec);
     }
     // 특정 사원 정보를 조회하는 메소드
@@ -113,5 +108,7 @@ public class EmployeeService {
     public void updateEmployee(EmployeeEntity employee) {
         employeeRepository.save(employee); // save 메소드는 존재하는 엔티티를 업데이트합니다.
     }
+
+
 
 }
