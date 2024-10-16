@@ -1,9 +1,13 @@
 package com.erp.techInovate.techInovate.controller;
 
 import com.erp.techInovate.techInovate.dto.EmployeeDTO;
+import com.erp.techInovate.techInovate.entity.DepartmentEntity;
 import com.erp.techInovate.techInovate.entity.EmployeeEntity;
+import com.erp.techInovate.techInovate.entity.PositionEntity;
 import com.erp.techInovate.techInovate.service.DepartmentService;
 import com.erp.techInovate.techInovate.service.PositionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +36,19 @@ public class EmployeeController {
 
     //직원 목록으로 이동
     @GetMapping("/list")
-    public String getEmployees(Model model){
-        model.addAttribute("employees",employeeService.getAllEmployees());
+    public String getEmployees(Model model) {
+        List<EmployeeEntity> employees = employeeService.getAllEmployees();
+        List<PositionEntity> positions = positionService.getAllPositions();
+        List<DepartmentEntity> departments = departmentService.getAllDepartments();
+
+        // 로그 추가
+        System.out.println("employees: "+ employees);
+        System.out.println("Positions: " + positions);
+        System.out.println("Departments: " + departments);
+
+        model.addAttribute("employees", employeeService.getAllEmployees());
+        model.addAttribute("positions", positions);
+        model.addAttribute("departments", departments);
         return "employeeList";
     }
     // 특정 직원의 상세 페이지
@@ -49,7 +64,6 @@ public class EmployeeController {
     @GetMapping("/new") // 직원 등록 폼에 접근하기 위한 메서드
     public String createEmployeeForm(Model model) {
         model.addAttribute("employee", new EmployeeDTO());
-
         // 포지션과 부서 정보를 모델에 추가
         model.addAttribute("positions", positionService.getAllPositions());
         model.addAttribute("departments", departmentService.getAllDepartments());
@@ -70,7 +84,6 @@ public class EmployeeController {
     //직원 목록에서 search 기능 수행
     @GetMapping("/search")
     public String searchEmployees(@RequestParam(required = false) String name,
-                                  @RequestParam(required = false) String ssn,
                                   @RequestParam(required = false) Long positionId,
                                   @RequestParam(required = false) String status,
                                   @RequestParam(required = false) Long departmentId,
@@ -80,16 +93,14 @@ public class EmployeeController {
                                   @RequestParam(required = false) String birthDateStr,
                                   @RequestParam(required = false) String address,
                                   @RequestParam(required = false) String experience,
-                                  @RequestParam(required = false) String accountNumber,
-                                  @RequestParam(required = false) String bank,
-
                                   Model model) {
         LocalDate hireDate = hireDateStr != null && !hireDateStr.isEmpty() ? LocalDate.parse(hireDateStr) : null;
         LocalDate birthDate = birthDateStr != null && !birthDateStr.isEmpty() ? LocalDate.parse(birthDateStr) : null;
 
-        List<EmployeeEntity> employees = employeeService.searchEmployees(name, ssn, positionId, status,
-                departmentId, hireDate, contactInfo, email, birthDate, address, experience, accountNumber, bank);
-
+        List<EmployeeEntity> employees = employeeService.searchEmployees(name, positionId, status,
+                departmentId, hireDate, contactInfo, email, birthDate, address, experience);
+        model.addAttribute("positions", positionService.getAllPositions());
+        model.addAttribute("departments", departmentService.getAllDepartments());
         model.addAttribute("employees", employees);
         return "employeeList"; // employeeList.html로 이동
     }

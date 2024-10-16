@@ -235,6 +235,6 @@ a:hover {
         width : 800px;
         height : 500px;
 
-            display: none; /* 기본적으로 숨김 */
+            /*display: none; /* 기본적으로 숨김 */
             margin-top: 20px;
         }

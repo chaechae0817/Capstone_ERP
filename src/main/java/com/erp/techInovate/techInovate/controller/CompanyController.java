@@ -2,7 +2,11 @@ package com.erp.techInovate.techInovate.controller;
 
 import com.erp.techInovate.techInovate.dto.CompanyDTO;
 import com.erp.techInovate.techInovate.entity.CompanyEntity;
+import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.service.CompanyService;
+import com.erp.techInovate.techInovate.service.EmployeeService;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,14 +15,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/company")
 public class CompanyController {
 
     @Autowired
     private CompanyService companyService;
+    private EmployeeService employeeService;
 
     @GetMapping("/list")
-    public String listCompany(Model model) {
+    public String listCompany(Model model,@SessionAttribute("employeeId") Long employeeId) {
+        EmployeeEntity employee = employeeService.getEmployeeById(employeeId);
+        if(employee.getDepartment().getName().equals("인사부")){
+
+        }
         Optional<CompanyEntity> company = companyService.getCompany();
         model.addAttribute("company", company.orElse(null));
         return "companyList"; // 회사 목록 페이지 (실제로는 단일 회사 정보)
