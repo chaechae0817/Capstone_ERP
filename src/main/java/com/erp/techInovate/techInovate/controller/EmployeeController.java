@@ -37,7 +37,7 @@ public class EmployeeController {
         return "employeeList";
     }
     // 특정 직원의 상세 페이지
-    @GetMapping("/employee/{id}")
+    @GetMapping("/{id}")
     public String getEmployeeDetails(@PathVariable("id") Long id, Model model) {
         EmployeeEntity employee = employeeService.getEmployeeById(id);
         model.addAttribute("employee", employee);

@@ -39,6 +39,51 @@
                 </li>
             </ul>
         </li>
+        <li><a href="#" onclick="toggleMenu(this)">근태 관리</a>
+            <ul class="open">
+                <li><a href="#" onclick="toggleMenu(this)">항목 코드 관리</a>
+                    <ul class="open">
+                        <li><a href="/">근태항목코드</a></li>
+                        <li><a href="/">휴가항목코드</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMenu(this)">휴가</a>
+                    <ul class="open">
+                        <li><a href="/">휴가 신청</a></li>
+                        <li><a href="/">휴가 신청자</a></li>
+                        <li><a href="/">사원별 휴가 조회</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMenu(this)">출퇴근 관리</a>
+                    <ul class="open">
+                        <li><a href="/">출퇴근 기록 조회</a></li>
+                        <li><a href="/">출퇴근 등록</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><a href="#" onclick="toggleMenu(this)">급여 관리</a>
+            <ul class="open">
+                <li><a href="#" onclick="toggleMenu(this)">급여 코드 관리</a>
+                    <ul class="open">
+                        <li><a href="/">수당 등록</a></li>
+                        <li><a href="/">공제 등록</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMenu(this)">급여</a>
+                    <ul class="open">
+                        <li><a href="/">근무 기록 조회 및 확정</a></li>
+                        <li><a href="/">급여 계산</a></li>
+                        <li><a href="/">명세서 전송 및 조회</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMenu(this)">퇴직금</a>
+                    <ul class="open">
+                        <li><a href="/">퇴직금</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
         <li><a href="#" onclick="toggleMenu(this)">회사 관리</a>
             <ul class="open">
                 <li><a href="#" onclick="toggleMenu(this)">회사</a>
@@ -119,9 +164,9 @@
         <!--<td th:text="${employee.name}"></td>-->
         <td><a th:href="@{/employee/{id}(id=${employee.employeeId})}" th:text="${employee.name}"></a></td>
         <td th:text="${employee.ssn}"></td>
-        <td th:text="${employee.position}"></td>
+        <td th:text="${employee.position.name}"></td>
         <td th:text="${employee.status}"></td>
-        <td th:text="${employee.department}"></td>
+        <td th:text="${employee.department.name}"></td>
         <td th:text="${employee.hireDate}"></td>
         <td th:text="${employee.contactInfo}"></td>
         <td th:text="${employee.email}"></td>
@@ -187,6 +232,31 @@
         searchFields.style.display = 'none';  // 검색창을 숨김
     }
 });
+    function toggleMenu(element) {
+    // 클릭한 요소의 상위 메뉴를 확인
+    const parentMenu = element.closest('li').parentNode;
+
+    // 상위 메뉴(인사관리, 근태관리, 급여관리, 회사관리)를 선택
+    const allMainMenus = document.querySelectorAll('.sidebar > ul > li > a');
+
+    // 하위 메뉴가 있는지 확인
+    const nestedMenu = element.nextElementSibling;
+
+    // 상위 메뉴 클릭 시, 다른 상위 메뉴의 하위 메뉴를 닫음
+    if (parentMenu === document.querySelector('.sidebar > ul')) {
+        allMainMenus.forEach(menu => {
+            const siblingMenu = menu.nextElementSibling;
+            if (siblingMenu && siblingMenu !== nestedMenu) {
+                siblingMenu.classList.remove('active');
+            }
+        });
+    }
+
+    // 클릭된 메뉴의 하위 메뉴를 토글
+    if (nestedMenu) {
+        nestedMenu.classList.toggle('active');
+    }
+}
 </script>
 </body>
 </html>
