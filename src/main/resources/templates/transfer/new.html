@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>인사 발령 입력</title>
+</head>
+<body>
+<h1>인사 발령 입력</h1>
+<form action="/transfer/new" method="post">
+    <label for="employeeId">직원 ID:</label>
+    <input type="number" id="employeeId" name="employeeId" required>
+
+    <label for="personnelAppointment">발령 구분:</label>
+    <select id="personnelAppointment" name="personnelAppointment" required>
+        <option value="부서이동">부서이동</option>
+        <option value="승진">승진</option>
+    </select>
+
+    <label for="fromDepartment">이전 부서:</label>
+    <input type="text" id="fromDepartment" name="fromDepartment" required>
+
+    <label for="toDepartment">현재 부서:</label>
+    <input type="text" id="toDepartment" name="toDepartment" required>
+
+    <label for="fromPosition">이전 직급:</label>
+    <input type="text" id="fromPosition" name="fromPosition" required>
+
+    <label for="toPosition">발령 직급:</label>
+    <input type="text" id="toPosition" name="toPosition" required>
+
+    <label for="transferDate">발령일:</label>
+    <input type="date" id="transferDate" name="transferDate" required>
+
+    <button type="submit">저장</button>
+</form>
+</body>
+</html>
