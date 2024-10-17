@@ -2,6 +2,7 @@ package com.erp.techInovate.techInovate.controller;
 
 
 import com.erp.techInovate.techInovate.dto.TransferDTO;
+import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.entity.TransferEntity;
 import com.erp.techInovate.techInovate.service.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,6 @@ public class TransferController {
         transfer.setFromPosition(transferDTO.getFromPosition());
         transfer.setToPosition(transferDTO.getToPosition());
         transfer.setTransferDate(transferDTO.getTransferDate());
-
         TransferService.save(transfer);
         return "redirect:/transfer/list";
     }

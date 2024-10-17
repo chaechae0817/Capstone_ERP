@@ -18,10 +18,10 @@ public class TransferEntity {
     @Column(nullable = false)
     private String personnelAppointment; // 부서이동 or 승진
 
-    private String fromDepartment;
-    private String toDepartment;
-    private String fromPosition;
-    private String toPosition;
+    private String fromDepartment; //현재부서
+    private String toDepartment; //이동할 부서
+    private String fromPosition; //현재 직급
+    private String toPosition; //이동할 직급
 
     @Column(nullable = false)
     private LocalDate transferDate;
