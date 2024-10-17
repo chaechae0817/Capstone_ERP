@@ -19,8 +19,8 @@
                 </li>
                 <li><a href="#" onclick="toggleMenu(this)">인사 발령</a>
                     <ul class="open">
-                        <li><a href="#">인사 발령 조회</a></li>
-                        <li><a href="#">인사 발령 입력</a></li>
+                        <li><a href="/transfer/list">인사 발령 조회</a></li>
+                        <li><a href="/transfer/new">인사 발령 입력</a></li>
                         <li><a href="#">수정(삭제)</a></li>
                     </ul>
                 </li>
@@ -32,8 +32,8 @@
                 </li>
                 <li><a href="#" onclick="toggleMenu(this)">증명서 관리</a>
                     <ul class="open">
-                        <li><a href="#">재직 증명서</a></li>
-                        <li><a href="#">경력 증명서</a></li>
+                        <li><a href="/certificate/employee">재직 증명서</a></li>
+                        <li><a href="/certificate/career">경력 증명서</a></li>
                         <li><a href="#">급여 명세서</a></li>
                     </ul>
                 </li>
@@ -103,7 +103,7 @@
 
     </ul>
 </div>
-  
+<div class="content">
 <div class="search-fields" id="searchFields">
     <form id="searchForm" action="/employee/search" method="get">
         <div class="search-field">
@@ -142,12 +142,12 @@
             <input type="text" name="address" placeholder="주소 입력">
         </div>
 
-        <div id="hireDateField" class="dynamicField" style="display: none;">
+        <div id="hireDateStrField" class="dynamicField" style="display: none;">
             <label for="hireDateStr" id="hireDateStr">입사일:</label>
-            <input type="date" name="hireDateStr">
+            <input type="date" name="hireDateStr" >
         </div>
 
-        <div id="birthDateField" class="dynamicField" style="display: none;">
+        <div id="birthDateStrField" class="dynamicField" style="display: none;">
             <label for="birthDateStr" id="birthDateStr">생년월일:</label>
             <input type="date" name="birthDateStr">
         </div>
@@ -189,6 +189,7 @@
 
         <button type="submit">검색</button>
     </form>
+</div>
 </div>
 <h1>직원 목록</h1>
 <table>
@@ -233,16 +234,16 @@
 </div>
 <script>
     function toggleFields(selectedValue) {
-    var fields = document.querySelectorAll('.dynamicField');
-    fields.forEach(function(field) {
-        field.style.display = 'none'; // 모든 필드 숨기기
-    });
+        var fields = document.querySelectorAll('.dynamicField');
+        fields.forEach(function(field) {
+            field.style.display = 'none'; // 모든 필드 숨기기
+        });
 
-    if (selectedValue) {
-        document.getElementById(selectedValue + 'Field').style.display = 'block'; // 선택된 필드만 보이기
+        if (selectedValue) {
+            document.getElementById(selectedValue + 'Field').style.display = 'block'; // 선택된 필드만 보이기
+        }
     }
 
-});
     function toggleMenu(element) {
     // 클릭한 요소의 상위 메뉴를 확인
     const parentMenu = element.closest('li').parentNode;
@@ -267,8 +268,6 @@
     if (nestedMenu) {
         nestedMenu.classList.toggle('active');
     }
-}
-
 }
 
 </script>
