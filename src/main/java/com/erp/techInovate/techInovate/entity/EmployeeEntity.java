@@ -39,6 +39,7 @@ public class EmployeeEntity {
     private String photo; //사진
 
 
+
     @PostPersist
     public void generateEmployeeNumber() {
         // employeeId가 설정된 후에 사원번호를 생성할 수 있도록 함

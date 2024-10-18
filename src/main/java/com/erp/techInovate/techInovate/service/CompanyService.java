@@ -3,6 +3,7 @@ package com.erp.techInovate.techInovate.service;
 import com.erp.techInovate.techInovate.dto.CompanyDTO;
 import com.erp.techInovate.techInovate.entity.CompanyEntity;
 import com.erp.techInovate.techInovate.repository.CompanyRepository;
+import com.mysql.cj.log.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,10 @@ public class CompanyService {
         company.setRepresentativeName(companyDTO.getRepresentativeName());
         company.setBusinessType(companyDTO.getBusinessType());
         return companyRepository.save(company);
+    }
+
+    public Optional<CompanyEntity> getCompanyById(Long id){
+        return companyRepository.findById(id);
     }
 
     public void deleteCompany(Long id) {

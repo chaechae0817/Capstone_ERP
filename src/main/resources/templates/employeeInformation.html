@@ -17,6 +17,10 @@
         <h1>직원 상세 정보</h1>
         <div class="details-wrapper">
             <div class="details-container">
+                <!-- 직원 사진 표시 -->
+                <div class="detail-row">
+                    <img th:src="@{${employee.photo}}" alt="직원 사진" style="max-width: 150px; max-height: 150px;" />
+                </div>
                 <div class="detail-row"><span class="detail-label">ID:</span> <span th:text="${employee.employeeId}"></span></div>
                 <div class="detail-row"><span class="detail-label">이름:</span> <span th:text="${employee.name}"></span></div>
                 <div class="detail-row"><span class="detail-label">사원번호:</span> <span th:text="${employee.employeeNumber}"></span></div>
@@ -29,6 +33,9 @@
                 <div class="detail-row"><span class="detail-label">생년월일:</span> <span th:text="${employee.birthDate}"></span></div>
                 <div class="detail-row"><span class="detail-label">주소:</span> <span th:text="${employee.address}"></span></div>
                 <div class="detail-row"><span class="detail-label">경력:</span> <span th:text="${employee.experience}"></span></div>
+
+
+
                 <a href="/employee/list" class="button">직원 목록보기</a>
             </div>
         </div>

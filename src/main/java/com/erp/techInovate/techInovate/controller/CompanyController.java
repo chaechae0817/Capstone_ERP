@@ -52,7 +52,7 @@ public class CompanyController {
 
     @GetMapping("/{id}/edit")
     public String editCompanyForm(@PathVariable Long id, Model model) {
-        CompanyEntity company = companyService.getCompany().orElseThrow(() -> new RuntimeException("Company not found"));
+        CompanyEntity company = companyService.getCompanyById(id).orElseThrow(() -> new RuntimeException("Company not found"));
         CompanyDTO companyDTO = new CompanyDTO();
         companyDTO.setId(company.getId());
         companyDTO.setName(company.getName());
