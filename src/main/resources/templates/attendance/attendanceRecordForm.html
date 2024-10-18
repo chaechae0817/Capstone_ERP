@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>출퇴근 기록 등록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .dialog {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: white;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .overlay {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+<h1>출퇴근 기록 등록</h1>
+<div class="overlay" id="overlay" onclick="closeDialog()"></div> <!-- 오버레이 -->
+<div class="dialog" id="confirmationDialog">
+    <h2>확인</h2>
+    <p id="confirmationText"></p>
+    <button onclick="submitForm()">저장</button>
+    <button onclick="closeDialog()">취소</button>
+</div>
+
+<form id="addAttendanceForm" onsubmit="prepareConfirmation(event)">
+    <label for="employee_id">직원 :</label>
+    <select id="employee_id" onchange="loadAttendanceCodes()" required>
+        <option value="">직원 선택</option>
+        <!-- 직원 목록을 올바르게 표시 -->
+        <option th:each="employee : ${employees}" th:value="${employee.employeeId}" th:text="${employee.name}"></option>
+    </select>
+
+    <label for="status_id">근태 코드 :</label>
+    <select id="status_id" required>
+        <option value="">근태 코드 선택</option>
+        <!-- 근태 코드 옵션은 JavaScript에서 동적으로 추가됩니다. -->
+    </select>
+
+    <label for="date">근태 날짜 :</label>
+    <input type="date" id="date" required />
+
+    <label for="check_in_time">출근 시간 :</label>
+    <input type="time" id="check_in_time" required />
+
+    <label for="check_out_time">퇴근 시간 :</label>
+    <input type="time" id="check_out_time" required />
+
+    <label for="notes">비고 :</label>
+    <input type="text" id="notes" />
+
+    <button type="submit">등록</button>
+    <button type="button" onclick="window.location.href='/record/list'">취소</button>
+</form>
+
+<script>
+    function loadAttendanceCodes() {
+        fetch(`/attendance/codes`) // 모든 근태 코드를 요청
+            .then(response => response.json())
+            .then(data => {
+                const statusSelect = document.getElementById('status_id');
+                statusSelect.innerHTML = '<option value="">근태 코드 선택</option>'; // 기존 옵션 제거
+                data.forEach(attendance => {
+                    const option = document.createElement('option');
+                    option.value = attendance.id; // 근태 코드 ID
+                    option.textContent = attendance.name; // 근태 코드 이름
+                    statusSelect.appendChild(option);
+                });
+            });
+    }
+
+    function prepareConfirmation(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+        const employeeId = document.getElementById('employee_id').value;
+        const statusId = document.getElementById('status_id').value;
+        const date = document.getElementById('date').value;
+        const checkInTime = document.getElementById('check_in_time').value;
+        const checkOutTime = document.getElementById('check_out_time').value;
+        const notes = document.getElementById('notes').value;
+
+        const confirmationText = `직원 ID: ${employeeId}, 근태 코드: ${statusId}, 날짜: ${date}, 출근 시간: ${checkInTime}, 퇴근 시간: ${checkOutTime}, 비고: ${notes}`;
+        document.getElementById('confirmationText').textContent = confirmationText;
+
+        document.getElementById('confirmationDialog').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closeDialog() {
+        document.getElementById('confirmationDialog').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    function submitForm() {
+        const employeeId = document.getElementById('employee_id').value;
+        const statusId = document.getElementById('status_id').value;
+        const date = document.getElementById('date').value;
+        const checkInTime = document.getElementById('check_in_time').value;
+        const checkOutTime = document.getElementById('check_out_time').value;
+        const notes = document.getElementById('notes').value;
+
+        fetch('/record/new', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+           body: JSON.stringify({
+                employee: {
+                    employeeId: employeeId // EmployeeEntity의 ID를 포함해야 함
+                },
+                attendance: { // AttendanceEntity 객체로 감싸기
+                    id: statusId // AttendanceEntity의 ID로 설정
+                },
+                date: date,
+                checkInTime: checkInTime,
+                checkOutTime: checkOutTime,
+                notes: notes
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/record/list'; // 성공 시 목록 페이지로 이동
+            } else {
+                alert('근태 기록 등록 실패');
+            }
+        });
+    }
+</script>
+</body>
+</html>

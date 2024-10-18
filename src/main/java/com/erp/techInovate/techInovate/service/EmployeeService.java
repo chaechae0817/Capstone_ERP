@@ -63,7 +63,7 @@ public class EmployeeService {
         employeeEntity.setExperience(employeeDTO.getExperience());
         employeeEntity.setAccountNumber(employeeDTO.getAccountNumber());
         employeeEntity.setBank(employeeDTO.getBank());
-        employeeEntity.setPhoto(fileName);
+        employeeEntity.setPhoto("/files/"+fileName);
         return employeeRepository.save(employeeEntity);
     }
 
