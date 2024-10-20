@@ -189,6 +189,7 @@
 
 
             <button type="submit">검색</button>
+            <button type="button" onclick="clearSearch()">초기화</button>
         </form>
     </div>
 </div>
@@ -318,6 +319,9 @@
         nestedMenu.classList.toggle('active');
     }
 }
+     function clearSearch() {
+        window.location.href = '/employee/list'; // 기본 리스트 페이지로 이동
+    }
 
 </script>
 </body>

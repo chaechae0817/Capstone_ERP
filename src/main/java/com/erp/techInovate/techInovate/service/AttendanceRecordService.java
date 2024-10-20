@@ -27,8 +27,9 @@ public class AttendanceRecordService {
         attendanceRecordRepository.deleteById(id);
     }
 
-    public List<AttendanceRecordEntity> searchRecords(String employeeName, LocalDate date, Long attendanceId) {
-        return attendanceRecordRepository.findByCriteria(employeeName, date, attendanceId);
+    public List<AttendanceRecordEntity> searchRecords(String employeeName, LocalDate startDate, LocalDate endDate, Long attendanceId) {
+        return attendanceRecordRepository.findByCriteria(employeeName, startDate, endDate, attendanceId);
     }
+
 
 }
