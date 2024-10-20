@@ -46,15 +46,20 @@
     <label for="employeeName">직원 이름:</label>
     <input type="text" id="employeeName" name="employeeName" th:value="${employeeName}">
 
-    <label for="date">날짜:</label>
-    <input type="date" id="date" name="date" th:value="${date}">
+    <label for="startDate">시작 날짜:</label>
+    <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+
+    <label for="endDate">종료 날짜:</label>
+    <input type="date" id="endDate" name="endDate" th:value="${endDate}">
 
     <label for="attendance">근태 코드:</label>
     <select id="attendance" name="attendance">
+        <option value="">전체</option> <!-- 선택 안 함 또는 전체 검색 -->
         <option th:each="att : ${attendanceCodes}" th:value="${att.id}" th:text="${att.name}" th:selected="${att.id == attendance}"></option>
     </select>
 
     <button type="submit">검색</button>
+    <button type="button" onclick="clearSearch()">초기화</button>
 </form>
 
 
@@ -87,5 +92,11 @@
 </table>
 
 <a href="/record/register">출퇴근 기록 등록하기</a>
+<script>
+    function clearSearch() {
+        window.location.href = '/record/list'; // 기본 리스트 페이지로 이동
+    }
+</script>
+
 </body>
 </html>

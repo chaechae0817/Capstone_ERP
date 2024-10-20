@@ -61,11 +61,13 @@ public class AttendanceRecordController {
     @GetMapping("/search")
     public String searchAttendanceRecords(
             @RequestParam(required = false) String employeeName,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @RequestParam(required = false) Long attendance,
             Model model) {
 
-        List<AttendanceRecordEntity> attendanceRecords = attendanceRecordService.searchRecords(employeeName, date, attendance);
+        // 기간 검색 처리
+        List<AttendanceRecordEntity> attendanceRecords = attendanceRecordService.searchRecords(employeeName, startDate, endDate, attendance);
         model.addAttribute("attendanceRecords", attendanceRecords);
 
         // 근태 코드 목록 추가
@@ -74,10 +76,12 @@ public class AttendanceRecordController {
 
         // 검색 조건 유지
         model.addAttribute("employeeName", employeeName);
-        model.addAttribute("date", date);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         model.addAttribute("attendance", attendance);
 
         return "attendance/attendanceRecordList";
     }
+
 
 }
