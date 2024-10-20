@@ -1,16 +1,20 @@
 package com.erp.techInovate.techInovate.controller;
 
+import com.erp.techInovate.techInovate.entity.AttendanceEntity;
 import com.erp.techInovate.techInovate.entity.AttendanceRecordEntity;
 import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.service.AttendanceRecordService;
+import com.erp.techInovate.techInovate.service.AttendanceService;
 import com.erp.techInovate.techInovate.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -21,11 +25,17 @@ public class AttendanceRecordController {
     private AttendanceRecordService attendanceRecordService;
 
     @Autowired
+    private AttendanceService attendanceService;
+
+    @Autowired
     private EmployeeService employeeService;
     @GetMapping("/list")
     public String list(Model model) {
         List<AttendanceRecordEntity> attendanceRecords = attendanceRecordService.findAll();
         model.addAttribute("attendanceRecords", attendanceRecords);
+        // 근태 코드 목록 추가
+        List<AttendanceEntity> attendanceCodes = attendanceService.findAll();
+        model.addAttribute("attendanceCodes", attendanceCodes);
         return "attendance/attendanceRecordList"; // 항목 목록 페이지
     }
 
@@ -47,4 +57,27 @@ public class AttendanceRecordController {
         attendanceRecordService.delete(id);
         return "redirect:/attendance/attendanceRecordlist"; // 삭제 후 목록으로 리디렉션
     }
+
+    @GetMapping("/search")
+    public String searchAttendanceRecords(
+            @RequestParam(required = false) String employeeName,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) Long attendance,
+            Model model) {
+
+        List<AttendanceRecordEntity> attendanceRecords = attendanceRecordService.searchRecords(employeeName, date, attendance);
+        model.addAttribute("attendanceRecords", attendanceRecords);
+
+        // 근태 코드 목록 추가
+        List<AttendanceEntity> attendanceCodes = attendanceService.findAll();
+        model.addAttribute("attendanceCodes", attendanceCodes);
+
+        // 검색 조건 유지
+        model.addAttribute("employeeName", employeeName);
+        model.addAttribute("date", date);
+        model.addAttribute("attendance", attendance);
+
+        return "attendance/attendanceRecordList";
+    }
+
 }
