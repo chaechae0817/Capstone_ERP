@@ -192,7 +192,7 @@
         </form>
     </div>
 </div>
-</div>
+
 <h1>직원 목록</h1>
 <table>
     <tr>
@@ -235,16 +235,63 @@
 <a href="/employee/new">직원 등록하기</a>
 </div>
 <script>
-    function toggleFields(selectedValue) {
-        var fields = document.querySelectorAll('.dynamicField');
-        fields.forEach(function(field) {
-            field.style.display = 'none'; // 모든 필드 숨기기
+    document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchField = urlParams.get('searchField');
+            const name = urlParams.get('name');
+            const contactInfo = urlParams.get('contactInfo');
+            const email = urlParams.get('email');
+            const address = urlParams.get('address');
+            const hireDateStr = urlParams.get('hireDateStr');
+            const birthDateStr = urlParams.get('birthDateStr');
+            const experience = urlParams.get('experience');
+            const positionId = urlParams.get('positionId');
+            const departmentId = urlParams.get('departmentId');
+
+            if (searchField) {
+                document.getElementById('searchField').value = searchField;
+                toggleFields(searchField);
+            }
+
+            if (name) {
+                document.querySelector("input[name='name']").value = name;
+            }
+            if (contactInfo) {
+                document.querySelector("input[name='contactInfo']").value = contactInfo;
+            }
+            if (email) {
+                document.querySelector("input[name='email']").value = email;
+            }
+            if (address) {
+                document.querySelector("input[name='address']").value = address;
+            }
+            if (hireDateStr) {
+                document.querySelector("input[name='hireDateStr']").value = hireDateStr;
+            }
+            if (birthDateStr) {
+                document.querySelector("input[name='birthDateStr']").value = birthDateStr;
+            }
+            if (experience) {
+                document.querySelector("select[name='experience']").value = experience;
+            }
+            if (positionId) {
+                document.querySelector("select[name='positionId']").value = positionId;
+            }
+            if (departmentId) {
+                document.querySelector("select[name='departmentId']").value = departmentId;
+            }
         });
 
-        if (selectedValue) {
-            document.getElementById(selectedValue + 'Field').style.display = 'block'; // 선택된 필드만 보이기
+        function toggleFields(selectedValue) {
+            var fields = document.querySelectorAll('.dynamicField');
+            fields.forEach(function(field) {
+                field.style.display = 'none'; // 모든 필드 숨기기
+            });
+
+            if (selectedValue) {
+                document.getElementById(selectedValue + 'Field').style.display = 'block'; // 선택된 필드만 보이기
+            }
         }
-    }
 
     function toggleMenu(element) {
     // 클릭한 요소의 상위 메뉴를 확인

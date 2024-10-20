@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,4 +26,9 @@ public class AttendanceRecordService {
     public void delete(Long id) {
         attendanceRecordRepository.deleteById(id);
     }
+
+    public List<AttendanceRecordEntity> searchRecords(String employeeName, LocalDate date, Long attendanceId) {
+        return attendanceRecordRepository.findByCriteria(employeeName, date, attendanceId);
+    }
+
 }
