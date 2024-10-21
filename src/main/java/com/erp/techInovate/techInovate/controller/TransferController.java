@@ -64,7 +64,7 @@ public class TransferController {
         TransferEntity transfer = transferService.findById(transferId);
         EmployeeEntity employee = transfer.getEmployee();
 
-        // 발령된 부서와 직급으로 직원 정보 업데이트
+        // 발령된 부서와 직급으로 직원 정보 업데이트 ( 입력 시 할 행동)
         employee.setDepartment(transfer.getToDepartment());
         employee.setPosition(transfer.getToPosition());
 
@@ -113,6 +113,14 @@ public class TransferController {
     // 발령 삭제 처리
     @PostMapping("/delete")
     public String deleteTransfer(@RequestParam("transferId") Long transferId) {
+        TransferEntity transfer = transferService.findById(transferId);
+        EmployeeEntity employee = transfer.getEmployee();
+        //취소 시 할 행동
+        employee.setDepartment(transfer.getFromDepartment());
+        employee.setPosition(transfer.getFromPosition());
+
+        employeeService.save(employee);
+
         transferService.deleteById(transferId); // 발령 ID로 발령 정보 삭제
         return "redirect:/transfer/list";       // 발령 목록 페이지로 리다이렉트
     }
