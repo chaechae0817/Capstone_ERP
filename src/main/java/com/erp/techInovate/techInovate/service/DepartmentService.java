@@ -26,6 +26,12 @@ public class DepartmentService {
         departmentRepository.deleteById(id);
     }
 
-
+    public DepartmentEntity findById(Long id) {
+        return departmentRepository.findById(id).orElse(null);
+    }
+    // 이름으로 부서 검색
+    public DepartmentEntity findByName(String name) {
+        return departmentRepository.findByName(name);
+    }
 
 }

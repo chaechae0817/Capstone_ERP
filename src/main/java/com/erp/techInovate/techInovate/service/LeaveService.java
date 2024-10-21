@@ -26,4 +26,8 @@ public class LeaveService {
     public void delete(Long id) {
         leaveRepository.deleteById(id);
     }
+
+    public List<LeaveEntity> getAllLeaveTypes() {
+        return leaveRepository.findAll();
+    }
 }

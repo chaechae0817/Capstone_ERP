@@ -1,93 +1,41 @@
 package com.erp.techInovate.techInovate.entity;
 
 import jakarta.persistence.*;
-
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "transfers")
 public class TransferEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transferId;
 
-    @Column(nullable = false)
-    private Long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private EmployeeEntity employee;
 
-    @Column(nullable = false)
-    private String personnelAppointment; // 부서이동 or 승진
+    @ManyToOne
+    @JoinColumn(name = "from_department_id")
+    private DepartmentEntity fromDepartment;
 
-    private String fromDepartment; //현재부서
-    private String toDepartment; //이동할 부서
-    private String fromPosition; //현재 직급
-    private String toPosition; //이동할 직급
+    @ManyToOne
+    @JoinColumn(name = "from_position_id")
+    private PositionEntity fromPosition;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "to_department_id")
+    private DepartmentEntity toDepartment;
+
+    @ManyToOne
+    @JoinColumn(name = "to_position_id")
+    private PositionEntity toPosition;
+
     private LocalDate transferDate;
 
-    // Getters and Setters
-    public Long getTransferId() {
-        return transferId;
-    }
-
-    public void setTransferId(Long transferId) {
-        this.transferId = transferId;
-    }
-
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public String getPersonnelAppointment() {
-        return personnelAppointment;
-    }
-
-    public void setPersonnelAppointment(String personnelAppointment) {
-        this.personnelAppointment = personnelAppointment;
-    }
-
-    public String getFromDepartment() {
-        return fromDepartment;
-    }
-
-    public void setFromDepartment(String fromDepartment) {
-        this.fromDepartment = fromDepartment;
-    }
-
-    public String getToDepartment() {
-        return toDepartment;
-    }
-
-    public void setToDepartment(String toDepartment) {
-        this.toDepartment = toDepartment;
-    }
-
-    public String getFromPosition() {
-        return fromPosition;
-    }
-
-    public void setFromPosition(String fromPosition) {
-        this.fromPosition = fromPosition;
-    }
-
-    public String getToPosition() {
-        return toPosition;
-    }
-
-    public void setToPosition(String toPosition) {
-        this.toPosition = toPosition;
-    }
-
-    public LocalDate getTransferDate() {
-        return transferDate;
-    }
-
-    public void setTransferDate(LocalDate transferDate) {
-        this.transferDate = transferDate;
-    }
+    private String personnelAppointment;
 }

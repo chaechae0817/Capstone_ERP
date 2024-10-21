@@ -23,7 +23,14 @@ public class PositionService {
         return positionRepository.save(position);
     }
 
+    public PositionEntity findById(Long id) {
+        return positionRepository.findById(id).orElse(null);
+    }
     public void deletePosition(Long id) {
         positionRepository.deleteById(id);
+    }
+    // 이름으로 직급 검색
+    public PositionEntity findByName(String name) {
+        return positionRepository.findByName(name);
     }
 }

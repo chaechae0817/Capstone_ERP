@@ -108,7 +108,16 @@ public class EmployeeService {
     public void updateEmployee(EmployeeEntity employee) {
         employeeRepository.save(employee); // save 메소드는 존재하는 엔티티를 업데이트합니다.
     }
+    public EmployeeEntity findById(Long employeeId) {
+        return employeeRepository.findById(employeeId).orElse(null);
+    }
 
-
+    public void save(EmployeeEntity employee) {
+        employeeRepository.save(employee);
+    }
+    // 모든 직원 정보 조회 메서드
+    public List<EmployeeEntity> findAll() {
+        return employeeRepository.findAll();
+    }
 
 }

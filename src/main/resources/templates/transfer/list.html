@@ -1,156 +1,97 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>인사 발령 목록</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
-        /* 기본적인 페이지 스타일 */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-}
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
 
-h1 {
-    text-align: center;
-    color: #333;
-    margin-top: 20px;
-    font-size: 2em;
-}
+        h1 {
+            text-align: center;
+            color: #333;
+        }
 
-/* 테이블 스타일 */
-table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-thead {
-    background-color: #4CAF50;
-    color: white;
-}
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
 
-th, td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    text-align: center;
-}
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
+        tr:hover {
+            background-color: #f1f1f1;
+        }
 
-tr:hover {
-    background-color: #f1f1f1;
-}
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
 
-th {
-    background-color: #4CAF50;
-    color: white;
-    font-weight: bold;
-}
-
-/* 링크 스타일 */
-a {
-    color: #4CAF50;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* 버튼 같은 링크 스타일 */
-a[href="/transfer/new"] {
-    display: inline-block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 4px;
-}
-
-a[href="/transfer/new"]:hover {
-    background-color: #45a049;
-}
-
-/* 수정 및 삭제 링크 스타일 */
-td a {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: white;
-    background-color: #4CAF50;
-}
-
-td a:hover {
-    background-color: #45a049;
-}
-
-td a:nth-child(2) {
-    background-color: #e74c3c;
-}
-
-td a:nth-child(2):hover {
-    background-color: #c0392b;
-}
-
-/* 반응형 스타일 */
-@media (max-width: 768px) {
-    table {
-        width: 100%;
-    }
-
-    th, td {
-        font-size: 0.9em;
-    }
-
-    h1 {
-        font-size: 1.5em;
-    }
-}
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-<h1>인사 발령 목록</h1>
-<a href="/transfer/new">새로운 발령 추가</a>
+<h1>발령 리스트</h1>
+
 <table>
     <thead>
     <tr>
-        <th>발령 ID</th>
-        <th>직원 ID</th>
-        <th>발령 구분</th>
-        <th>이전 부서</th>
+        <th>이름</th>
         <th>현재 부서</th>
-        <th>이전 직급</th>
+        <th>현재 직급</th>
+        <th>발령 부서</th>
         <th>발령 직급</th>
         <th>발령일</th>
-        <th>작업</th>
+        <th>발령 구분</th>
+        <th>액션</th>
     </tr>
     </thead>
     <tbody>
+    <!-- 발령 리스트 출력 -->
     <tr th:each="transfer : ${transfers}">
-        <td th:text="${transfer.transferId}"></td>
-        <td th:text="${transfer.employeeId}"></td>
-        <td th:text="${transfer.personnelAppointment}"></td>
-        <td th:text="${transfer.fromDepartment}"></td>
-        <td th:text="${transfer.toDepartment}"></td>
-        <td th:text="${transfer.fromPosition}"></td>
-        <td th:text="${transfer.toPosition}"></td>
+        <td th:text="${transfer.employeeName}"></td> <!-- employee 대신 employeeName 사용 -->
+        <td th:text="${transfer.fromDepartmentName}"></td>
+        <td th:text="${transfer.fromPositionName}"></td>
+        <td th:text="${transfer.toDepartmentName}"></td>
+        <td th:text="${transfer.toPositionName}"></td>
         <td th:text="${transfer.transferDate}"></td>
+        <td th:text="${transfer.personnelAppointment}"></td>
         <td>
-            <a th:href="@{/transfer/update/{id}(id=${transfer.transferId})}">수정</a>
-            <a th:href="@{/transfer/delete/{id}(id=${transfer.transferId})}">삭제</a>
+            <!-- 승인 및 삭제 버튼 -->
+            <form action="/transfer/approve" method="post" style="display:inline;">
+                <input type="hidden" name="transferId" th:value="${transfer.transferId}" />
+                <button type="submit">승인</button>
+            </form>
+            <form action="/transfer/delete" method="post" style="display:inline;">
+                <input type="hidden" name="transferId" th:value="${transfer.transferId}" />
+                <button type="submit" class="delete">삭제</button>
+            </form>
         </td>
     </tr>
     </tbody>
 </table>
+<div class="button-container">
+    <a href="/employee/list">사원 리스트로 이동</a>
+</div>
+
 </body>
 </html>

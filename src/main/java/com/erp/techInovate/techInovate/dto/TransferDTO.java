@@ -7,16 +7,23 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-
 public class TransferDTO {
     private Long transferId;
     private Long employeeId;
-    private String personnelAppointment;
-    private String fromDepartment;
-    private String toDepartment;
-    private String fromPosition;
-    private String toPosition;
+    private String employeeName;
+
+    private Long fromDepartmentId;
+    private String fromDepartmentName;
+
+    private Long toDepartmentId;
+    private String toDepartmentName;
+
+    private Long fromPositionId;
+    private String fromPositionName;
+
+    private Long toPositionId;
+    private String toPositionName;
+
     private LocalDate transferDate;
-
-
+    private String personnelAppointment; // 발령 구분 (부서 이동, 승진 등)
 }
