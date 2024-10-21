@@ -76,11 +76,6 @@
         <td th:text="${transfer.transferDate}"></td>
         <td th:text="${transfer.personnelAppointment}"></td>
         <td>
-            <!-- 승인 및 삭제 버튼 -->
-            <form action="/transfer/approve" method="post" style="display:inline;">
-                <input type="hidden" name="transferId" th:value="${transfer.transferId}" />
-                <button type="submit">승인</button>
-            </form>
             <form action="/transfer/delete" method="post" style="display:inline;">
                 <input type="hidden" name="transferId" th:value="${transfer.transferId}" />
                 <button type="submit" class="delete">삭제</button>

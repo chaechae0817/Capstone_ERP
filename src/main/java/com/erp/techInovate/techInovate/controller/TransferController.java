@@ -70,6 +70,8 @@ public class TransferController {
 
         employeeService.save(employee);
 
+
+
         // 발령 항목 삭제
         transferService.deleteById(transferId);
 
@@ -103,9 +105,12 @@ public class TransferController {
         transfer.setPersonnelAppointment(transferDTO.getPersonnelAppointment());
         transfer.setTransferDate(transferDTO.getTransferDate());
 
+
+        employee.setPosition(transfer.getToPosition());
+        employee.setDepartment(transfer.getToDepartment());
+        employeeService.save(employee);
         // 발령 정보 저장
         transferService.save(transfer);
-
         // 발령 신청 후 리스트 페이지로 리다이렉트
         return "redirect:/transfer/list";  // 리다이렉트 명시적으로 추가
     }
