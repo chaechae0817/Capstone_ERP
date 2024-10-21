@@ -231,6 +231,24 @@ a:hover {
     background-color: #45a049;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
+/* 초기화 버튼 스타일 */
+#searchForm button[type="button"] {
+    padding: 10px 25px;  /* 버튼 크기 */
+    background-color: #f44336;  /* 빨간색 배경 */
+    color: white;  /* 흰색 글씨 */
+    border: none;  /* 테두리 제거 */
+    border-radius: 5px;  /* 모서리 둥글게 */
+    font-size: 16px;  /* 버튼 텍스트 크기 */
+    cursor: pointer;  /* 클릭 가능 커서 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;  /* 부드러운 변화 효과 */
+    margin-left: 10px;  /* 검색 버튼과의 간격 */
+}
+
+/* 초기화 버튼 호버 시 색상 변경 */
+#searchForm button[type="button"]:hover {
+    background-color: #d32f2f;  /* 더 짙은 빨간색 배경 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);  /* 그림자 효과 */
+}
 .search-fields {
         width : 800px;
         height : 500px;
