@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>인사 발령 입력</title>
+    <title>휴가자 조회</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,16 +58,30 @@
             background-color: #45a049;
         }
     </style>
-</head>
 <body>
-<h1>직원을 선택하세요</h1>
-<form th:action="@{/transfer/newselect}" method="get">
-    <select name="employeeId">
-        <option value="">직원 선택</option>
-        <option th:each="employee : ${employees}" th:value="${employee.employeeId}"
-                th:text="${employee.name}"></option>
-    </select>
-    <button type="submit">다음</button>
-</form>
+<h1>휴가 신청자 목록</h1>
+<table>
+    <thead>
+    <tr>
+        <th>휴가 ID</th>
+        <th>사원 이름</th>
+        <th>휴가 종목</th>
+        <th>시작일</th>
+        <th>종료일</th>
+        <th>휴가 사유</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Thymeleaf 등을 활용하여 데이터를 출력 -->
+    <tr th:each="vacation : ${vacations}">
+        <td th:text="${vacation.vacationId}"></td>
+        <td th:text="${vacation.employee.name}"></td>
+        <td th:text="${vacation.vacationType.name}"></td>
+        <td th:text="${vacation.startDate}"></td>
+        <td th:text="${vacation.endDate}"></td>
+        <td th:text="${vacation.reason}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

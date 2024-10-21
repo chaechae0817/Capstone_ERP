@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>인사 발령 입력</title>
+    <title>휴가 신청</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,7 +42,9 @@
             font-size: 1em;
             background-color: #f9f9f9;
         }
-
+        textarea {
+            font-size: 1.2em; /* 폰트를 조금 크게 설정 */
+        }
         button {
             width: 100%;
             padding: 12px;
@@ -58,16 +60,32 @@
             background-color: #45a049;
         }
     </style>
-</head>
 <body>
-<h1>직원을 선택하세요</h1>
-<form th:action="@{/transfer/newselect}" method="get">
-    <select name="employeeId">
-        <option value="">직원 선택</option>
-        <option th:each="employee : ${employees}" th:value="${employee.employeeId}"
-                th:text="${employee.name}"></option>
-    </select>
-    <button type="submit">다음</button>
+<h1>휴가 신청</h1>
+<form action="/vacation/new" method="POST">
+    <label for="employee">사원 선택:</label>
+    <select id="employee" name="employeeId" required>
+        <option value="" disabled selected>사원을 선택하세요</option>
+        <option th:each="employee : ${employees}" th:value="${employee.employeeId}" th:text="${employee.name}"></option>
+    </select><br><br>
+
+    <label for="vacationType">휴가 종목:</label>
+    <select id="vacationType" name="vacationTypeName" required>
+        <option value="" disabled selected>휴가 종목을 선택하세요</option>
+        <!-- 휴가 종목 목록을 드롭다운에 출력 -->
+        <option th:each="leaveType : ${leaveTypes}" th:value="${leaveType.name}" th:text="${leaveType.name}"></option>
+    </select><br><br>
+
+    <label for="startDate">시작일:</label>
+    <input type="date" id="startDate" name="startDate" required><br><br>
+
+    <label for="endDate">종료일:</label>
+    <input type="date" id="endDate" name="endDate" required><br><br>
+
+    <label for="reason">휴가 사유:</label>
+    <textarea id="reason" name="reason" required></textarea><br><br>
+
+    <button type="submit">휴가 신청</button>
 </form>
 </body>
 </html>

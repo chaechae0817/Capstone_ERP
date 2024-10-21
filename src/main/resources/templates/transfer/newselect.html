@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>인사 발령 입력</title>
+    <title>인사 발령 신청</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,14 +60,42 @@
     </style>
 </head>
 <body>
-<h1>직원을 선택하세요</h1>
-<form th:action="@{/transfer/newselect}" method="get">
-    <select name="employeeId">
-        <option value="">직원 선택</option>
-        <option th:each="employee : ${employees}" th:value="${employee.employeeId}"
-                th:text="${employee.name}"></option>
-    </select>
-    <button type="submit">다음</button>
+<h1>인사 발령 신청</h1>
+
+<form action="/transfer/apply" method="post">
+    <!-- 직원 정보 -->
+    <input type="hidden" name="employeeId" th:value="${employee.employeeId}" />
+
+    <label>이름:</label>
+    <input type="text" th:value="${employee.name}" readonly><br>
+
+    <label>현재 부서:</label>
+    <input type="text" th:value="${employee.department.name}" readonly><br>
+
+    <label>현재 직급:</label>
+    <input type="text" th:value="${employee.position.name}" readonly><br>
+
+    <!-- 발령 정보 선택 -->
+    <label>발령 부서:</label>
+    <select name="toDepartmentId">
+        <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+    </select><br>
+
+    <label>발령 직급:</label>
+    <select name="toPositionId">
+        <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}"></option>
+    </select><br>
+
+    <label>발령일:</label>
+    <input type="date" name="transferDate"><br>
+
+    <label>발령 구분:</label>
+    <select name="personnelAppointment">
+        <option value="승진">승진</option>
+        <option value="강등">강등</option>
+    </select><br>
+
+    <button type="submit">신청</button>
 </form>
 </body>
 </html>

@@ -1,11 +1,13 @@
 package com.erp.techInovate.techInovate.service;
 
+import com.erp.techInovate.techInovate.dto.TransferDTO;
 import com.erp.techInovate.techInovate.entity.TransferEntity;
 import com.erp.techInovate.techInovate.repository.TransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransferService {
@@ -13,19 +15,40 @@ public class TransferService {
     @Autowired
     private TransferRepository transferRepository;
 
-    public List<TransferEntity> findAll() {
-        return transferRepository.findAll();
+    // 발령 정보 저장
+    public void save(TransferEntity transfer) {
+        transferRepository.save(transfer);
     }
 
-    public TransferEntity findById(Long id) {
-        return transferRepository.findById(id).orElse(null);
+    // 발령 리스트 조회
+    public List<TransferDTO> findAll() {
+        return transferRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public TransferEntity save(TransferEntity transfer) {
-        return transferRepository.save(transfer);
+    // 발령 엔티티를 DTO로 변환
+    private TransferDTO convertToDTO(TransferEntity transfer) {
+        TransferDTO dto = new TransferDTO();
+        dto.setTransferId(transfer.getTransferId());
+        dto.setEmployeeId(transfer.getEmployee().getEmployeeId());
+        dto.setEmployeeName(transfer.getEmployee().getName());
+        dto.setFromDepartmentName(transfer.getFromDepartment().getName());
+        dto.setToDepartmentName(transfer.getToDepartment().getName());
+        dto.setFromPositionName(transfer.getFromPosition().getName());
+        dto.setToPositionName(transfer.getToPosition().getName());
+        dto.setTransferDate(transfer.getTransferDate());
+        dto.setPersonnelAppointment(transfer.getPersonnelAppointment());
+        return dto;
     }
 
-    public void deleteById(Long id) {
-        transferRepository.deleteById(id);
+    // 발령 ID로 조회
+    public TransferEntity findById(Long transferId) {
+        return transferRepository.findById(transferId).orElseThrow();
+    }
+
+    // 발령 삭제
+    public void deleteById(Long transferId) {
+        transferRepository.deleteById(transferId);
     }
 }

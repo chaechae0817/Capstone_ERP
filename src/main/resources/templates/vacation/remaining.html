@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>인사 발령 입력</title>
+    <title>사원별 휴가조회</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,16 +58,37 @@
             background-color: #45a049;
         }
     </style>
-</head>
 <body>
-<h1>직원을 선택하세요</h1>
-<form th:action="@{/transfer/newselect}" method="get">
-    <select name="employeeId">
-        <option value="">직원 선택</option>
-        <option th:each="employee : ${employees}" th:value="${employee.employeeId}"
-                th:text="${employee.name}"></option>
-    </select>
-    <button type="submit">다음</button>
+<h1>사원별 휴가 조회</h1>
+<form action="/vacation/remain" method="GET">
+    <label for="employeeId">사원 ID:</label>
+    <input type="number" id="employeeId" name="employeeId" required>
+    <button type="submit">조회</button>
 </form>
+
+<h2>휴가 내역</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>휴가 ID</th>
+        <th>휴가 종목</th>
+        <th>시작일</th>
+        <th>종료일</th>
+        <th>휴가 사유</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 서버에서 데이터를 받아서 출력 -->
+    <!-- 예시:
+    <tr>
+        <td>1</td>
+        <td>연차</td>
+        <td>2024-10-01</td>
+        <td>2024-10-07</td>
+        <td>개인 사정</td>
+    </tr>
+    -->
+    </tbody>
+</table>
 </body>
 </html>
