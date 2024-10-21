@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>퇴사 신청 관리</title>
+    <link rel="stylesheet" type="text/css" href="/resignation.css" />
 </head>
 <body>
 <h1>퇴사 신청 관리</h1>
@@ -23,12 +24,18 @@
         <td>
             <form action="#" th:action="@{/resignation/approve/{resignationId}(resignationId=${resignation.resignationId})}" method="post">
                 <input type="text" name="notes" placeholder="비고 입력" />
-                <button type="submit">승인</button>
             </form>
         </td>
+
+        <td>
+            <form action="#" th:action="@{/resignation/approve/{resignationId}(resignationId=${resignation.resignationId})}" method="post">
+                <button type="submit" class="approve-btn">승인</button>
+            </form>
+        </td>
+
         <td>
             <form action="#" th:action="@{/resignation/reject/{resignationId}(resignationId=${resignation.resignationId})}" method="post">
-                <button type="submit">거절</button>
+                <button type="submit" class="reject-btn">거절</button>
             </form>
         </td>
     </tr>
