@@ -1,0 +1,120 @@
+/* 기본 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+/* 제목 스타일 */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* 테이블 헤더 스타일 */
+th {
+    background-color: #4CAF50;
+    color: white;
+    text-transform: uppercase;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+/* 테이블 셀 스타일 */
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 짝수 행 스타일 */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* 행 호버 스타일 */
+tr:hover {
+    background-color: #e1f5fe;
+}
+
+/* 입력 필드 스타일 */
+input[type="text"] {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+/* 승인 버튼 스타일 */
+button.approve-btn {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 승인 버튼 호버 스타일 */
+button.approve-btn:hover {
+    background-color: #45a049;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 거절 버튼 스타일 */
+button.reject-btn {
+    padding: 10px 15px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 거절 버튼 호버 스타일 */
+button.reject-btn:hover {
+    background-color: #d32f2f;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 폼 스타일 */
+form {
+    margin: 0;
+}
+
+/* 비고와 버튼이 겹치지 않도록 비고 칸 폼 스타일 */
+td form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 비고 필드와 버튼 사이에 간격 추가 */
+    align-items: flex-start; /* 요소들을 왼쪽으로 정렬 */
+}
+
+/* 비고 입력 필드 */
+td input[type="text"] {
+    margin-bottom: 10px;
+    width: 100%; /* 비고 입력 필드가 전체 칸을 차지하도록 */
+}
