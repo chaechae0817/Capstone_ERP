@@ -1,92 +1,103 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>재직 증명서</title>
-    <link rel="stylesheet" href="career_certificate.css"> <!-- CSS 파일 링크 -->
+    <style>
+        body {
+            font-family: 'Malgun Gothic', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .certificate-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 2px solid black;
+        }
+
+        .certificate-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .certificate-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .certificate-table th, .certificate-table td {
+            border: 1px solid black;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .footer-text {
+            margin-top: 30px;
+            font-size: 16px;
+        }
+
+        .footer-signature {
+            margin-top: 30px;
+            font-size: 16px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        #purposeDialog {
+            max-width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #purposeSelect {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #purposeDialog button {
+            margin-top: 15px;
+        }
+        @media print {
+            .print-button {
+                display: none;
+            }
+    </style>
     <script>
         function submitPurpose() {
             const purpose = document.getElementById('purposeSelect').value;
-            // 용도를 선택한 후 페이지를 새로고침하여 용도를 URL 파라미터로 전달
-            window.location.href = '/certificate/select_purpose?purpose=' + encodeURIComponent(purpose);
-            document.getElmentById('certificateContainer').style.display = 'block';
+            document.getElementById('purposeDialog').style.display = 'none';
+            document.getElementById('certificateContainer').style.display = 'block';
+            document.getElementById('purposeField').textContent = purpose;
         }
     </script>
-    <style>
-        body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
-}
-
-.certificate-container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
-    font-size: 28px;
-    color: #4CAF50;
-}
-
-.employee-info, .company-info, .job-info {
-    margin-bottom: 30px;
-}
-
-.employee-info p, .company-info p, .job-info p {
-    font-size: 18px;
-    line-height: 1.6;
-}
-
-strong {
-    color: #333;
-}
-
-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 18px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-#purposeDialog {
-    max-width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#purposeSelect {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-#purposeDialog button {
-    margin-top: 15px;
-}
-    </style>
 </head>
 <body>
 
@@ -94,39 +105,59 @@ button:hover {
     <h3>용도 선택</h3>
     <select id="purposeSelect">
         <option value="개인">개인</option>
-        <option value="ㅋㅋ">ㅋㅋ</option>
-        <option value="몰라">몰라</option>
-        <!-- 추가 용도 -->
+        <option value="공공기관 제출">공공기관 제출</option>
+        <option value="은행 제출">은행 제출</option>
     </select>
     <button onclick="submitPurpose()">확인</button>
 </div>
 
-<div class="certificate-container" style="display:block;" id="certificateContainer">
-    <h1>재직 증명서</h1>
-    <div class="employee-info">
-        <p><strong>이름:</strong> <span th:text="${employeeCertificate.name}"></span></p>
-        <p><strong>생년월일:</strong> <span th:text="${employeeCertificate.birth_date}"></span></p>
-        <p><strong>연락처:</strong> <span th:text="${employeeCertificate.contact_info}"></span></p>
-        <p><strong>주소:</strong> <span th:text="${employeeCertificate.address}"></span></p>
+<div class="certificate-container" style="display:none;" id="certificateContainer">
+    <div class="certificate-title">재 직 증 명 서</div>
+    <table class="certificate-table">
+        <tr>
+            <th>성 명</th>
+            <td th:text="${employeeCertificate.name}"></td>
+            <th>생년월일</th>
+            <td th:text="${employeeCertificate.birth_date}"></td>
+        </tr>
+        <tr>
+            <th>주 소</th>
+            <td colspan="3"th:text="${employeeCertificate.address}"></td>
+        </tr>
+        <tr>
+            <th>회사명</th>
+            <td th:text="${employeeCertificate.company_name}"></td>
+            <th>사업자번호</th>
+            <td th:text="${employeeCertificate.business_registration_number}"></td>
+        </tr>
+        <tr>
+            <th>근무부서</th>
+            <td th:text="${employeeCertificate.department}"></td>
+            <th>직 위</th>
+            <td th:text="${employeeCertificate.position}"></td>
+        </tr>
+        <tr>
+            <th>소재지</th>
+            <td colspan="3"th:text="${employeeCertificate.business_location}"></td>
+        </tr>
+        <tr>
+            <th>입사일</th>
+            <td colspan="3"th:text="${employeeCertificate.hireDate}"></td>
+        </tr>
+        <tr>
+            <th>용 도</th>
+            <td colspan="3" id="purposeField"></td>
+        </tr>
+    </table>
+    <div class="footer-text">
+        상기와 같이 재직하고 있음을 증명함
     </div>
-    <div class="company-info">
-        <p><strong>회사 이름:</strong> <span th:text="${employeeCertificate.company_name}"></span></p>
-        <p><strong>사업자등록번호:</strong> <span th:text="${employeeCertificate.business_registration_number}"></span></p>
-        <p><strong>대표명:</strong> <span th:text="${employeeCertificate.representative_name}"></span></p>
-        <p><strong>업종:</strong> <span th:text="${employeeCertificate.industry}"></span></p>
-        <p><strong>사업장 소재지:</strong> <span th:text="${employeeCertificate.business_location}"></span></p>
+    <div class="footer-signature">
+        <p><span th:text="${employeeCertificate.issue_date}"></span></p>
+        <p>주식회사 <span th:text="${employeeCertificate.company_name}"></span></p>
+        <p>대표이사<span th:text="${employeeCertificate.industry}"></span></p>
     </div>
-    <div class="job-info">
-        <p><strong>근무 부서:</strong> <span th:text="${employeeCertificate.department}"></span></p>
-        <p><strong>직위:</strong> <span th:text="${employeeCertificate.position}"></span></p>
-        <p><strong>입사일:</strong> <span th:text="${employeeCertificate.hireDate}"></span></p>
-        <p><strong>용도:</strong> <span th:text="${employeeCertificate.purpose}"></span></p>
-        <p><strong>발급일:</strong> <span th:text="${employeeCertificate.issue_date}"></span></p>
-    </div>
-    <button onclick="window.print()">인쇄하기</button>
+    <button onclick="window.print()"class="print-button">인쇄하기</button>
 </div>
-
-
-
 </body>
 </html>

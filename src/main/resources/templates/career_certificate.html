@@ -6,95 +6,113 @@
     <link rel="stylesheet" href="career_certificate.css"> <!-- CSS 파일 링크 -->
     <style>
         body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
+            font-family: 'Malgun Gothic', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
 
-/* 증명서 컨테이너 스타일 */
-.certificate-container {
-    background-color: #fff;
-    padding: 30px;
-    margin: 50px auto;
-    width: 80%;
-    max-width: 800px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
+        }
 
-/* 제목 스타일 */
-.certificate-container h1 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 30px;
-    font-size: 2em;
-}
+        .certificate-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 2px solid black;
+        }
 
-/* 직원 정보, 회사 정보, 직무 정보 섹션 스타일 */
-.employee-info, .company-info, .job-info {
-    margin-bottom: 20px;
-}
+        .certificate-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-/* 각 섹션 내부 텍스트 스타일 */
-p {
-    margin: 10px 0;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #555;
-}
+        .certificate-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
 
-/* 각 섹션의 라벨을 굵게 표시 */
-p strong {
-    color: #333;
-    font-weight: bold;
-    width: 150px;
-    display: inline-block;  /* 라벨과 텍스트를 수평으로 정렬 */
-}
+        .certificate-table th, .certificate-table td {
+            border: 1px solid black;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
 
-/* 버튼 스타일 */
-button {
-    display: block;
-    width: 150px;
-    margin: 30px auto 0;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
+        .footer-text {
+            margin-top: 30px;
+            font-size: 16px;
+        }
 
-button:hover {
-    background-color: #45a049;
-}
+        .footer-signature {
+            margin-top: 30px;
+            font-size: 16px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        @media print {
+            .print-button {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="certificate-container">
-    <h1>경력 증명서</h1>
-    <div class="employee-info">
-        <p><strong>이름:</strong> <span th:text="${careerCertificate.name}"></span></p>
-        <p><strong>생년월일:</strong> <span th:text="${careerCertificate.birth_date}"></span></p>
-        <p><strong>연락처:</strong> <span th:text="${careerCertificate.contact_info}"></span></p>
+<div class="certificate-container" id="certificateContainer">
+    <div class="certificate-title">경 력 증 명 서</div>
+    <table class="certificate-table">
+        <tr>
+            <th>성 명</th>
+            <td th:text="${careerCertificate.name}"></td>
+            <th>생년월일</th>
+            <td th:text="${careerCertificate.birth_date}"></td>
+        </tr>
+        <tr>
+            <th>회사명</th>
+            <td th:text="${careerCertificate.company_name}"></td>
+            <th>사업자번호</th>
+            <td th:text="${careerCertificate.business_registration_number}"></td>
+        </tr>
+        <tr>
+            <th>근무부서</th>
+            <td th:text="${careerCertificate.department}"></td>
+            <th>직 위</th>
+            <td th:text="${careerCertificate.position}"></td>
+        </tr>
+        <tr>
+            <th>소재지</th>
+            <td colspan="3"th:text="${careerCertificate.business_location}"></td>
+        </tr>
+        <tr>
+            <th>재직기간</th>
+            <td colspan="3"th:text="${careerCertificate.employment_period}"></td>
+        </tr>
+    </table>
+    <div class="footer-text">
+        상기와 같이 재직하고 있음을 증명함
     </div>
-    <div class="company-info">
-        <p><strong>회사 이름:</strong> <span th:text="${careerCertificate.company_name}"></span></p>
-        <p><strong>사업자등록번호:</strong> <span th:text="${careerCertificate.business_registration_number}"></span></p>
-        <p><strong>대표명:</strong> <span th:text="${careerCertificate.representative_name}"></span></p>
-        <p><strong>업종:</strong> <span th:text="${careerCertificate.industry}"></span></p>
-        <p><strong>사업장 소재지:</strong> <span th:text="${careerCertificate.business_location}"></span></p>
+    <div class="footer-signature">
+        <p><span th:text="${careerCertificate.issue_date}"></span></p>
     </div>
-    <div class="job-info">
-        <p><strong>근무 부서:</strong> <span th:text="${careerCertificate.department}"></span></p>
-        <p><strong>직위:</strong> <span th:text="${careerCertificate.position}"></span></p>
-        <p><strong>입사일:</strong> <span th:text="${careerCertificate.hireDate}"></span></p>
-        <p><strong>재직기간:</strong> <span th:text="${careerCertificate.employment_period}"></span></p>
-        <p><strong>퇴사 사유:</strong> <span th:text="${careerCertificate.resignation_reason}"></span></p>
-        <p><strong>발급일:</strong> <span th:text="${careerCertificate.issue_date}"></span></p>
-    </div>
-    <button onclick="window.print()">인쇄하기</button>
+    <button onclick="window.print()"class="print-button">인쇄하기</button>
 </div>
 </body>
 </html>

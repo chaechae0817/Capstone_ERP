@@ -1,0 +1,58 @@
+/* 전체 페이지 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* 정보 텍스트 스타일 */
+        p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        strong {
+            color: #333;
+        }
+
+        span {
+            color: #555;
+        }
+
+        /* 수정 버튼 스타일 */
+        a {
+            display: inline-block;
+            background-color: #4CAF50; /* 녹색 배경 */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            background-color: #45a049; /* 버튼 호버 효과 */
+        }
+
+        /* 회사 미등록 메시지 스타일 */
+        .no-company {
+            font-size: 18px;
+            color: #f44336; /* 경고 색상 */
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .no-company a {
+            background-color: #2196F3; /* 파란색 배경 */
+        }
+
+        .no-company a:hover {
+            background-color: #1976D2; /* 파란색 호버 효과 */
+        }
