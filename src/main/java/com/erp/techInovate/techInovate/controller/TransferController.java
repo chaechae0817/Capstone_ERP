@@ -130,12 +130,40 @@ public class TransferController {
         return "redirect:/transfer/list";       // 발령 목록 페이지로 리다이렉트
     }
 
-    // 발령 리스트 페이지 (GET 요청)
     @GetMapping("/list")
     public String listTransfers(Model model) {
-        List<TransferDTO> transfers = transferService.findAll();   // 모든 발령 정보 가져오기
-        model.addAttribute("transfers", transfers);                // 발령 목록을 모델에 추가
-        return "transfer/list";                                    // 발령 목록 페이지로 이동
+        List<TransferDTO> transfers = transferService.findAll();
+        List<DepartmentEntity> departments = departmentService.getAllDepartments();
+        List<PositionEntity> positions = positionService.getAllPositions();
+
+        model.addAttribute("transfers", transfers);
+        model.addAttribute("departments", departments);
+        model.addAttribute("positions", positions);
+        return "transfer/list";
     }
 
+    @GetMapping("/search")
+    public String searchTransfers(
+            @RequestParam(required = false) String employeeName,
+            @RequestParam(required = false) Long toDepartmentId,
+            @RequestParam(required = false) Long toPositionId,
+            @RequestParam(required = false) LocalDate transferDate,
+            @RequestParam(required = false) String personnelAppointment,
+            Model model) {
+
+        List<TransferDTO> transfers = transferService.searchTransfers(employeeName, toDepartmentId, toPositionId, transferDate, personnelAppointment);
+        model.addAttribute("transfers", transfers);
+
+        // 검색 폼에 필요한 부서 및 직급 목록
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        model.addAttribute("positions", positionService.getAllPositions());
+        //검색 조건 유지
+        model.addAttribute("employeeName",employeeName);
+        model.addAttribute("toDepartmentId",toDepartmentId);
+        model.addAttribute("toPositionId",toPositionId);
+        model.addAttribute("transferDate",transferDate);
+        model.addAttribute("personnelAppointment",personnelAppointment);
+
+        return "transfer/list";
+    }
 }

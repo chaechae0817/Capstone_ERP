@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>증명서 내용</title>
+</head>
+<body>
+<h1>증명서 내용</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>발급 번호</th>
+    <th>직원 이름</th>
+    <th>증명서 유형</th>
+    <th>발급 일자</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="issue : ${certificateIssues}">
+    <td th:text="${issue.id}"></td> <!-- 발급 번호 -->
+    <td th:text="${issue.employee.name}"></td> <!-- 직원 이름 -->
+    <td th:text="${issue.certificateType}"></td> <!-- 증명서 유형 -->
+    <td th:text="${#temporals.format(issue.issueDate, 'yyyy-MM-dd')}"></td> <!-- 발급 일자 -->
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

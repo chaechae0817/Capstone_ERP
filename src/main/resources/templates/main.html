@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>내 인사정보</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+<div class="sidebar">
+    <!-- 사이드바 내용 -->
+    <ul>
+        <li><a href="/myInfo">내 인사정보</a></li>
+        <li><a href="/salary">급여 조회</a></li>
+        <li><a href="/certificate">증명서 발급</a></li>
+        <!-- 기타 메뉴 -->
+    </ul>
+</div>
+
+<div class="content">
+    <h2>내 인사정보</h2>
+
+    <div class="employee-info">
+        <img src="/images/profile.png" alt="프로필 사진">
+        <h3 th:text="${employee.name}">직원이름</h3>
+        <p>직위: <span th:text="${employee.position.name}">직위</span></p>
+        <p>부서: <span th:text="${employee.department.name}">부서명</span></p>
+        <p>입사일: <span th:text="${employee.hireDate}">입사일</span></p>
+        <p>연락처: <span th:text="${employee.contactInfo}">연락처</span></p>
+        <p>이메일: <span th:text="${employee.email}">이메일</span></p>
+        <p>주소: <span th:text="${employee.address}">주소</span></p>
+    </div>
+
+    <div class="salary-info">
+        <h3>최근 급여명세서</h3>
+        <p>급여: <span th:text="${employee.salary.amount}">급여금액</span></p>
+        <p>공제: <span th:text="${employee.salary.deduction}">공제금액</span></p>
+    </div>
+</div>
+</body>
+</html>

@@ -9,12 +9,10 @@
             margin: 0;
             padding: 20px;
         }
-
         h1 {
             text-align: center;
             color: #333;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -22,18 +20,15 @@
             background-color: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-
         th, td {
             text-align: left;
             padding: 12px;
             border-bottom: 1px solid #ddd;
         }
-
         th {
             background-color: #4CAF50;
             color: white;
         }
-
         tr:hover {
             background-color: #f1f1f1;
         }
@@ -54,14 +49,13 @@
 
     <label for="attendance">근태 코드:</label>
     <select id="attendance" name="attendance">
-        <option value="">전체</option> <!-- 선택 안 함 또는 전체 검색 -->
+        <option value="">전체</option>
         <option th:each="att : ${attendanceCodes}" th:value="${att.id}" th:text="${att.name}" th:selected="${att.id == attendance}"></option>
     </select>
 
     <button type="submit">검색</button>
     <button type="button" onclick="clearSearch()">초기화</button>
 </form>
-
 
 <table>
     <tr>
@@ -94,7 +88,7 @@
 <a href="/record/register">출퇴근 기록 등록하기</a>
 <script>
     function clearSearch() {
-        window.location.href = '/record/list'; // 기본 리스트 페이지로 이동
+        window.location.href = '/record/list';
     }
 </script>
 

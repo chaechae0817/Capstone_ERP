@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>월간 근태 요약 리스트</title>
+    <style>
+        /* 스타일 설정 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .month-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .month-navigation button {
+            font-size: 18px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .month-display {
+            font-size: 20px;
+            margin: 0 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script>
+        function changeMonth(offset) {
+            const monthInput = document.getElementById("month");
+            const date = new Date(monthInput.value + "-01");
+            date.setMonth(date.getMonth() + offset);
+
+            // format the date to YYYY-MM
+            const year = date.getFullYear();
+            const month = ("0" + (date.getMonth() + 1)).slice(-2);
+            monthInput.value = `${year}-${month}`;
+
+            // Submit the form to load data for the new month
+            document.getElementById("monthForm").submit();
+        }
+    </script>
+</head>
+<body>
+<h1>월간 근태 요약</h1>
+
+<div class="month-navigation">
+    <button onclick="changeMonth(-1)">&#9664;</button>
+    <span class="month-display" th:text="${formattedMonth}"></span>
+    <button onclick="changeMonth(1)">&#9654;</button>
+</div>
+
+<form th:action="@{/monthly/list}" method="get" id="monthForm" style="display: none;">
+    <input type="month" id="month" name="month" th:value="${formattedMonth}" />
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>사원 번호</th>
+        <th>사원 이름</th>
+        <th>월</th>
+        <th>정상 근무 일수</th>
+        <th>부분 근무 일수</th>
+        <th>총 근무 일수</th>
+        <th>결근 일수</th>
+        <th>총 근무 시간</th>
+        <th>급여가 지급되는 근무 시간</th>
+        <th>특수 근무 일수</th>
+        <th>야근 시간</th>
+        <th>휴일/공휴일 근무 일수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="summary : ${monthlySummaries}">
+        <td th:text="${summary.employee.employeeNumber}"></td>
+        <td th:text="${summary.employee.name}"></td>
+        <td th:text="${formattedMonth}"></td> <!-- 포맷된 월 표시 -->
+        <td th:text="${summary.normalWorkDays}"></td>
+        <td th:text="${summary.halfWorkDays}"></td>
+        <td th:text="${summary.totalWorkDays}"></td>
+        <td th:text="${summary.totalAbsenceDays}"></td>
+        <td th:text="${summary.totalWorkHours}"></td>
+        <td th:text="${summary.totalPaidWorkHours}"></td>
+        <td th:text="${summary.specialWorkDays}"></td>
+        <td th:text="${summary.overtimeHours}"></td>
+        <td th:text="${summary.holidayWorkDays}"></td>
+    </tr>
+    <tr th:if="${monthlySummaries == null or #lists.isEmpty(monthlySummaries)}">
+        <td colspan="12">월간 근태 요약 데이터가 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -26,6 +26,7 @@ public class CompanyService {
             company.setRegistrationNumber(companyDTO.getRegistrationNumber());
             company.setRepresentativeName(companyDTO.getRepresentativeName());
             company.setBusinessType(companyDTO.getBusinessType());
+            company.setCorporateNumber(companyDTO.getCorporateNumber());
             companyRepository.save(company);
         } else {
             throw new RuntimeException("회사는 이미 등록되어 있습니다. 수정만 가능합니다.");
@@ -46,6 +47,7 @@ public class CompanyService {
         company.setRegistrationNumber(companyDTO.getRegistrationNumber());
         company.setRepresentativeName(companyDTO.getRepresentativeName());
         company.setBusinessType(companyDTO.getBusinessType());
+        company.setCorporateNumber(companyDTO.getCorporateNumber());
         return companyRepository.save(company);
     }
 

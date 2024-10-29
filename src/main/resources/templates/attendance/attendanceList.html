@@ -3,7 +3,6 @@
 <head>
     <title>근태 항목 관리</title>
     <style>
-        /* 전체 페이지 스타일 */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -16,26 +15,23 @@
             color: #333;
         }
 
-        /* 버튼 스타일 */
         button {
-            background-color: #4CAF50; /* 녹색 배경 */
-            color: white; /* 흰색 글씨 */
+            background-color: #4CAF50;
+            color: white;
             border: none;
             padding: 10px 15px;
             text-align: center;
-            text-decoration: none;
             display: inline-block;
             font-size: 16px;
             margin: 10px 2px;
             cursor: pointer;
-            border-radius: 5px; /* 모서리 둥글게 */
+            border-radius: 5px;
         }
 
         button:hover {
-            background-color: #45a049; /* 버튼 호버 효과 */
+            background-color: #45a049;
         }
 
-        /* 테이블 스타일 */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -56,15 +52,17 @@
         }
 
         tr:hover {
-            background-color: #f1f1f1; /* 행 호버 효과 */
+            background-color: #f1f1f1;
         }
-        /* 다이얼로그 스타일 */
+
         .dialog {
-            display: none; /* 기본적으로 숨김 */
+            display: none;
             position: fixed;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
+            width: 70%;
+            max-width: 600px;
             border: 1px solid #ccc;
             padding: 20px;
             background-color: white;
@@ -73,7 +71,7 @@
         }
 
         .overlay {
-            display: none; /* 기본적으로 숨김 */
+            display: none;
             position: fixed;
             left: 0;
             top: 0;
@@ -82,21 +80,59 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+
+        /* 세로로 배치하기 위한 스타일 */
+        #addAttendanceForm label,
+        #addAttendanceForm input,
+        #addAttendanceForm select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /* 유급/무급 라디오 버튼 세로 배치 */
+        #addAttendanceForm .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #addAttendanceForm .radio-group label {
+            margin-left: 5px;
+            margin-right: 15px;
+        }
     </style>
 </head>
 <body>
 <h1>근태 항목 관리</h1>
 <button onclick="openAddDialog()">근태 코드 추가</button>
-<div class="overlay" id="overlay" onclick="closeDialog()"></div> <!-- 오버레이 -->
+<div class="overlay" id="overlay" onclick="closeDialog()"></div>
 
 <div class="dialog" id="addDialog">
     <h2>근태 코드 추가</h2>
     <form id="addAttendanceForm" onsubmit="addAttendance(event)">
-        <label for="name">코드 이름 :</label>
+        <label for="name">코드 이름:</label>
         <input type="text" id="name" required />
 
-        <label for="description">설명 :</label>
-        <input type="text" id="description" required /> <!-- 설명 입력 필드 추가 -->
+        <label for="description">설명:</label>
+        <input type="text" id="description" required />
+
+        <label>유급 여부:</label>
+        <div class="radio-group">
+            <label><input type="radio" name="isPaid" value="true" checked onclick="toggleMultiplier(true)"> 유급</label>
+            <label><input type="radio" name="isPaid" value="false" onclick="toggleMultiplier(false)"> 무급</label>
+        </div>
+
+        <label for="multiplier">급여 배수:</label>
+        <input type="number" id="multiplier" value="1.0" step="0.5" min="0.5" max="3.0" />
+
+        <label for="type">근태 유형:</label>
+        <select id="type" required>
+            <option value="NORMAL">정상</option>
+            <option value="SPECIAL">특수 근무</option>
+            <option value="ABSENCE">결근</option>
+            <option value="HOLIDAY">휴일/공휴일</option>
+        </select>
 
         <button type="submit">추가</button>
         <button type="button" onclick="closeDialog()">취소</button>
@@ -107,11 +143,26 @@
     <tr>
         <th>근태 코드 이름</th>
         <th>설명</th>
-        <th>작업</th> <!-- 추가: 작업 열 -->
+        <th>유급 여부</th>
+        <th>급여 배수</th>
+        <th>근태 유형</th>
+        <th>작업</th>
     </tr>
     <tr th:each="item : ${items}">
-        <td th:text="${item.name}"></td> <!-- name으로 수정 -->
-        <td th:text="${item.description}"></td> <!-- description 그대로 -->
+        <td th:text="${item.name}"></td>
+        <td th:text="${item.description}"></td>
+        <td th:text="${item.isPaid != null ? (item.isPaid ? '유급' : '무급') : 'N/A'}"></td>
+        <td th:text="${item.multiplier}"></td>
+        <td>
+            <span th:switch="${item.type}">
+                <span th:case="${T(com.erp.techInovate.techInovate.entity.AttendanceType).NORMAL}">정상</span>
+                <span th:case="${T(com.erp.techInovate.techInovate.entity.AttendanceType).SPECIAL}">특수 근무</span>
+                <span th:case="${T(com.erp.techInovate.techInovate.entity.AttendanceType).ABSENCE}">결근</span>
+                <span th:case="${T(com.erp.techInovate.techInovate.entity.AttendanceType).HOLIDAY}">휴일/공휴일</span>
+                <span th:case="null">N/A</span> <!-- type이 null인 경우 -->
+                <span th:case="*">기타</span> <!-- 예외적인 경우 -->
+            </span>
+        </td>
         <td>
             <form th:action="@{/attendance/delete(id=${item.id})}" method="post" style="display:inline;">
                 <button type="submit">삭제</button>
@@ -119,47 +170,64 @@
         </td>
     </tr>
     <tr th:if="${items == null or #lists.isEmpty(items)}">
-        <td colspan="3">등록된 근태 항목이 없습니다.</td>
+        <td colspan="6">등록된 근태 항목이 없습니다.</td>
     </tr>
 </table>
 
 <a href="/employee/list">홈으로</a>
 
-</body>
 <script>
     function openAddDialog() {
-        document.getElementById('addDialog').style.display = 'block'; // 다이얼로그 보이기
-        document.getElementById('overlay').style.display = 'block'; // 오버레이 보이기
+        document.getElementById('addDialog').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
     }
 
     function closeDialog() {
-        document.getElementById('addDialog').style.display = 'none'; // 다이얼로그 숨기기
-        document.getElementById('overlay').style.display = 'none'; // 오버레이 숨기기
+        document.getElementById('addDialog').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    function toggleMultiplier(isPaid) {
+        const multiplierField = document.getElementById('multiplier');
+        if (!isPaid) {
+            multiplierField.value = 0.0;
+            multiplierField.disabled = true;
+        } else {
+            multiplierField.value = 1.0;
+            multiplierField.disabled = false;
+        }
     }
 
     function addAttendance(event) {
-        event.preventDefault(); // 기본 폼 제출 방지
-        const attendanceName = document.getElementById('name').value; // 코드 이름
-        const attendanceDescription = document.getElementById('description').value; // 설명
+        event.preventDefault();
+        const attendanceName = document.getElementById('name').value;
+        const attendanceDescription = document.getElementById('description').value;
+        const isPaid = document.querySelector('input[name="isPaid"]:checked').value === 'true';
+        const multiplier = parseFloat(document.getElementById('multiplier').value);
+        const type = document.getElementById('type').value;
 
-        // AJAX 요청을 통해 근태 코드 추가
         fetch('/attendance/new', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 name: attendanceName,
-                description: attendanceDescription // 설명도 함께 전송
+                description: attendanceDescription,
+                isPaid: isPaid,
+                multiplier: multiplier,
+                type: type
             })
         })
         .then(response => {
             if (response.ok) {
-                location.reload(); // 성공 시 페이지 새로 고침
+                location.reload();
             } else {
                 alert('근태 코드 추가 실패');
             }
         });
     }
 </script>
+
+</body>
 </html>

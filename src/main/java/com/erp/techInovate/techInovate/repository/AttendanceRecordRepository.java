@@ -1,12 +1,15 @@
 package com.erp.techInovate.techInovate.repository;
 
+import com.erp.techInovate.techInovate.entity.AttendanceEntity;
 import com.erp.techInovate.techInovate.entity.AttendanceRecordEntity;
+import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -21,5 +24,30 @@ public interface AttendanceRecordRepository extends JpaRepository<AttendanceReco
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             @Param("attendanceId") Long attendanceId);
+
+    @Query("SELECT CASE WHEN COUNT(a) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM AttendanceRecordEntity a " +
+            "WHERE a.employee = :employee " +
+            "AND a.date = :date " +
+            "AND ((:checkInTime BETWEEN a.checkInTime AND a.checkOutTime) " +
+            "OR (:checkOutTime BETWEEN a.checkInTime AND a.checkOutTime) " +
+            "OR (a.checkInTime BETWEEN :checkInTime AND :checkOutTime) " +
+            "OR (a.checkOutTime BETWEEN :checkInTime AND :checkOutTime))")
+    boolean existsByEmployeeAndDateAndOverlappingTime(
+            @Param("employee") EmployeeEntity employee,
+            @Param("date") LocalDate date,
+            @Param("checkInTime") LocalTime checkInTime,
+            @Param("checkOutTime") LocalTime checkOutTime
+    );
+
+    boolean existsByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
+
+    List<AttendanceRecordEntity> findByEmployee(EmployeeEntity employee);
+
+    List<AttendanceRecordEntity> findByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
+
+    List<AttendanceRecordEntity> findByDate(LocalDate date);
+    List<AttendanceRecordEntity> findByDateBetween(LocalDate startDate, LocalDate endDate);
+
 }
 

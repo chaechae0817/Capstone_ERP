@@ -2,16 +2,20 @@ package com.erp.techInovate.techInovate.controller;
 
 import com.erp.techInovate.techInovate.dto.CareerCertificateDTO;
 import com.erp.techInovate.techInovate.dto.EmployeeCertificateDTO;
+import com.erp.techInovate.techInovate.entity.CertificateIssueEntity;
+import com.erp.techInovate.techInovate.service.CertificateIssueService;
 import com.erp.techInovate.techInovate.service.CertificateService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,6 +24,9 @@ public class CertificateController {
 
     @Autowired
     private CertificateService certificateService;
+
+    @Autowired
+    private CertificateIssueService certificateIssueService;
 
 
     //경력증명서
@@ -66,5 +73,22 @@ public class CertificateController {
         return "employee_certificate"; // 재직 증명서 페이지로 이동
     }
 
+    @GetMapping("/list")
+    public String getCertificateIssue(Model model) {
+        List<CertificateIssueEntity> certificateIssues = certificateIssueService.getAllCertificateIssues();
+        model.addAttribute("certificateIssues", certificateIssues);
+        return "CertificateIssueList"; // CertificateIssueList.html 페이지로 이동
+    }
 
+    // 발급 내역 저장 API
+    @PostMapping("/issue")
+    public ResponseEntity<?> saveCertificateIssue(@RequestBody Map<String, Object> requestData, @SessionAttribute("employeeId") Long employeeId) {
+        if (employeeId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 필요");
+        }
+
+        String certificateType = (String) requestData.get("certificateType");
+        certificateIssueService.recordIssue(employeeId, certificateType);
+        return ResponseEntity.ok().body("발급 내역이 저장되었습니다.");
+    }
 }

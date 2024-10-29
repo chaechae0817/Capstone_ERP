@@ -333,7 +333,35 @@
     <div class="footer-signature">
         <p><span th:text="${careerCertificate.issue_date}"></span></p>
     </div>
-    <button onclick="window.print()"class="print-button">인쇄하기</button>
+<!--    <button onclick="window.print()"class="print-button">인쇄하기</button>-->
+    <button onclick="issueCertificate()" class="print-button">인쇄하기</button>
+
 </div>
+<script>
+    function issueCertificate() {
+    // 발급 내역 저장 요청을 보낼 데이터 구성
+    const requestData = {
+        certificateType: "경력 증명서"
+    };
+
+    // 발급 내역 저장을 위한 서버 요청
+    fetch('/certificate/issue', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("발급 내역이 저장되었습니다.");
+            window.print(); // 인쇄 대화창 호출
+        } else {
+            alert("발급 내역 저장에 실패했습니다.");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+</script>
 </body>
 </html>

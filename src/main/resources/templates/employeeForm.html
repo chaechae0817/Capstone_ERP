@@ -271,6 +271,10 @@
   <option value="카카오뱅크">카카오뱅크</option>
   </select>
 
+  <label for="salary">연봉:</label>
+  <input type="number" id="salary" th:field="*{salary}" placeholder="연봉 입력" step="100000" required />
+
+
   <label for="photo">사진 업로드:</label>
   <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)" />
 

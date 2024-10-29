@@ -104,12 +104,12 @@
 
 <table>
     <tr>
-        <th>ID</th>
+<!--        <th>ID</th>-->
         <th>직급 이름</th>
         <th>작업</th>
     </tr>
     <tr th:each="position : ${positions}">
-        <td th:text="${position.id}"></td>
+<!--        <td th:text="${position.id}"></td>-->
         <td th:text="${position.name}"></td>
         <td>
             <form th:action="@{/organization/positions/delete(id=${position.id})}" method="post" style="display:inline;">

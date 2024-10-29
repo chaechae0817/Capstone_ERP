@@ -62,6 +62,7 @@ public class CompanyController {
         companyDTO.setRegistrationNumber(company.getRegistrationNumber());
         companyDTO.setRepresentativeName(company.getRepresentativeName());
         companyDTO.setBusinessType(company.getBusinessType());
+        companyDTO.setCorporateNumber(company.getCorporateNumber()); // 법인 번호 설정
         model.addAttribute("company", companyDTO);
         return "companyForm"; // 회사 수정 폼
     }
