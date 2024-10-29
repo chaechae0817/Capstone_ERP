@@ -29,5 +29,7 @@ public class EmployeeDTO {
     private String accountNumber; // 계좌 번호
     private String bank; // 은행
     private MultipartFile photo; //사진
+    private Double salary; // 추가된 연봉 필드
+
 
 }

@@ -16,4 +16,6 @@ public class CompanyDTO {
     private String registrationNumber;    // 사업자 등록번호
     private String representativeName;    // 대표명
     private String businessType;          // 업종
+    private String corporateNumber;     // 법인 번호 추가
+
 }

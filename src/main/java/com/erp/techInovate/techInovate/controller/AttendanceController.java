@@ -33,7 +33,7 @@ public class AttendanceController {
     @PostMapping("/delete")
     public String delete(@RequestParam Long id) {
         attendanceService.delete(id);
-        return "redirect:/attendance/attendanceList";
+        return "redirect:/attendance/list";
     }
 
     @GetMapping("/codes")

@@ -272,7 +272,38 @@
 </script>
 <h1>발령 리스트</h1>
 <div class="table-container">
-<table>
+    <form th:action="@{/transfer/search}" method="get">
+        <label for="employeeName">직원 이름:</label>
+        <input type="text" id="employeeName" name="employeeName" th:value="${employeeName}" placeholder="직원 이름 입력">
+
+        <label for="toDepartmentId">발령 부서:</label>
+        <select id="toDepartmentId" name="toDepartmentId">
+            <option value="">전체</option>
+            <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}" th:selected="${department.id == toDepartmentId}"></option>
+        </select>
+
+        <label for="toPositionId">발령 직급:</label>
+        <select id="toPositionId" name="toPositionId">
+            <option value="">전체</option>
+            <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}" th:selected="${position.id == toPositionId}"></option>
+        </select>
+
+        <label for="transferDate">발령일:</label>
+        <input type="date" id="transferDate" name="transferDate" th:value="${transferDate}">
+
+        <label for="personnelAppointment">발령 구분:</label>
+        <select id="personnelAppointment" name="personnelAppointment">
+            <option value="">전체</option>
+            <option value="승진" th:selected="${personnelAppointment == '승진'}">승진</option>
+            <option value="강등" th:selected="${personnelAppointment == '강등'}">강등</option>
+            <option value="부서 이동" th:selected="${personnelAppointment == '부서 이동'}">부서 이동</option>
+        </select>
+
+        <button type="submit">검색</button>
+        <button type="button" onclick="clearSearch()">초기화</button>
+    </form>
+
+    <table>
     <thead>
     <tr>
         <th>이름</th>
@@ -305,5 +336,10 @@
     </tbody>
 </table>
 </div>
+<script>
+    function clearSearch() {
+        window.location.href = '/transfer/list'; // 기본 리스트 페이지로 이동
+    }
+</script>
 </body>
 </html>

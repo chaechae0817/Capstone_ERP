@@ -34,6 +34,7 @@
                         <li><a href="/certificate/employee">- 재직 증명서</a></li>
                         <li><a href="/certificate/career">- 경력 증명서</a></li>
                         <li><a href="#">- 급여 명세서</a></li>
+                        <li><a href="/certificate/list">- 증명서 발급 현황</a></li>
                     </ul>
                 </li>
             </ul>
@@ -71,7 +72,7 @@
                 </li>
                 <li><a href="#" onclick="toggleMenu(this)">급여▼</a>
                     <ul class="open">
-                        <li><a href="/">- 근무 기록 조회 및 확정</a></li>
+                        <li><a href="/monthly/list">- 근무 기록 조회</a></li>
                         <li><a href="/">- 급여 계산</a></li>
                         <li><a href="/">- 명세서 전송 및 조회</a></li>
                     </ul>
@@ -195,7 +196,7 @@
 <h1>직원 목록</h1>
 <table>
     <tr>
-        <th>ID</th>
+<!--        <th>ID</th>-->
         <th>사원번호</th>
         <th>이름</th>
         <th>주민번호</th>
@@ -213,7 +214,7 @@
 
     </tr>
     <tr th:each="employee : ${employees}">
-        <td th:text="${employee.employeeId}"></td>
+<!--        <td th:text="${employee.employeeId}"></td>-->
         <td th:text="${employee.employeeNumber}"></td>
         <!--<td th:text="${employee.name}"></td>-->
         <td><a th:href="@{/employee/{id}(id=${employee.employeeId})}" th:text="${employee.name}"></a></td>

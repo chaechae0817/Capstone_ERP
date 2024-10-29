@@ -10,7 +10,9 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "attendance_record")
+@Table(name = "attendance_record", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"employee_id", "date", "checkInTime", "checkOutTime"})
+})
 public class AttendanceRecordEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +33,12 @@ public class AttendanceRecordEntity {
     private AttendanceEntity attendance; // 외래키 (Attendance_Codes 테이블)
 
     private String notes; // 비고
+    private Double totalWorkHours; //총 근무 시간
+
+
+    @Override
+    public String toString() {
+        return "attendance" + attendance.getType() + ",id :"+attendance.getId() + ",name :"+attendance.getName();
+    }
 }
+

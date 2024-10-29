@@ -103,12 +103,12 @@
 
 <table>
     <tr>
-        <th>ID</th>
+<!--        <th>ID</th>-->
         <th>부서 이름</th>
         <th>작업</th>
     </tr>
     <tr th:each="department : ${departments}">
-        <td th:text="${department.id}"></td>
+<!--        <td th:text="${department.id}"></td>-->
         <td th:text="${department.name}"></td>
         <td>
             <form th:action="@{/organization/departments/delete(id=${department.id})}" method="post" style="display:inline;">

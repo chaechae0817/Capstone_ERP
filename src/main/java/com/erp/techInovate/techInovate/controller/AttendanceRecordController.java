@@ -55,7 +55,7 @@ public class AttendanceRecordController {
     @PostMapping("/delete")
     public String delete(@RequestParam Long id) {
         attendanceRecordService.delete(id);
-        return "redirect:/attendance/attendanceRecordlist"; // 삭제 후 목록으로 리디렉션
+        return "redirect:/record/list"; // 삭제 후 목록으로 리디렉션
     }
 
     @GetMapping("/search")
