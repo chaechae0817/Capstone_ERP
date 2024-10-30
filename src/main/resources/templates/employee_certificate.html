@@ -283,7 +283,10 @@
 .sidebar ul li ul li a:hover {
     background-color: #60a865; /* 하위 메뉴 호버시 */
 }
+.certificate-title {
 
+    text-align: center; /* 가운데 정렬 */
+}
 /* 하위 메뉴 들여쓰기 */
 .sidebar ul li ul {
     margin-left: 15px;
@@ -375,7 +378,7 @@
     <div class="footer-signature">
         <p><span th:text="${employeeCertificate.issue_date}"></span></p>
         <p>주식회사 <span th:text="${employeeCertificate.company_name}"></span></p>
-        <p>대표이사<span th:text="${employeeCertificate.industry}"></span></p>
+        <p>대표이사<span th:text="${employeeCertificate.industry}"></span>                 (인)</p>
     </div>
     <button onclick="window.print()"class="print-button">인쇄하기</button>
 </div>
