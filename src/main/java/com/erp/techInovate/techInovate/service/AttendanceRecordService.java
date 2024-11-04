@@ -21,7 +21,7 @@ import java.util.Optional;
 public class AttendanceRecordService {
     private final AttendanceRecordRepository attendanceRecordRepository;
     private final MonthlyAttendanceSummaryRepository monthlyAttendanceSummaryRepository;
-    private final AttendanceRepository attendanceRepository;
+    private final SalaryCalculationService salaryCalculationService;
 
 
     public List<AttendanceRecordEntity> findAll() {
@@ -43,6 +43,11 @@ public class AttendanceRecordService {
         try {
             attendanceRecordRepository.save(attendanceRecord);
             updateMonthlySummary(attendanceRecord,alreadyCounted);
+
+            // 근태 기록이 변경되었으므로 해당 월의 공제 내역을 업데이트
+            YearMonth month = YearMonth.from(attendanceRecord.getDate());
+            salaryCalculationService.updateMonthlyDeductions(attendanceRecord.getEmployee().getEmployeeId(), month);
+
         } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException("해당 직원의 같은 날짜 및 시간대에 이미 근태 기록이 존재합니다.", e);
         }
@@ -78,14 +83,8 @@ public class AttendanceRecordService {
         });
 
         // 근태 유형에 따른 요약 데이터 업데이트
-        double workHours = attendanceRecord.getTotalWorkHours(); //저장한 날의 총 근무 시간을 가져옴.
-
-//        // 이미 기록된 날짜인지 확인
-//        boolean alreadyCounted = attendanceRecordRepository.existsByEmployeeAndDate(
-//                attendanceRecord.getEmployee(), recordDate);
-
-
-//        boolean alreadyCounted = isAlreadyCounted(attendanceRecord.getEmployee(),recordDate);
+        double workHours = attendanceRecord.getTotalWorkHours(); //저장한 날의 총 근무 시간을 가져옴. -> 이미 계산된 값(휴게시간이 제외된 값)
+        double multiplier = attendanceRecord.getAttendance().getMultiplier(); //근무 배수
         System.out.println("employee"+attendanceRecord.getEmployee().getEmployeeId()+"Date"+recordDate);
         System.out.println("이미 기록된 날짜? "+alreadyCounted);
         // 요약 데이터 업데이트 -> 다시 천천히..
@@ -98,38 +97,35 @@ public class AttendanceRecordService {
                         summary.setHalfWorkDays(summary.getHalfWorkDays() + 0.5);
                     }
                 }
-                summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + workHours);
+                summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + (workHours * multiplier));
                 break;
             case ABSENCE: //조퇴 , 결근
                 if (!alreadyCounted) {
                     summary.setTotalAbsenceDays(summary.getTotalAbsenceDays() + 1);
                 }
-                summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + workHours);
+                summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + (workHours * multiplier));
                 break;
-            case SPECIAL: //특수 근무
-                if (!alreadyCounted) {
-                    summary.setSpecialWorkDays(summary.getSpecialWorkDays() + 1);
-                }
-                summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + workHours);
+            case SPECIAL: //특수 근무 -> 시간당 1.5배
+                summary.setSpecialWorkDays(summary.getSpecialWorkDays() + 1);
+                summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + (workHours * multiplier));
                 break;
             case HOLIDAY: //휴일 근무
                 if (!alreadyCounted) {
                     summary.setHolidayWorkDays(summary.getHolidayWorkDays() + 1);
                 }
-                summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + workHours);
+                summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + (workHours * multiplier));
                 break;
         }
 
         // 총 근무 시간과 근무 일수 업데이트
         summary.setTotalWorkHours(summary.getTotalWorkHours() + workHours);
-        if (!alreadyCounted) {
-            summary.setTotalWorkDays(summary.getNormalWorkDays() + summary.getHalfWorkDays() + summary.getHolidayWorkDays());
-        }
+        summary.setTotalWorkDays(summary.getNormalWorkDays() + summary.getHalfWorkDays() + summary.getHolidayWorkDays());
 
-        // 야근 시간 계산
+        // 야근 시간 계산 시간 당 x2로 계산
         if (attendanceRecord.getCheckOutTime().isAfter(LocalTime.parse("18:00"))) {
             double overtimeHours = LocalTime.parse("18:00").until(attendanceRecord.getCheckOutTime(), java.time.temporal.ChronoUnit.HOURS);
-            summary.setOvertimeHours(summary.getOvertimeHours() + Math.max(0, overtimeHours));
+            summary.setOvertimeHours(summary.getOvertimeHours() + (Math.max(0, overtimeHours))*2);
+            summary.setTotalPaidWorkHours(summary.getTotalPaidWorkHours() + summary.getOvertimeHours());
         }
 
         monthlyAttendanceSummaryRepository.save(summary);

@@ -95,32 +95,30 @@
     <tr>
         <th>사원 번호</th>
         <th>사원 이름</th>
-        <th>월</th>
-        <th>정상 근무 일수</th>
-        <th>부분 근무 일수</th>
-        <th>총 근무 일수</th>
-        <th>결근 일수</th>
-        <th>총 근무 시간</th>
-        <th>급여가 지급되는 근무 시간</th>
-        <th>특수 근무 일수</th>
-        <th>야근 시간</th>
+        <th>정상 출근 일</th>
+        <th>조퇴 일</th>
         <th>휴일/공휴일 근무 일수</th>
+        <th>특수 근무 일수</th>
+        <th>결근 일</th>
+        <th>총 출근 일</th>
+        <th>총 근무 시간</th>
+        <th>야근 시간</th>
+        <th>급여 지급 총 시간</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="summary : ${monthlySummaries}">
         <td th:text="${summary.employee.employeeNumber}"></td>
         <td th:text="${summary.employee.name}"></td>
-        <td th:text="${formattedMonth}"></td> <!-- 포맷된 월 표시 -->
         <td th:text="${summary.normalWorkDays}"></td>
         <td th:text="${summary.halfWorkDays}"></td>
-        <td th:text="${summary.totalWorkDays}"></td>
-        <td th:text="${summary.totalAbsenceDays}"></td>
-        <td th:text="${summary.totalWorkHours}"></td>
-        <td th:text="${summary.totalPaidWorkHours}"></td>
-        <td th:text="${summary.specialWorkDays}"></td>
-        <td th:text="${summary.overtimeHours}"></td>
         <td th:text="${summary.holidayWorkDays}"></td>
+        <td th:text="${summary.specialWorkDays}"></td>
+        <td th:text="${summary.totalAbsenceDays}"></td>
+        <td th:text="${summary.totalWorkDays}"></td>
+        <td th:text="${summary.totalWorkHours}"></td>
+        <td th:text="${summary.overtimeHours}"></td>
+        <td th:text="${summary.totalPaidWorkHours}"></td>
     </tr>
     <tr th:if="${monthlySummaries == null or #lists.isEmpty(monthlySummaries)}">
         <td colspan="12">월간 근태 요약 데이터가 없습니다.</td>

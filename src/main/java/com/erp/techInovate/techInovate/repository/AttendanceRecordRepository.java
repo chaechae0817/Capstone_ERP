@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AttendanceRecordRepository extends JpaRepository<AttendanceRecordEntity, Long> {
@@ -40,14 +41,16 @@ public interface AttendanceRecordRepository extends JpaRepository<AttendanceReco
             @Param("checkOutTime") LocalTime checkOutTime
     );
 
-    boolean existsByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
-
-    List<AttendanceRecordEntity> findByEmployee(EmployeeEntity employee);
-
     List<AttendanceRecordEntity> findByEmployeeAndDate(EmployeeEntity employee, LocalDate date);
 
-    List<AttendanceRecordEntity> findByDate(LocalDate date);
-    List<AttendanceRecordEntity> findByDateBetween(LocalDate startDate, LocalDate endDate);
+    @Query("SELECT COALESCE(SUM(a.totalWorkHours), 0) " +
+            "FROM AttendanceRecordEntity a " +
+            "WHERE a.employee.employeeId = :employeeId " +
+            "AND a.date BETWEEN :startOfMonth AND :endOfMonth")
+    Optional<Double> findTotalPaidHoursByEmployeeAndMonth(
+            @Param("employeeId") Long employeeId,
+            @Param("startOfMonth") LocalDate startOfMonth,
+            @Param("endOfMonth") LocalDate endOfMonth);
 
 }
 
