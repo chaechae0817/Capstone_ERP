@@ -34,6 +34,6 @@ public class LeaveController {
     @PostMapping("/delete")
     public String delete(@RequestParam Long id) {
         leaveService.delete(id);
-        return "redirect:/attendance/leaveList";
+        return "redirect:/leave/list";
     }
 }

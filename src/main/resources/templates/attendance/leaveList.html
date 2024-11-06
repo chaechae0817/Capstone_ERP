@@ -58,6 +58,7 @@
         tr:hover {
             background-color: #f1f1f1; /* 행 호버 효과 */
         }
+
         /* 다이얼로그 스타일 */
         .dialog {
             display: none; /* 기본적으로 숨김 */
@@ -87,7 +88,7 @@
 <body>
 <h1>휴가 항목 관리</h1>
 <button onclick="openAddDialog()">휴가 코드 추가</button>
-<div class="overlay" id="overlay" onclick="closeDialog()"></div> <!-- 오버레이 -->
+<div class="overlay" id="overlay" onclick="closeDialog()"></div>
 
 <div class="dialog" id="addDialog">
     <h2>휴가 코드 추가</h2>
@@ -96,7 +97,13 @@
         <input type="text" id="name" required />
 
         <label for="description">설명 :</label>
-        <input type="text" id="description" required /> <!-- 설명 입력 필드 추가 -->
+        <input type="text" id="description" required />
+
+        <label for="isPaid">유급 여부 :</label>
+        <select id="isPaid" required>
+            <option value="1">유급</option>
+            <option value="0">무급</option>
+        </select>
 
         <button type="submit">추가</button>
         <button type="button" onclick="closeDialog()">취소</button>
@@ -107,11 +114,13 @@
     <tr>
         <th>휴가 코드 이름</th>
         <th>설명</th>
-        <th>작업</th> <!-- 추가: 작업 열 -->
+        <th>유급 여부</th>
+        <th>작업</th>
     </tr>
     <tr th:each="leave : ${leaves}">
-        <td th:text="${leave.name}"></td> <!-- name으로 수정 -->
-        <td th:text="${leave.description}"></td> <!-- description 그대로 -->
+        <td th:text="${leave.name}"></td>
+        <td th:text="${leave.description}"></td>
+        <td th:text="${leave.isPaid == 1 ? '유급' : '무급'}"></td>
         <td>
             <form th:action="@{/leave/delete(id=${leave.id})}" method="post" style="display:inline;">
                 <button type="submit">삭제</button>
@@ -119,30 +128,29 @@
         </td>
     </tr>
     <tr th:if="${leaves == null or #lists.isEmpty(leaves)}">
-        <td colspan="3">등록된 근태 항목이 없습니다.</td>
+        <td colspan="4">등록된 휴가 항목이 없습니다.</td>
     </tr>
 </table>
 
 <a href="/employee/list">홈으로</a>
 
-</body>
 <script>
     function openAddDialog() {
-        document.getElementById('addDialog').style.display = 'block'; // 다이얼로그 보이기
-        document.getElementById('overlay').style.display = 'block'; // 오버레이 보이기
+        document.getElementById('addDialog').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
     }
 
     function closeDialog() {
-        document.getElementById('addDialog').style.display = 'none'; // 다이얼로그 숨기기
-        document.getElementById('overlay').style.display = 'none'; // 오버레이 숨기기
+        document.getElementById('addDialog').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
     }
 
     function addLeave(event) {
-        event.preventDefault(); // 기본 폼 제출 방지
-        const leaveName = document.getElementById('name').value; // 코드 이름
-        const leaveDescription = document.getElementById('description').value; // 설명
+        event.preventDefault();
+        const leaveName = document.getElementById('name').value;
+        const leaveDescription = document.getElementById('description').value;
+        const isPaid = document.getElementById('isPaid').value;
 
-        // AJAX 요청을 통해 휴가 코드 추가
         fetch('/leave/new', {
             method: 'POST',
             headers: {
@@ -150,16 +158,18 @@
             },
             body: JSON.stringify({
                 name: leaveName,
-                description: leaveDescription // 설명도 함께 전송
+                description: leaveDescription,
+                isPaid: parseInt(isPaid)  // 유급 여부를 int로 전송
             })
         })
         .then(response => {
             if (response.ok) {
-                location.reload(); // 성공 시 페이지 새로 고침
+                location.reload();
             } else {
                 alert('휴가 코드 추가 실패');
             }
         });
     }
 </script>
+</body>
 </html>

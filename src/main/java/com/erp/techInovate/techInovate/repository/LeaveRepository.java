@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface LeaveRepository extends JpaRepository<LeaveEntity,Long> {
-    Optional<LeaveEntity> findByName(String vacationTypeName);
+    Optional<LeaveEntity> findByName(String name); // 이름으로 LeaveEntity 조회
+
 }
