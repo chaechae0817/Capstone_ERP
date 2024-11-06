@@ -14,4 +14,7 @@ public class LeaveEntity {
     private Long id;
     private String name;
     private String description;
+
+    @Column(nullable = false)
+    private int  isPaid;
 }

@@ -10,25 +10,32 @@ import java.time.LocalDate;
 @Table(name = "vacations")
 public class VacationEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vacationId;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private EmployeeEntity employee;
+    @JoinColumn(name = "employee_id", referencedColumnName = "employeeId", nullable = false)
+    private EmployeeEntity employee;  // 사원 정보 연결
 
     @ManyToOne
-    @JoinColumn(name = "name", nullable = false)
-    private LeaveEntity vacationType;
+    @JoinColumn(name = "leave_item_id", referencedColumnName = "id", nullable = false)
+    private LeaveEntity leaveItem;  // 휴가 항목 정보
 
     @Column(nullable = false)
+    private int remainingDays;
+
+    @Column(nullable = false)
+    private Integer days = 0;
+
+    @Column(nullable = false)
+    private String status;
     private LocalDate startDate;
-
-    @Column(nullable = false)
     private LocalDate endDate;
-
-    @Column(nullable = false)
     private String reason;
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = "PENDING";
+        }}
 }
