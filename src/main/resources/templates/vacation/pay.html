@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="">
+<head>
+    <meta charset="UTF-8">
+    <title>휴가 지급</title>
+</head>
+
+<body>
+<h1>휴가 일수 지급</h1>
+
+<!-- 직원 목록과 휴가 유형을 표시할 부분 -->
+<table>
+    <thead>
+    <tr>
+        <th>사원 번호</th>
+        <th>이름</th>
+        <th>부서</th>
+        <th>직급</th>
+        <th>휴가 유형</th>
+        <th>추가할 일수</th>
+        <th>작업</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.employeeId}">사원번호</td>
+        <td th:text="${employee.name}">이름</td>
+        <td th:text="${employee.department.name}">부서</td>
+        <td th:text="${employee.position.name}">직급</td>
+        <td>
+            <select th:name="leaveType">
+                <option th:each="leave : ${leaveTypes}" th:value="${leave.id}" th:text="${leave.name}">휴가 유형</option>
+            </select>
+        </td>
+        <td><input type="number" name="daysToAdd" min="1" /></td>
+        <td><button type="button">할당</button></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

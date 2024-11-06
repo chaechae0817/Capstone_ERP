@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:c="">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>휴가자 조회</title>
+    <title>휴가 지급</title>
     <style>
         .sidebar {
         width: 150px;
@@ -126,8 +125,14 @@
           }
       }
     </script>
+</head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>승인된 휴가 목록</title>
+</head>
 <body>
-<h1>휴가 신청 목록</h1>
+<h1>승인된 휴가 목록</h1>
 
 <table>
     <thead>
@@ -140,11 +145,10 @@
         <th>사유</th>
         <th>시작일</th>
         <th>종료일</th>
-        <th>액션</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="vacation : ${vacations}">
+    <tr th:each="vacation : ${confirmedVacations}">
         <td th:text="${vacation.name}">사원 이름</td>
         <td th:text="${vacation.employeeId}">사원 번호</td>
         <td th:text="${vacation.position}">직급</td>
@@ -153,21 +157,10 @@
         <td th:text="${vacation.reason}">사유</td>
         <td th:text="${vacation.startDate}">시작일</td>
         <td th:text="${vacation.endDate}">종료일</td>
-        <td>
-            <!-- 승인 버튼 -->
-            <form th:action="@{/vacation/approve}" method="post" style="display:inline;">
-                <input type="hidden" th:value="${vacation.id}" name="id"/>
-                <button type="submit">승인</button>
-            </form>
-            <!-- 삭제 버튼 -->
-            <form th:action="@{/vacation/delete}" method="post" style="display:inline;">
-                <input type="hidden" th:value="${vacation.id}" name="id"/>
-                <button type="submit">삭제</button>
-            </form>
-        </td>
     </tr>
     </tbody>
 </table>
 
 </body>
+
 </html>
