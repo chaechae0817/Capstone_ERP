@@ -1,3 +1,4 @@
+/* 전체 페이지 기본 설정 */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -5,114 +6,150 @@ body {
     background-color: #f4f4f4;
 }
 
+/* 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+.company-logo {
+    max-height: 40px;
+    margin-right: 10px;
+}
+
+.company-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.user-info {
+    font-size: 14px;
+    color: #333;
+}
+
+.logout-button {
+    margin-left: 15px;
+    color: #3498db;
+    text-decoration: none;
+}
+
+.logout-button:hover {
+    text-decoration: underline;
+}
+
+/* 사이드바 스타일 */
 .sidebar {
-    width: 150px;
-    background-color: #4CAF50;
+    width: 200px;
+    background-color: #f5f6fa;
     padding: 20px;
-    height: 100vh;
+    height: calc(100vh - 60px); /* 헤더 높이를 제외한 전체 높이 */
     position: fixed;
-    top: 0;
     left: 0;
+    top: 60px; /* 헤더 바로 아래에 고정 */
+    overflow-y: auto;
+    box-sizing: border-box;
 }
+
 .sidebar h2 {
-    color: white;
-    text-align: center;
-    margin-bottom: 30px;
-}
-.sidebar li {
-    margin: 5px 0;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
 }
 
 .sidebar ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
 }
 
 .sidebar ul li {
-    margin-bottom: 5px;
+    margin: 10px 0;
 }
 
-.open {
-     max-height: 0;
-     overflow: hidden;
-     transition: max-height 0.5s ease;
-     margin-left: 10px;
-     }
-
-.active {
-        max-height: 1000px; /* 열렸을 때의 최대 높이 */
-}
-
-/* 상위 메뉴 스타일 */
 .sidebar ul li a {
-    color: white;
+    color: #333;
     text-decoration: none;
-    font-weight: bold;
-    display: block;
-    padding: 12px; /* 상위 메뉴의 패딩을 더 크게 설정 */
-    text-align: center;
-    border-radius: 5px;
-    font-size: 16px; /* 상위 메뉴는 더 큰 글씨 */
-    background-color: #4CAF50; /* 상위 메뉴의 배경색 */
+    font-size: 14px;
 }
 
 .sidebar ul li a:hover {
-    background-color: #45a049; /* 상위 메뉴 호버시 */
+    color: #3498db;
 }
 
-/* 상위 메뉴 스타일 */
-.sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    display: block;
-    padding: 10px; /* 상위 메뉴의 패딩을 더 크게 설정 */
-    text-align: center;
-    border-radius: 5px;
-    font-size: 16px; /* 상위 메뉴는 더 큰 글씨 */
-    background-color: #4CAF50; /* 상위 메뉴의 배경색 */
-}
-
-.sidebar ul li a:hover {
-    background-color: #45a049; /* 상위 메뉴 호버시 */
-}
-
-/* 하위 메뉴 스타일 */
-.sidebar ul li ul li a {
-    padding: 10px;
-    font-size: 14px; /* 하위 메뉴는 작은 글씨 */
-    text-align: left; /* 하위 메뉴는 왼쪽 정렬 */
-    background-color: #66BB6A; /* 하위 메뉴의 배경색 */
-    margin-left: 15px; /* 하위 메뉴는 들여쓰기 */
-}
-
-.sidebar ul li ul li a:hover {
-    background-color: #60a865; /* 하위 메뉴 호버시 */
-}
-
-/* 하위 메뉴 들여쓰기 */
-.sidebar ul li ul {
-    margin-left: 15px;
-}
-
-/* 하위 메뉴 아이템 간 간격 조정 */
-.sidebar ul li ul li {
-    margin-bottom: 5px; /* 하위 메뉴 간격을 약간 추가 */
-}
 /* 콘텐츠 영역 스타일 */
 .content {
-    margin-left: 220px; /* 메뉴바의 너비 + 여백 */
+    margin-left: 220px; /* 메뉴바의 너비 */
     padding: 20px;
-    height : 200px;
-
 }
 
-h1 {
-    text-align: center;
-    color: #333;
+/* 검색 필드 스타일 */
+.search-fields {
+    width: 800px;
     margin-top: 20px;
 }
 
+/* 검색 폼 스타일 */
+#searchForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#searchForm input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 60%;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 검색 버튼 스타일 */
+#searchForm button[type="submit"] {
+    padding: 10px 25px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    align-self: flex-end;
+}
+
+#searchForm button[type="submit"]:hover {
+    background-color: #45a049;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 초기화 버튼 스타일 */
+#searchForm button[type="button"] {
+    padding: 10px 25px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-left: 10px;
+}
+
+#searchForm button[type="button"]:hover {
+    background-color: #d32f2f;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 테이블 스타일 */
 table {
     width: 80%;
     margin: 20px auto;
@@ -141,6 +178,7 @@ tr:hover {
     background-color: #e1f5fe;
 }
 
+/* 링크 버튼 스타일 */
 a {
     display: block;
     width: 150px;
@@ -157,12 +195,6 @@ a {
 a:hover {
     background-color: #45a049;
 }
-.details-wrapper {
-    display: flex;
-    justify-content: center; /* 중앙 정렬 */
-    align-items: center;
-    min-height: calc(100vh - 100px); /* 화면에서 중앙 배치 */
-}
 
 /* 직원 상세 정보 디자인 */
 .details-wrapper {
@@ -177,12 +209,12 @@ a:hover {
     padding: 20px;
     border-radius: 10px;
     max-width: 600px;
-    width: 100%; /* 작은 화면에서도 적절하게 크기 조정 */
+    width: 100%;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .detail-row {
-    margin-bottom: 10px; /* 간격을 줄임 */
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
 }
@@ -191,73 +223,3 @@ a:hover {
     font-weight: bold;
     color: #333;
 }
-.search-field {
-    padding-top:5px;
-
-}
-#searchForm {
-    display: flex;  /* 가로로 배치 */
-    flex-wrap: wrap;  /* 필드가 넘치면 줄 바꿈 허용 */
-    gap: 5px;  /* 필드 사이의 간격 */
-        padding: 10px;  /* 폼 내부 여백 */
-        background-color: #f9f9f9;  /* 약간의 배경색 */
-        border-radius: 10px;  /* 모서리 둥글게 */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* 그림자 효과 */
-        margin-bottom: 30px;  /* 폼과 아래 컨텐츠 사이 여백 */
-
-}
-
-/* 각 필드의 스타일 */
-#searchForm input[type="text"] {
-    padding: 10px;  /* 필드 내부 여백 */
-        border: 1px solid #ddd;  /* 연한 테두리 */
-        border-radius: 5px;  /* 필드 모서리 둥글게 */
-        width: 60%;  /* 필드 너비 */
-        font-size: 14px;  /* 폰트 크기 */
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* 검색 버튼 스타일 */
-#searchForm button[type="submit"] {
-    padding: 10px 25px;  /* 버튼 크기 */
-        background-color: #4CAF50;  /* 초록색 배경 */
-        color: white;  /* 흰색 글씨 */
-        border: none;  /* 테두리 제거 */
-        border-radius: 5px;  /* 모서리 둥글게 */
-        font-size: 16px;  /* 버튼 텍스트 크기 */
-        cursor: pointer;  /* 클릭 가능 커서 */
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;  /* 부드러운 변화 효과 */
-        align-self: flex-end;  /* 버튼을 오른쪽 끝에 맞춤 */
-}
-
-/* 검색 버튼 호버 시 색상 변경 */
-#searchForm button[type="submit"]:hover {
-    background-color: #45a049;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-/* 초기화 버튼 스타일 */
-#searchForm button[type="button"] {
-    padding: 10px 25px;  /* 버튼 크기 */
-    background-color: #f44336;  /* 빨간색 배경 */
-    color: white;  /* 흰색 글씨 */
-    border: none;  /* 테두리 제거 */
-    border-radius: 5px;  /* 모서리 둥글게 */
-    font-size: 16px;  /* 버튼 텍스트 크기 */
-    cursor: pointer;  /* 클릭 가능 커서 */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;  /* 부드러운 변화 효과 */
-    margin-left: 10px;  /* 검색 버튼과의 간격 */
-}
-
-/* 초기화 버튼 호버 시 색상 변경 */
-#searchForm button[type="button"]:hover {
-    background-color: #d32f2f;  /* 더 짙은 빨간색 배경 */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);  /* 그림자 효과 */
-}
-.search-fields {
-        width : 800px;
-        height : 500px;
-
-            /*display: none; /* 기본적으로 숨김 */
-            margin-top: 20px;
-
-        }
