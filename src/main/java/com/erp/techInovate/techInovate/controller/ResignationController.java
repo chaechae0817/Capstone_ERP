@@ -13,7 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -86,4 +89,34 @@ public class ResignationController {
         return "manageResignations"; // 퇴사 신청 관리 템플릿으로 이동
     }
 
+
+    @GetMapping("/resignation/pay")
+    public String resignationPay(Model model) {
+        List<Map<String, Object>> resignationDetails = new ArrayList<>();
+
+        // 모든 퇴사자 목록을 가져와서 각 퇴사자에 대해 필요한 데이터 추가
+        List<ResignationEntity> resignations = resignationService.findAll();
+        for (ResignationEntity resignation : resignations) {
+            Map<String, Object> resignationData = new LinkedHashMap<>();
+            EmployeeEntity employee = resignation.getEmployee();
+
+            // 기본 정보 추가
+            resignationData.put("employeeName", employee.getName());
+            resignationData.put("employeeHireDate", employee.getHireDate());
+            resignationData.put("resignationDate", resignation.getResignationDate());
+
+            // 3개월 급여 평균 계산
+            double threeMonthAverageSalary = resignationService.getThreeMonthAverageSalary(employee, resignation.getResignationDate());
+            resignationData.put("threeMonthAverageSalary", threeMonthAverageSalary);
+
+            // 퇴직금 (이미 사전 승인 단계에서 계산된 값이 있다면 사용)
+            double severancePay = resignation.getSeverancePay() != null ? resignation.getSeverancePay() : 0.0;
+            resignationData.put("severancePay", severancePay);
+
+            resignationDetails.add(resignationData);
+        }
+
+        model.addAttribute("resignationDetails", resignationDetails);
+        return "resignationPay"; // 해당 HTML 템플릿으로 이동
+    }
 }

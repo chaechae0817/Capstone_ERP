@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>퇴사자 명단 및 퇴직금</title>
+  <style>
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 8px; text-align: center; border-bottom: 1px solid #ddd; }
+    th { background-color: #4CAF50; color: white; }
+  </style>
+</head>
+<body>
+<h1>퇴사자 명단 및 퇴직금</h1>
+<table>
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th>성명</th>
+    <th>입사일</th>
+    <th>퇴사일</th>
+    <th>3개월 급여 평균</th>
+    <th>퇴직급여</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="resignation, iterStat : ${resignationDetails}">
+    <td th:text="${iterStat.count}"></td>
+    <td th:text="${resignation['employeeName']}"></td>
+    <td th:text="${resignation['employeeHireDate']}"></td>
+    <td th:text="${resignation['resignationDate']}"></td>
+    <td th:text="${#numbers.formatDecimal(resignation['threeMonthAverageSalary'], 0, 0)}"></td>
+    <td th:text="${#numbers.formatDecimal(resignation['severancePay'], 0, 0)}"></td>
+  </tr>
+  <tr th:if="${#lists.isEmpty(resignationDetails)}">
+    <td colspan="6">퇴사자 정보가 없습니다.</td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

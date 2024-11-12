@@ -1,22 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>회사 정보/수정</title>
-    <link rel="stylesheet" href="/companyListstyle.css">
+    <link rel="stylesheet" th:href="@{/companyListstyle.css}">
 </head>
 <body>
 <h1>회사 정보</h1>
 
-<div th:if="${company != null}">
-    <p><strong>회사 이름:</strong> <span th:text="${company.name}"></span></p>
-    <p><strong>사업장 소재지:</strong> <span th:text="${company.address}"></span></p>
-    <p><strong처>연락처:</strong처> <span th:text="${company.contactNumber}"></span></p>
-    <p><strong>이메일:</strong> <span th:text="${company.email}"></span></p>
-    <p><strong>사업자 등록번호:</strong> <span th:text="${company.registrationNumber}"></span></p>
-    <p><strong>대표명:</strong> <span th:text="${company.representativeName}"></span></p>
-    <p><strong>업종:</strong> <span th:text="${company.businessType}"></span></p>
-    <p><strong>법인 번호:</strong> <span th:text="${company.corporateNumber}"></span></p>
-    <a th:href="@{/company/{id}/edit(id=${company.id})}">수정</a>
+<div class="company-info">
+    <table>
+        <tr>
+            <td>회사명</td>
+            <td th:text="${company.name}"></td>
+            <td>전화번호</td>
+            <td th:text="${company.contactNumber}"></td>
+        </tr>
+        <tr>
+            <td>대표자명</td>
+            <td th:text="${company.representativeName}"></td>
+            <td>이메일</td>
+            <td th:text="${company.email}"></td>
+        </tr>
+        <tr>
+            <td>업종</td>
+            <td th:text="${company.businessType}"></td>
+            <td>법인등록번호</td>
+            <td th:text="${company.corporateNumber}"></td>
+        </tr>
+        <tr>
+            <td>사업자등록번호</td>
+            <td th:text="${company.registrationNumber}"></td>
+            <td>사업장 주소</td>
+            <td th:text="${company.address}"></td>
+        </tr>
+    </table>
+    <div class="button_container">
+    <a th:href="@{/company/{id}/edit(id=${company.id})}" class="edit-button">수정</a>
+    </div>
 </div>
 
 <div th:if="${company == null}">

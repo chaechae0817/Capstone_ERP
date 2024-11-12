@@ -1,326 +1,200 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
     <title>직원 목록</title>
-    <link rel="stylesheet" type="text/css" href="/liststyle.css">
-</head>
-<body>
-<div class="sidebar">
-    <h2>메뉴</h2>
-    <ul>
-        <li><a href="#" onclick="toggleMenu(this)">인사관리</a>
-            <ul class="open">
-                <li><a href="#" onclick="toggleMenu(this)">직원 관리▼</a>
-                    <ul class="open">
-                        <li><a href="/employee/list">- 직원 목록</a></li>
-                        <li><a href="/employee/new">- 직원 등록</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" onclick="toggleMenu(this)">인사 발령▼</a>
-                    <ul class="open">
-                        <li><a href="/transfer/list">- 인사 발령 조회</a></li>
-                        <li><a href="/transfer/new">- 인사 발령 입력</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" onclick="toggleMenu(this)">퇴사자 관리▼</a>
-                    <ul class="open">
-                        <li><a href="/manage/resignations">- 퇴사자 명단</a></li>
-                        <li><a href="/resignation">- 퇴사 신청</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" onclick="toggleMenu(this)">증명서 관리▼</a>
-                    <ul class="open">
-                        <li><a href="/certificate/employee">- 재직 증명서</a></li>
-                        <li><a href="/certificate/career">- 경력 증명서</a></li>
-                        <li><a href="#">- 급여 명세서</a></li>
-                        <li><a href="/certificate/list">- 증명서 발급 현황</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li><a href="#" onclick="toggleMenu(this)">근태 관리</a>
-            <ul class="open">
-                <li><a href="#" onclick="toggleMenu(this)">항목 코드 관리▼</a>
-                    <ul class="open">
-                        <li><a href="/attendance/list">- 근태항목코드</a></li>
-                        <li><a href="/leave/list">- 휴가항목코드</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" onclick="toggleMenu(this)">휴가▼</a>
-                    <ul class="open">
-                        <li><a href="/">- 휴가 신청</a></li>
-                        <li><a href="/">- 휴가 신청자</a></li>
-                        <li><a href="/">- 사원별 휴가 조회</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" onclick="toggleMenu(this)">출퇴근 관리▼</a>
-                    <ul class="open">
-                        <li><a href="/record/list">- 출퇴근 기록 조회</a></li>
-                        <li><a href="/record/register">- 출퇴근 등록</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li><a href="#" onclick="toggleMenu(this)">급여 관리</a>
-            <ul class="open">
-                <li><a href="#" onclick="toggleMenu(this)">급여 코드 관리▼</a>
-                    <ul class="open">
-                        <li><a href="/">- 수당 등록</a></li>
-                        <li><a href="/">- 공제 등록</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" onclick="toggleMenu(this)">급여▼</a>
-                    <ul class="open">
-                        <li><a href="/monthly/list">- 근무 기록 조회</a></li>
-                        <li><a href="/">- 급여 계산</a></li>
-                        <li><a href="/">- 명세서 전송 및 조회</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" onclick="toggleMenu(this)">퇴직금▼</a>
-                    <ul class="open">
-                        <li><a href="/">- 퇴직금</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li><a href="#" onclick="toggleMenu(this)">회사 관리</a>
-            <ul class="open">
-                <li><a href="#" onclick="toggleMenu(this)">회사▼</a>
-                    <ul class="open">
-                        <li><a href="/company/list">- 회사 정보/수정</a></li>
-                        <li><a href="/company/new">- 회사 정보 등록</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" onclick="toggleMenu(this)">조직 개편▼</a>
-                    <ul class="open">
-                        <li><a href="/organization/position/list">- 직급 관리</a></li>
-                        <li><a href="/organization/department/list">- 부서 관리</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-    </ul>
-</div>
-<div class="content">
-    <div class="search-fields" id="searchFields">
-        <form id="searchForm" action="/employee/search" method="get">
-            <div class="search-field">
-                <label for="searchField">선택:</label>
-                <select id="searchField" name="searchField" onchange="toggleFields(this.value)">
-                    <option value="">선택하세요</option>
-                    <option value="name">이름</option>
-                    <option value="contactInfo">연락처</option>
-                    <option value="email">이메일</option>
-                    <option value="address">주소</option>
-                    <option value="hireDateStr">입사일</option>
-                    <option value="birthDateStr">생년월일</option>
-                    <option value="experience">경력</option>
-                    <option value="position">직급</option>
-                    <option value="department">부서</option>
-                </select>
-            </div>
+    <link rel="stylesheet" type="text/css" href="/css/employeeList.css">
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchField = urlParams.get('searchField');
+                const name = urlParams.get('name');
+                const contactInfo = urlParams.get('contactInfo');
+                const email = urlParams.get('email');
+                const address = urlParams.get('address');
+                const hireDateStr = urlParams.get('hireDateStr');
+                const birthDateStr = urlParams.get('birthDateStr');
+                const experience = urlParams.get('experience');
+                const positionId = urlParams.get('positionId');
+                const departmentId = urlParams.get('departmentId');
 
-            <div id="nameField" class="dynamicField" style="display: none;">
-                <label for="name" id="name">이름:</label>
-                <input type="text" name="name" placeholder="이름 입력">
-            </div>
+                if (searchField) {
+                    document.getElementById('searchField').value = searchField;
+                    toggleFields(searchField);
+                }
 
-            <div id="contactInfoField" class="dynamicField" style="display: none;">
-                <label for="contactInfo" id="contactInfo">연락처:</label>
-                <input type="text" name="contactInfo" placeholder="연락처 입력">
-            </div>
-
-            <div id="emailField" class="dynamicField" style="display: none;">
-                <label for="email" id="email">이메일:</label>
-                <input type="text" name="email" placeholder="이메일 입력">
-            </div>
-
-            <div id="addressField" class="dynamicField" style="display: none;">
-                <label for="address" id="address">주소:</label>
-                <input type="text" name="address" placeholder="주소 입력">
-            </div>
-
-            <div id="hireDateStrField" class="dynamicField" style="display: none;">
-                <label for="hireDateStr" id="hireDateStr">입사일:</label>
-                <input type="date" name="hireDateStr" >
-            </div>
-
-            <div id="birthDateStrField" class="dynamicField" style="display: none;">
-                <label for="birthDateStr" id="birthDateStr">생년월일:</label>
-                <input type="date" name="birthDateStr">
-            </div>
-
-
-            <div id="experienceField" class="dynamicField" style="display: none;">
-                <label for="experience" id="experience">경력:</label>
-                <select name="experience">
-                    <option value="">경력 선택</option>
-                    <option value="0">0년</option>
-                    <option value="1">1년</option>
-                    <option value="2">2년</option>
-                    <option value="3">3년</option>
-                    <option value="4">4년</option>
-                    <option value="5">5년</option>
-                    <option value="6">6년</option>
-                    <option value="7">7년</option>
-                    <option value="8">8년</option>
-                    <option value="9">9년</option>
-                    <option value="10">10년</option>
-                </select>
-            </div>
-
-            <div id="positionField" class="dynamicField" style="display: none;">
-                <label for="position" id="position">직급:</label>
-                <select name="positionId">
-                    <option value="">직급 선택</option>
-                    <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}"></option>
-                </select>
-            </div>
-
-            <div id="departmentField" class="dynamicField" style="display: none;">
-                <label for="department" id="department">부서:</label>
-                <select name="departmentId">
-                    <option value="">부서 선택</option>
-                    <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
-                </select>
-            </div>
-
-
-            <button type="submit">검색</button>
-            <button type="button" onclick="clearSearch()">초기화</button>
-        </form>
-    </div>
-</div>
-
-<h1>직원 목록</h1>
-<table>
-    <tr>
-<!--        <th>ID</th>-->
-        <th>사원번호</th>
-        <th>이름</th>
-        <th>주민번호</th>
-        <th>직급</th>
-        <th>직원 구분</th>
-        <th>부서</th>
-        <th>입사일</th>
-        <th>연락처</th>
-        <th>이메일</th>
-        <th>생년월일</th>
-        <th>주소</th>
-        <th>경력</th>
-        <th>계좌 번호</th>
-        <th>은행</th>
-
-    </tr>
-    <tr th:each="employee : ${employees}">
-<!--        <td th:text="${employee.employeeId}"></td>-->
-        <td th:text="${employee.employeeNumber}"></td>
-        <!--<td th:text="${employee.name}"></td>-->
-        <td><a th:href="@{/employee/{id}(id=${employee.employeeId})}" th:text="${employee.name}"></a></td>
-        <td th:text="${employee.ssn}"></td>
-        <td th:text="${employee.position.name}"></td>
-        <td th:text="${employee.status}"></td>
-        <td th:text="${employee.department.name}"></td>
-        <td th:text="${employee.hireDate}"></td>
-        <td th:text="${employee.contactInfo}"></td>
-        <td th:text="${employee.email}"></td>
-        <td th:text="${employee.birthDate}"></td>
-        <td th:text="${employee.address}"></td>
-        <td th:text="${employee.experience}"></td>
-        <td th:text="${employee.accountNumber}"></td>
-        <td th:text="${employee.bank}"></td>
-    </tr>
-</table>
-<a href="/employee/new">직원 등록하기</a>
-</div>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const searchField = urlParams.get('searchField');
-            const name = urlParams.get('name');
-            const contactInfo = urlParams.get('contactInfo');
-            const email = urlParams.get('email');
-            const address = urlParams.get('address');
-            const hireDateStr = urlParams.get('hireDateStr');
-            const birthDateStr = urlParams.get('birthDateStr');
-            const experience = urlParams.get('experience');
-            const positionId = urlParams.get('positionId');
-            const departmentId = urlParams.get('departmentId');
-
-            if (searchField) {
-                document.getElementById('searchField').value = searchField;
-                toggleFields(searchField);
-            }
-
-            if (name) {
-                document.querySelector("input[name='name']").value = name;
-            }
-            if (contactInfo) {
-                document.querySelector("input[name='contactInfo']").value = contactInfo;
-            }
-            if (email) {
-                document.querySelector("input[name='email']").value = email;
-            }
-            if (address) {
-                document.querySelector("input[name='address']").value = address;
-            }
-            if (hireDateStr) {
-                document.querySelector("input[name='hireDateStr']").value = hireDateStr;
-            }
-            if (birthDateStr) {
-                document.querySelector("input[name='birthDateStr']").value = birthDateStr;
-            }
-            if (experience) {
-                document.querySelector("select[name='experience']").value = experience;
-            }
-            if (positionId) {
-                document.querySelector("select[name='positionId']").value = positionId;
-            }
-            if (departmentId) {
-                document.querySelector("select[name='departmentId']").value = departmentId;
-            }
+                if (name) {
+                    document.querySelector("input[name='name']").value = name;
+                }
+                if (contactInfo) {
+                    document.querySelector("input[name='contactInfo']").value = contactInfo;
+                }
+                if (email) {
+                    document.querySelector("input[name='email']").value = email;
+                }
+                if (address) {
+                    document.querySelector("input[name='address']").value = address;
+                }
+                if (hireDateStr) {
+                    document.querySelector("input[name='hireDateStr']").value = hireDateStr;
+                }
+                if (birthDateStr) {
+                    document.querySelector("input[name='birthDateStr']").value = birthDateStr;
+                }
+                if (experience) {
+                    document.querySelector("select[name='experience']").value = experience;
+                }
+                if (positionId) {
+                    document.querySelector("select[name='positionId']").value = positionId;
+                }
+                if (departmentId) {
+                    document.querySelector("select[name='departmentId']").value = departmentId;
+                }
         });
 
         function toggleFields(selectedValue) {
+            console.log("toggleFields 호출됨: " + selectedValue); // 디버그 로그
             var fields = document.querySelectorAll('.dynamicField');
             fields.forEach(function(field) {
-                field.style.display = 'none'; // 모든 필드 숨기기
+                field.style.display = 'none';
             });
-
             if (selectedValue) {
-                document.getElementById(selectedValue + 'Field').style.display = 'block'; // 선택된 필드만 보이기
+                document.getElementById(selectedValue + 'Field').style.display = 'block';
             }
         }
 
-    function toggleMenu(element) {
-    // 클릭한 요소의 상위 메뉴를 확인
-    const parentMenu = element.closest('li').parentNode;
 
-    // 상위 메뉴(인사관리, 근태관리, 급여관리, 회사관리)를 선택
-    const allMainMenus = document.querySelectorAll('.sidebar > ul > li > a');
+        function clearSearch() {
+            window.location.href = '/employee/list'; // 기본 리스트 페이지로 이동
+        }
+    </script>
+</head>
 
-    // 하위 메뉴가 있는지 확인
-    const nestedMenu = element.nextElementSibling;
+<body>
+<!-- layout.html 파일의 content fragment에 employeeList.html의 내용을 삽입 -->
+<div layout:fragment="content">
+    <h1>직원 목록</h1>
+        <div class="search-fields" id="searchFields">
+            <form id="searchForm" action="/employee/search" method="get">
+                <div class="search-field">
+                    <label for="searchField">선택</label>
+                    <select id="searchField" name="searchField" onchange="toggleFields(this.value)">
+                        <option value="">선택하세요</option>
+                        <option value="name">이름</option>
+                        <option value="contactInfo">연락처</option>
+                        <option value="email">이메일</option>
+                        <option value="address">주소</option>
+                        <option value="hireDateStr">입사일</option>
+                        <option value="birthDateStr">생년월일</option>
+                        <option value="experience">경력</option>
+                        <option value="position">직급</option>
+                        <option value="department">부서</option>
+                    </select>
+                </div>
 
-    // 상위 메뉴 클릭 시, 다른 상위 메뉴의 하위 메뉴를 닫음
-    if (parentMenu === document.querySelector('.sidebar > ul')) {
-        allMainMenus.forEach(menu => {
-            const siblingMenu = menu.nextElementSibling;
-            if (siblingMenu && siblingMenu !== nestedMenu) {
-                siblingMenu.classList.remove('active');
-            }
-        });
-    }
+                <div id="nameField" class="dynamicField" style="display: none;">
+                    <label for="name" id="name">이름</label>
+                    <input type="text" name="name" placeholder="이름 입력">
+                </div>
 
-    // 클릭된 메뉴의 하위 메뉴를 토글
-    if (nestedMenu) {
-        nestedMenu.classList.toggle('active');
-    }
-}
-     function clearSearch() {
-        window.location.href = '/employee/list'; // 기본 리스트 페이지로 이동
-    }
+                <div id="contactInfoField" class="dynamicField" style="display: none;">
+                    <label for="contactInfo" id="contactInfo">연락처:</label>
+                    <input type="text" name="contactInfo" placeholder="연락처 입력">
+                </div>
 
-</script>
+                <div id="emailField" class="dynamicField" style="display: none;">
+                    <label for="email" id="email">이메일:</label>
+                    <input type="text" name="email" placeholder="이메일 입력">
+                </div>
+
+                <div id="addressField" class="dynamicField" style="display: none;">
+                    <label for="address" id="address">주소:</label>
+                    <input type="text" name="address" placeholder="주소 입력">
+                </div>
+
+                <div id="hireDateStrField" class="dynamicField" style="display: none;">
+                    <label for="hireDateStr" id="hireDateStr">입사일:</label>
+                    <input type="date" name="hireDateStr" >
+                </div>
+
+                <div id="birthDateStrField" class="dynamicField" style="display: none;">
+                    <label for="birthDateStr" id="birthDateStr">생년월일:</label>
+                    <input type="date" name="birthDateStr">
+                </div>
+
+
+                <div id="experienceField" class="dynamicField" style="display: none;">
+                    <label for="experience" id="experience">경력:</label>
+                    <select name="experience">
+                        <option value="">경력 선택</option>
+                        <option value="0">신입</option>
+                        <option value="1">1년</option>
+                        <option value="2">2년</option>
+                        <option value="3">3년</option>
+                        <option value="4">4년</option>
+                        <option value="5">5년</option>
+                        <option value="6">6년</option>
+                        <option value="7">7년</option>
+                        <option value="8">8년</option>
+                        <option value="9">9년</option>
+                        <option value="10">10년</option>
+                    </select>
+                </div>
+
+                <div id="positionField" class="dynamicField" style="display: none;">
+                    <label for="position" id="position">직급:</label>
+                    <select name="positionId">
+                        <option value="">직급 선택</option>
+                        <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}"></option>
+                    </select>
+                </div>
+
+                <div id="departmentField" class="dynamicField" style="display: none;">
+                    <label for="department" id="department">부서:</label>
+                    <select name="departmentId">
+                        <option value="">부서 선택</option>
+                        <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                    </select>
+                </div>
+
+
+                <button type="submit">검색</button>
+                <button type="button" onclick="clearSearch()">초기화</button>
+            </form>
+        </div>
+
+    <table>
+        <tr>
+            <!--        <th>ID</th>-->
+            <th>사원번호</th>
+            <th>이름</th>
+            <th>직급</th>
+            <th>직원 구분</th>
+            <th>부서</th>
+            <th>입사일</th>
+            <th>연락처</th>
+            <th>이메일</th>
+            <th>생년월일</th>
+            <th>주소</th>
+            <th>경력</th>
+
+        </tr>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.employeeNumber}"></td>
+            <td><a th:href="@{/employee/{id}(id=${employee.employeeId})}" th:text="${employee.name}"></a></td>
+            <td th:text="${employee.position.name}"></td>
+            <td th:text="${employee.status}"></td>
+            <td th:text="${employee.department.name}"></td>
+            <td th:text="${employee.hireDate}"></td>
+            <td th:text="${employee.contactInfo}"></td>
+            <td th:text="${employee.email}"></td>
+            <td th:text="${employee.birthDate}"></td>
+            <td th:text="${employee.address}"></td>
+            <td th:text="${employee.experience}"></td>
+        </tr>
+    </table>
+    <a href="/employee/new">직원 등록하기</a>
+</div>
+
 </body>
 </html>

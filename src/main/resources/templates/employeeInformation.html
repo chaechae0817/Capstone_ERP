@@ -1,45 +1,208 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
     <title>직원 정보</title>
-    <link rel="stylesheet" type="text/css" href="/liststyle.css">
+    <style>
+        /* 스타일 시트 예제: 직원 상세 정보 페이지 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #2c3e50;
+            padding: 20px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #ecf0f1;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            padding: 20px;
+            width: calc(100% - 200px);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        .details-wrapper {
+            display: flex;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-photo {
+            border-radius: 50%;
+            max-width: 150px;
+            max-height: 150px;
+            object-fit: cover;
+            border: 2px solid #424242;
+        }
+
+        .upload-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .upload-button:hover {
+            background-color: #2980b9;
+        }
+
+        .employee-info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .employee-info-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            color: #2c3e50;
+            white-space: nowrap; /* 줄바꿈 방지 */
+        }
+
+        .employee-info-table td:first-child {
+            font-weight: bold;
+            width: 25%;
+            color: #34495e;
+            white-space: nowrap; /* 줄바꿈 방지 */
+        }
+
+        .info-columns {
+            display: flex;
+            gap: 40px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #424242;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h2>메뉴</h2>
-        <ul>
-            <li><a href="/hrm">인사관리</a></li>
-            <li><a href="/pay">급여관리</a></li>
-            <li><a href="/vac">휴가관리</a></li>
-        </ul>
-    </div>
-    <div class="content">
-        <h1>직원 상세 정보</h1>
-        <div class="details-wrapper">
-            <div class="details-container">
-                <!-- 직원 사진 표시 -->
-                <div class="detail-row">
-                    <img th:src="@{${employee.photo}}" alt="직원 사진" style="max-width: 150px; max-height: 150px;" />
-                </div>
-                <div class="detail-row"><span class="detail-label">ID:</span> <span th:text="${employee.employeeId}"></span></div>
-                <div class="detail-row"><span class="detail-label">이름:</span> <span th:text="${employee.name}"></span></div>
-                <div class="detail-row"><span class="detail-label">사원번호:</span> <span th:text="${employee.employeeNumber}"></span></div>
-                <div class="detail-row"><span class="detail-label">주민번호:</span> <span th:text="${employee.ssn}"></span></div>
-                <div class="detail-row"><span class="detail-label">직급:</span> <span th:text="${employee.position.name}"></span></div>
-                <div class="detail-row"><span class="detail-label">부서:</span> <span th:text="${employee.department.name}"></span></div>
-                <div class="detail-row"><span class="detail-label">입사일:</span> <span th:text="${employee.hireDate}"></span></div>
-                <div class="detail-row"><span class="detail-label">연락처:</span> <span th:text="${employee.contactInfo}"></span></div>
-                <div class="detail-row"><span class="detail-label">이메일:</span> <span th:text="${employee.email}"></span></div>
-                <div class="detail-row"><span class="detail-label">생년월일:</span> <span th:text="${employee.birthDate}"></span></div>
-                <div class="detail-row"><span class="detail-label">주소:</span> <span th:text="${employee.address}"></span></div>
-                <div class="detail-row"><span class="detail-label">경력:</span> <span th:text="${employee.experience}"></span></div>
+<div layout:fragment="content">
+    <h1>직원 상세 정보</h1>
+    <div class="details-wrapper">
+        <!-- 프로필 사진 및 업로드 버튼 -->
+        <div class="profile-section">
+            <img th:src="@{${employee.photo}}" alt="직원 사진" class="profile-photo" />
+        </div>
 
+        <!-- 직원 정보 테이블 -->
+        <div class="details-container">
+            <div class="info-columns">
+                <!-- 첫 번째 열 -->
+                <table class="employee-info-table">
+                    <tr>
+                        <td>사원번호</td>
+                        <td th:text="${employee.employeeNumber}"></td>
+                    </tr>
+                    <tr>
+                        <td>성명</td>
+                        <td th:text="${employee.name}"></td>
+                    </tr>
+                    <tr>
+                        <td>주민번호</td>
+                        <td th:text="${employee.ssn}"></td>
+                    </tr>
+                    <tr>
+                        <td>직급</td>
+                        <td th:text="${employee.position.name}"></td>
+                    </tr>
+                    <tr>
+                        <td>부서</td>
+                        <td th:text="${employee.department.name}"></td>
+                    </tr>
+                </table>
 
-
-                <a href="/employee/list" class="button">직원 목록보기</a>
+                <!-- 두 번째 열 -->
+                <table class="employee-info-table">
+                    <tr>
+                        <td>입사일</td>
+                        <td th:text="${employee.hireDate}"></td>
+                    </tr>
+                    <tr>
+                        <td>연락처</td>
+                        <td th:text="${employee.contactInfo}"></td>
+                    </tr>
+                    <tr>
+                        <td>이메일</td>
+                        <td th:text="${employee.email}"></td>
+                    </tr>
+                    <tr>
+                        <td>생년월일</td>
+                        <td th:text="${employee.birthDate}"></td>
+                    </tr>
+                    <tr>
+                        <td>주소</td>
+                        <td th:text="${employee.address}"></td>
+                    </tr>
+                    <tr>
+                        <td>경력</td>
+                        <td th:text="${employee.experience}"></td>
+                    </tr>
+                </table>
             </div>
+            <a href="/employee/list" class="button">직원 목록보기</a>
         </div>
     </div>
-
+</div>
 </body>
 </html>

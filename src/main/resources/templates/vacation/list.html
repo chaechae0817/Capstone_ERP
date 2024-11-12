@@ -1,87 +1,173 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="">
 <head>
     <meta charset="UTF-8">
     <title>휴가자 조회</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
-        }
+        .sidebar {
+        width: 150px;
+        background-color: #4CAF50;
+        padding: 20px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+      .sidebar h2 {
+        color: white;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .sidebar li {
+        margin: 5px 0;
+      }
 
-        h1 {
-            text-align: center;
-            color: #333;
-        }
+      .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+      }
 
-        form {
-            width: 60%;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
+      .sidebar ul li {
+        margin-bottom: 5px;
+      }
 
-        label {
-            display: block;
-            margin: 10px 0;
-            font-weight: bold;
-            color: #333;
-        }
+      .open {
+         max-height: 0;
+         overflow: hidden;
+         transition: max-height 0.5s ease;
+         margin-left: 10px;
+         }
 
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1em;
-            background-color: #f9f9f9;
-        }
+      .active {
+            max-height: 1000px; /* 열렸을 때의 최대 높이 */
+      }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
+      /* 상위 메뉴 스타일 */
+      .sidebar ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        padding: 12px; /* 상위 메뉴의 패딩을 더 크게 설정 */
+        text-align: center;
+        border-radius: 5px;
+        font-size: 16px; /* 상위 메뉴는 더 큰 글씨 */
+        background-color: #4CAF50; /* 상위 메뉴의 배경색 */
+      }
 
-        button:hover {
-            background-color: #45a049;
-        }
+      .sidebar ul li a:hover {
+        background-color: #45a049; /* 상위 메뉴 호버시 */
+      }
+
+      /* 상위 메뉴 스타일 */
+      .sidebar ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        padding: 10px; /* 상위 메뉴의 패딩을 더 크게 설정 */
+        text-align: center;
+        border-radius: 5px;
+        font-size: 16px; /* 상위 메뉴는 더 큰 글씨 */
+        background-color: #4CAF50; /* 상위 메뉴의 배경색 */
+      }
+
+      .sidebar ul li a:hover {
+        background-color: #45a049; /* 상위 메뉴 호버시 */
+      }
+
+      /* 하위 메뉴 스타일 */
+      .sidebar ul li ul li a {
+        padding: 10px;
+        font-size: 14px; /* 하위 메뉴는 작은 글씨 */
+        text-align: left; /* 하위 메뉴는 왼쪽 정렬 */
+        background-color: #66BB6A; /* 하위 메뉴의 배경색 */
+        margin-left: 15px; /* 하위 메뉴는 들여쓰기 */
+      }
+
+      .sidebar ul li ul li a:hover {
+        background-color: #60a865; /* 하위 메뉴 호버시 */
+      }
+
+      /* 하위 메뉴 들여쓰기 */
+      .sidebar ul li ul {
+        margin-left: 15px;
+      }
+
+      /* 하위 메뉴 아이템 간 간격 조정 */
+      .sidebar ul li ul li {
+        margin-bottom: 5px; /* 하위 메뉴 간격을 약간 추가 */
+      }
     </style>
+    <script>
+        function toggleMenu(element) {
+          // 클릭한 요소의 상위 메뉴를 확인
+          const parentMenu = element.closest('li').parentNode;
+
+          // 상위 메뉴(인사관리, 근태관리, 급여관리, 회사관리)를 선택
+          const allMainMenus = document.querySelectorAll('.sidebar > ul > li > a');
+
+          // 하위 메뉴가 있는지 확인
+          const nestedMenu = element.nextElementSibling;
+
+          // 상위 메뉴 클릭 시, 다른 상위 메뉴의 하위 메뉴를 닫음
+          if (parentMenu === document.querySelector('.sidebar > ul')) {
+              allMainMenus.forEach(menu => {
+                  const siblingMenu = menu.nextElementSibling;
+                  if (siblingMenu && siblingMenu !== nestedMenu) {
+                      siblingMenu.classList.remove('active');
+                  }
+              });
+          }
+
+          // 클릭된 메뉴의 하위 메뉴를 토글
+          if (nestedMenu) {
+              nestedMenu.classList.toggle('active');
+          }
+      }
+    </script>
 <body>
-<h1>휴가 신청자 목록</h1>
+<h1>휴가 신청 목록</h1>
+
 <table>
     <thead>
     <tr>
-        <th>휴가 ID</th>
         <th>사원 이름</th>
-        <th>휴가 종목</th>
+        <th>사원 번호</th>
+        <th>직급</th>
+        <th>부서</th>
+        <th>휴가 종류</th>
+        <th>사유</th>
         <th>시작일</th>
         <th>종료일</th>
-        <th>휴가 사유</th>
+        <th>액션</th>
     </tr>
     </thead>
     <tbody>
-    <!-- Thymeleaf 등을 활용하여 데이터를 출력 -->
     <tr th:each="vacation : ${vacations}">
-        <td th:text="${vacation.vacationId}"></td>
-        <td th:text="${vacation.employee.name}"></td>
-        <td th:text="${vacation.vacationType.name}"></td>
-        <td th:text="${vacation.startDate}"></td>
-        <td th:text="${vacation.endDate}"></td>
-        <td th:text="${vacation.reason}"></td>
+        <td th:text="${vacation.name}">사원 이름</td>
+        <td th:text="${vacation.employeeId}">사원 번호</td>
+        <td th:text="${vacation.position}">직급</td>
+        <td th:text="${vacation.department}">부서</td>
+        <td th:text="${vacation.leaveItemName}">휴가 종류</td>
+        <td th:text="${vacation.reason}">사유</td>
+        <td th:text="${vacation.startDate}">시작일</td>
+        <td th:text="${vacation.endDate}">종료일</td>
+        <td>
+            <!-- 승인 버튼 -->
+            <form th:action="@{/vacation/approve}" method="post" style="display:inline;">
+                <input type="hidden" th:value="${vacation.id}" name="id"/>
+                <button type="submit">승인</button>
+            </form>
+            <!-- 삭제 버튼 -->
+            <form th:action="@{/vacation/delete}" method="post" style="display:inline;">
+                <input type="hidden" th:value="${vacation.id}" name="id"/>
+                <button type="submit">삭제</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

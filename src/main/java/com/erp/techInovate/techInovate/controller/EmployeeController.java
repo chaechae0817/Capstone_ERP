@@ -8,6 +8,7 @@ import com.erp.techInovate.techInovate.service.DepartmentService;
 import com.erp.techInovate.techInovate.service.PositionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,10 +37,12 @@ public class EmployeeController {
 
     //직원 목록으로 이동
     @GetMapping("/list")
-    public String getEmployees(Model model) {
+    public String getEmployees(Model model/*,@SessionAttribute("employeeId") Long employeeId*/) {
         List<EmployeeEntity> employees = employeeService.getAllEmployees();
         List<PositionEntity> positions = positionService.getAllPositions();
         List<DepartmentEntity> departments = departmentService.getAllDepartments();
+//        EmployeeEntity entity = employeeService.getEmployeeById(employeeId);
+//        String username = entity.getName();
 
         // 로그 추가
         System.out.println("employees: "+ employees);
@@ -49,6 +52,7 @@ public class EmployeeController {
         model.addAttribute("employees", employeeService.getAllEmployees());
         model.addAttribute("positions", positions);
         model.addAttribute("departments", departments);
+//        model.addAttribute("username",username);
         return "employeeList";
     }
     // 특정 직원의 상세 페이지

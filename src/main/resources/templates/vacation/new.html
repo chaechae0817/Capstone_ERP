@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="">
 <head>
     <meta charset="UTF-8">
     <title>휴가 신청</title>
@@ -62,30 +62,35 @@
     </style>
 <body>
 <h1>휴가 신청</h1>
-<form action="/vacation/new" method="POST">
-    <label for="employee">사원 선택:</label>
-    <select id="employee" name="employeeId" required>
-        <option value="" disabled selected>사원을 선택하세요</option>
-        <option th:each="employee : ${employees}" th:value="${employee.employeeId}" th:text="${employee.name}"></option>
-    </select><br><br>
 
-    <label for="vacationType">휴가 종목:</label>
-    <select id="vacationType" name="vacationTypeName" required>
-        <option value="" disabled selected>휴가 종목을 선택하세요</option>
-        <!-- 휴가 종목 목록을 드롭다운에 출력 -->
-        <option th:each="leaveType : ${leaveTypes}" th:value="${leaveType.name}" th:text="${leaveType.name}"></option>
-    </select><br><br>
+<form th:action="@{/vacation/new}" th:object="${vacationDTO}" method="post">
+    <input type="hidden" th:field="*{employeeId}" /> <!-- employeeId를 숨겨진 필드로 추가 -->
 
-    <label for="startDate">시작일:</label>
-    <input type="date" id="startDate" name="startDate" required><br><br>
-
-    <label for="endDate">종료일:</label>
-    <input type="date" id="endDate" name="endDate" required><br><br>
-
-    <label for="reason">휴가 사유:</label>
-    <textarea id="reason" name="reason" required></textarea><br><br>
-
-    <button type="submit">휴가 신청</button>
+    <div>
+        <label>이름: <span th:text="${vacationDTO.name}"></span></label>
+        <label>직급: <span th:text="${vacationDTO.position}"></span></label>
+        <label>부서: <span th:text="${vacationDTO.department}"></span></label>
+    </div>
+    <div>
+        <label>휴가 종류: </label>
+        <select th:field="*{leaveItemName}" required>
+            <option th:each="item : ${leaveItems}" th:value="${item.name}" th:text="${item.name}">휴가 항목</option>
+        </select>
+    </div>
+    <div>
+        <label>시작일: </label>
+        <input type="date" th:field="*{startDate}" required/>
+    </div>
+    <div>
+        <label>종료일: </label>
+        <input type="date" th:field="*{endDate}" required/>
+    </div>
+    <div>
+        <label>사유: </label>
+        <textarea th:field="*{reason}" rows="3" required></textarea>
+    </div>
+    <button type="submit">신청</button>
 </form>
+
 </body>
 </html>
