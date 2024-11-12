@@ -54,7 +54,7 @@ public class VacationService {
         return leaveRepository.findAll();
     }
     public List<VacationDTO> getAllVacationApplications() {
-        List<VacationEntity> vacations = vacationRepository.findAll();
+        List<VacationEntity> vacations = vacationRepository.findByStatus("PENDING");
         return vacations.stream().map(vacation -> {
             VacationDTO dto = new VacationDTO();
             dto.setId(vacation.getId()); // VacationEntity의 ID를 DTO에 설정

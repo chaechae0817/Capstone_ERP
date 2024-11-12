@@ -40,6 +40,26 @@ public class SalaryCalculationService {
         calculateAndSaveMonthlyDeductions(employeeId, month);
     }
 
+    public double calculateThreeMonthAverageSalary(EmployeeEntity employee, LocalDate resignationDate) {
+        YearMonth endMonth = YearMonth.from(resignationDate).minusMonths(1); // 퇴사 전 달까지 3개월
+        YearMonth startMonth = endMonth.minusMonths(2);
+
+        double totalSalary = 0.0;
+
+        for (YearMonth month = startMonth; !month.isAfter(endMonth); month = month.plusMonths(1)) {
+            double monthlySalary = calculateMonthlySalary(employee, month);
+            totalSalary += monthlySalary;
+        }
+
+        return totalSalary / 3.0; // 3개월 평균 급여
+    }
+
+    // 월 급여 계산 로직 (기존에 사용 중이라면 재활용)
+    private double calculateMonthlySalary(EmployeeEntity employee, YearMonth month) {
+        double hourlyWage = calculateHourlyWage(employee.getSalary());
+        double totalPaidHours = attendanceRecordRepository.findTotalPaidHoursByEmployeeAndMonth(employee.getEmployeeId(), month.atDay(1), month.atEndOfMonth()).orElse(0.0);
+        return totalPaidHours * hourlyWage;
+    }
     public void calculateAndSaveDeductionsForAllEmployees(YearMonth month) {
         LocalDate firstDayOfMonth = month.atDay(1);
 
