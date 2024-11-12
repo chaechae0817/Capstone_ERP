@@ -197,7 +197,7 @@
 </div>
 
 <h1>직원 목록</h1>
-<table>
+<table class="table-wrapper">
     <tr>
 <!--        <th>ID</th>-->
         <th>사원번호</th>
@@ -235,7 +235,7 @@
         <td th:text="${employee.bank}"></td>
     </tr>
 </table>
-<a href="/employee/new">직원 등록하기</a>
+<a href="/employee/new" class="edit">직원 등록하기</a>
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {

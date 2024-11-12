@@ -40,13 +40,20 @@
         }
 
         .footer-text {
-            margin-top: 30px;
+            margin-top: 250px;
             font-size: 16px;
+            text-align: center;
         }
 
         .footer-signature {
-            margin-top: 30px;
+            margin-top: 50px;
             font-size: 16px;
+            text-align: center;
+        }
+
+        .TechInnovate {
+            margin-top:5px;
+            vertical-align:middle;
         }
 
         button {
@@ -377,7 +384,7 @@
     <div class="footer-signature">
         <p><span th:text="${employeeCertificate.issue_date}"></span></p>
         <p>주식회사 <span th:text="${employeeCertificate.company_name}"></span></p>
-        <p>대표이사<span th:text="${employeeCertificate.industry}"></span>                 (인)</p>
+        <p>대표이사 <span th:text="${employeeCertificate.representative_name}"></span><img src="/image/TechInnovate.png" class="TechInnovate"></p>
     </div>
     <button onclick="issueCertificate()" class="print-button">인쇄하기</button>
 </div>
