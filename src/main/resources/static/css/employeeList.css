@@ -1,0 +1,118 @@
+/* 검색 폼 스타일 */
+#searchForm {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;  /* 줄 바꿈 방지 */
+    gap: 10px;  /* 필드 사이의 간격 */
+    padding: 10px;  /* 폼 내부 여백 */
+    background-color: #f9f9f9;  /* 약간의 배경색 */
+    border-radius: 10px;  /* 모서리 둥글게 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* 그림자 효과 */
+    margin-bottom: 30px;  /* 폼과 아래 컨텐츠 사이 여백 */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 각 필드 스타일 */
+.search-field, .dynamicField {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* label 스타일 - 사각형 배경과 검정색 글씨 */
+.search-field label, .dynamicField label {
+    font-weight: bold;
+    color: #000000; /* 글씨 색상을 검정으로 설정 */
+    background-color: #F2F4F7; /* 배경색을 밝은 회색으로 설정 */
+    padding: 10px 25px; /* 레이블 내부 여백 */
+    border-radius: 4px; /* 사각형 모양 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* input 및 select 크기 label과 동일하게 설정 */
+#searchForm input[type="text"],
+#searchForm select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: auto;  /* 입력 필드의 너비 고정 해제 */
+    min-width: 100px; /* 최소 너비 설정 */
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    color: #424242; /* 텍스트 색상 */
+    background-color: #F2F4F7; /* 배경 색상 */
+}
+
+/* 검색 버튼 스타일 */
+#searchForm button[type="submit"], #searchForm button[type="button"] {
+    padding: 10px 15px;
+    background-color: #424242; /* 버튼 배경 색상 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 버튼 호버 효과 */
+#searchForm button[type="submit"]:hover, #searchForm button[type="button"]:hover {
+    background-color: #333333; /* 호버 시 더 어두운 색상 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+table tr:hover {
+    background-color: #e1f5fe;
+}
+
+/* 링크 스타일 */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 직원 등록 링크 */
+a[href="/employee/new"] {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #424242;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+}
+
+a[href="/employee/new"]:hover {
+    background-color: #333333;
+}

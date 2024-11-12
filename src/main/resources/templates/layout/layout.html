@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <title>공통 레이아웃</title>
+    <link rel="stylesheet" type="text/css" href="/style.css"> <!-- 공통 스타일 -->
+    <script src="/js/common.js" defer></script> <!-- 공통 JavaScript -->
+</head>
+<body>
+<!-- 헤더 영역 -->
+<header class="header">
+    <div class="logo">
+        <img src="/image/techinnovate_logo.png" alt="회사 로고" class="company-logo"> <!-- 회사 로고 -->
+    </div>
+    <div class="user-info">
+        <span th:text="${username}">_admin1234님</span>님 <!-- 로그인한 사용자 이름 -->
+        <a href="/logout" class="logout-button">로그아웃</a> <!-- 로그아웃 버튼 -->
+    </div>
+</header>
+
+<div th:replace="~{/layout/sidebar :: sidebar}"></div>
+
+<!-- 콘텐츠 영역 -->
+<div class="content" layout:fragment="content">
+</div>
+</body>
+</html>

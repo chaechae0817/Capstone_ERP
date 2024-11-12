@@ -9,14 +9,17 @@
 .background-section {
     flex: 1;
     background-image: url('/image/background.png'); /* 배경 이미지 경로 */
-    background-size: cover;
+    width: 600px;
+    height: 1050px;
+    margin-top: 50px;
+    background-size:center;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 /* 오른쪽 로그인 섹션 */
 .login-section {
-    width: 35%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,8 +28,8 @@
 }
 
 .logo {
-    max-width: 591px;
-    margin-bottom: 106px;
+    max-width: 900px;
+    margin-bottom: 70px;
 }
 
 /* 폼 스타일 */
@@ -39,18 +42,18 @@ form {
 
 input[type="text"], input[type="email"] {
     width: 100%;
-    padding: 12px;
+    padding: 20px;
     margin-bottom: 30px;
     border: 1px solid #ddd;
     background: #EEEEEE;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 18px;
     text-align: center;
 }
 
 button[type="submit"] {
     width: 100%;
-    padding: 12px;
+    padding: 20px;
     margin-left: 10px;
     background-color: #333333;
     color: white;
