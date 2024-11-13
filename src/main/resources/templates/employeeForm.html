@@ -3,87 +3,85 @@
       layout:decorate="~{layout/layout.html}">
 <head>
   <title>직원 등록</title>
-
   <link rel="stylesheet" type="text/css" href="/css/formstyle.css" />
 </head>
 <body>
 <div layout:fragment="content">
+<h1>직원 등록</h1>
+<form action="#" th:action="@{/employee/save}" th:object="${employee}" method="post" enctype="multipart/form-data">
+  <label for="name">이름:</label>
+  <input type="text" id="name" th:field="*{name}" required />
 
-  <h1>직원 등록</h1>
-  <form action="#" th:action="@{/employee/save}" th:object="${employee}" method="post" enctype="multipart/form-data">
-    <label for="name">이름:</label>
-    <input type="text" id="name" th:field="*{name}" required />
+  <label for="ssn">주민번호:</label>
+  <input type="text" id="ssn" th:field="*{ssn}" required />
 
-    <label for="ssn">주민번호:</label>
-    <input type="text" id="ssn" th:field="*{ssn}" required />
+  <label for="position">직급:</label>
+  <select id="position" th:field="*{positionId}" required>
+    <option value="">직급 선택</option>
+    <tr th:each="position : ${positions}">
+      <option th:value="${position.id}" th:text="${position.name}"></option>
+    </tr>
+  </select>
 
-    <label for="position">직급:</label>
-    <select id="position" th:field="*{positionId}" required>
-      <option value="">직급 선택</option>
-      <tr th:each="position : ${positions}">
-        <option th:value="${position.id}" th:text="${position.name}"></option>
-      </tr>
-    </select>
+  <label for="status">직원 구분:</label>
+  <select id="status" th:field="*{status}" required>
+    <option value="정규">정규</option>
+    <option value="계약">계약</option>
+    <option value="퇴사">퇴사</option>
+  </select>
 
-    <label for="status">직원 구분:</label>
-    <select id="status" th:field="*{status}" required>
-      <option value="정규">정규</option>
-      <option value="계약">계약</option>
-      <option value="퇴사">퇴사</option>
-    </select>
+  <label for="department">부서:</label>
+  <select id="department" th:field="*{departmentId}" required>
+    <option value="">부서 선택</option>
+    <tr th:each="department : ${departments}">
+      <option th:value="${department.id}" th:text="${department.name}"></option>
+    </tr>
+  </select>
 
-    <label for="department">부서:</label>
-    <select id="department" th:field="*{departmentId}" required>
-      <option value="">부서 선택</option>
-      <tr th:each="department : ${departments}">
-        <option th:value="${department.id}" th:text="${department.name}"></option>
-      </tr>
-    </select>
+  <label for="hireDate">입사일:</label>
+  <input type="date" id="hireDate" th:field="*{hireDate}" required />
 
-    <label for="hireDate">입사일:</label>
-    <input type="date" id="hireDate" th:field="*{hireDate}" required />
+  <label for="contactInfo">연락처:</label>
+  <input type="text" id="contactInfo" th:field="*{contactInfo}" required />
 
-    <label for="contactInfo">연락처:</label>
-    <input type="text" id="contactInfo" th:field="*{contactInfo}" required />
+  <label for="email">이메일:</label>
+  <input type="email" id="email" th:field="*{email}" required />
 
-    <label for="email">이메일:</label>
-    <input type="email" id="email" th:field="*{email}" required />
+  <label for="birthDate">생년월일:</label>
+  <input type="date" id="birthDate" th:field="*{birthDate}" required />
 
-    <label for="birthDate">생년월일:</label>
-    <input type="date" id="birthDate" th:field="*{birthDate}" required />
+  <label for="address">주소:</label>
+  <input type="text" id="address" th:field="*{address}" required />
 
-    <label for="address">주소:</label>
-    <input type="text" id="address" th:field="*{address}" required />
+  <label for="experience">경력:</label>
+  <input type="text" id="experience" th:field="*{experience}" />
 
-    <label for="experience">경력:</label>
-    <input type="text" id="experience" th:field="*{experience}" />
+  <label for="accountNumber">계좌 번호:</label>
+  <input type="text" id="accountNumber" th:field="*{accountNumber}" />
 
-    <label for="accountNumber">계좌 번호:</label>
-    <input type="text" id="accountNumber" th:field="*{accountNumber}" />
+  <label for="bank">은행:</label>
+  <select id="bank" th:field="*{bank}" />
+  <option value="국민은행">국민은행</option>
+  <option value="신한은행">신한은행</option>
+  <option value="하나은행">하나은행</option>
+  <option value="우리은행">우리은행</option>
+  <option value="토스뱅크">토스뱅크</option>
+  <option value="기업은행">기업은행</option>
+  <option value="카카오뱅크">카카오뱅크</option>
+  </select>
 
-    <label for="bank">은행:</label>
-    <select id="bank" th:field="*{bank}" />
-    <option value="국민은행">국민은행</option>
-    <option value="신한은행">신한은행</option>
-    <option value="하나은행">하나은행</option>
-    <option value="우리은행">우리은행</option>
-    <option value="토스뱅크">토스뱅크</option>
-    <option value="기업은행">기업은행</option>
-    <option value="카카오뱅크">카카오뱅크</option>
-    </select>
-
-    <label for="salary">연봉:</label>
-    <input type="number" id="salary" th:field="*{salary}" placeholder="연봉 입력" step="100000" required />
+  <label for="salary">연봉:</label>
+  <input type="number" id="salary" th:field="*{salary}" placeholder="연봉 입력" step="100000" required />
 
 
-    <label for="photo">사진 업로드:</label>
-    <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)" />
+  <label for="photo">사진 업로드:</label>
+  <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)" />
 
-    <!-- 미리보기 이미지 표시 -->
-    <img id="photoPreview" src="" alt="사진 미리보기" />
+  <!-- 미리보기 이미지 표시 -->
+  <img id="photoPreview" src="" alt="사진 미리보기" />
 
-    <button type="submit">등록</button>
-  </form>
+  <button type="submit">등록</button>
+</form>
 </div>
 <script>
   function previewImage(event) {
@@ -101,5 +99,6 @@
       }
   }
 </script>
+
 </body>
 </html>

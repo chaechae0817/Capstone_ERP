@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
-  <title>증명서 내용</title>
+  <title>증명서 발급 목록</title>
+  <link rel="stylesheet" type="text/css" href="/css/certificateissueliststyle.css" />
 </head>
 <body>
+<div layout:fragment="content">
 <h1>증명서 내용</h1>
 
 <table>
@@ -24,5 +27,6 @@
   </tr>
   </tbody>
 </table>
+</div>
 </body>
 </html>
