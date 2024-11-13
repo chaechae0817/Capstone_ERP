@@ -1,0 +1,67 @@
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+table tr:hover {
+    background-color: #e1f5fe;
+}
+
+/* 승인 버튼 스타일 */
+button.approve {
+    background-color: #424242; /* 중립적인 회색 */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.approve:hover {
+    background-color: #333333; /* 호버 시 더 진한 회색 */
+}
+
+/* 삭제 버튼 스타일 */
+button.reject {
+    background-color: #999999; /* 붉은색 */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.reject:hover {
+    background-color: #CCCCCC; /* 호버 시 더 진한 빨간색 */
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
