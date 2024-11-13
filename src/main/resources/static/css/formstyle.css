@@ -1,0 +1,67 @@
+/* 폼 전체 스타일 */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+h1 {
+    font-size: 24px;
+    color: #34495e;
+    margin-bottom: 20px;
+    text-align: center;
+}
+/* 레이블 스타일 */
+form label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* 입력 필드 스타일 */
+form input[type="text"],
+form input[type="email"],
+form input[type="date"],
+form input[type="number"],
+form select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #333;
+}
+
+/* 플레이스홀더 텍스트 색상 */
+form input::placeholder {
+    color: #bbb;
+}
+
+/* 버튼 스타일 */
+form button[type="submit"] {
+    padding: 12px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+form button[type="submit"]:hover {
+    background-color: #555;
+}
+
+/* 사진 미리보기 */
+#photoPreview {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+    margin-top: 10px;
+}

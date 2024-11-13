@@ -1,0 +1,110 @@
+body {
+    font-family: 'Malgun Gothic', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.certificate-container {
+    width:100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-sizing:border-box;
+    border: 2px solid black;
+}
+
+.certificate-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.certificate-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.certificate-table th, .certificate-table td {
+    border: 1px solid black;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.footer-text {
+    margin-top: 250px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.footer-signature {
+    margin-top: 50px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.TechInnovate {
+    margin-top:5px;
+    vertical-align:middle;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #424242;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #333333;
+}
+#purposeDialog {
+    max-width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#purposeSelect {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#purposeDialog button {
+    margin-top: 15px;
+}
+@media print {
+    .sidebar {
+        display: none;
+    }
+    .header {
+        display: none;
+    }
+    .print-button {
+        display: none;
+    }
+    .certificate-container {
+        margin: 0;
+        padding: 20px;
+        max-width: 800px; /* 인쇄 시에도 중앙에 맞추기 위한 최대 너비 */
+        box-sizing: border-box;
+        transform: translate(-50%, 0);
+        position: absolute;
+        left: 50%;
+    }
+}

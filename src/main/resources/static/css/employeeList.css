@@ -102,7 +102,7 @@ a:hover {
 }
 
 /* 직원 등록 링크 */
-a[href="/employee/new"] {
+a[href="/employee/new"].register {
     display: inline-block;
     margin-top: 20px;
     background-color: #424242;
@@ -113,6 +113,11 @@ a[href="/employee/new"] {
     text-decoration: none;
 }
 
-a[href="/employee/new"]:hover {
+a[href="/employee/new"].register:hover {
     background-color: #333333;
+}
+h1 {
+    font-size: 24px;
+    color: #34495e;
+    margin-bottom: 20px;
 }

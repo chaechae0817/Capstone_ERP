@@ -1,102 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>인사 발령 신청</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        form {
-            width: 60%;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0;
-            font-weight: bold;
-            color: #333;
-        }
-
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1em;
-            background-color: #f9f9f9;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/css/transfernewselectstyle.css">
 </head>
 <body>
+<div layout:fragment="content">
 <h1>인사 발령 신청</h1>
-
-<form action="/transfer/apply" method="post">
-    <!-- 직원 정보 -->
-    <input type="hidden" name="employeeId" th:value="${employee.employeeId}" />
-
-    <label>이름:</label>
-    <input type="text" th:value="${employee.name}" readonly><br>
-
-    <label>현재 부서:</label>
-    <input type="text" th:value="${employee.department.name}" readonly><br>
-
-    <label>현재 직급:</label>
-    <input type="text" th:value="${employee.position.name}" readonly><br>
-
-    <!-- 발령 정보 선택 -->
-    <label>발령 부서:</label>
-    <select name="toDepartmentId">
-        <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
-    </select><br>
-
-    <label>발령 직급:</label>
-    <select name="toPositionId">
-        <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}"></option>
-    </select><br>
-
-    <label>발령일:</label>
-    <input type="date" name="transferDate"><br>
-
-    <label>발령 구분:</label>
-    <select name="personnelAppointment">
-        <option value="승진">승진</option>
-        <option value="강등">강등</option>
-        <option value="부서 이동">부서 이동</option>
-    </select><br>
-
-    <button type="submit">신청</button>
-</form>
+<div class="table-container">
+    <form id="select" action="/transfer/apply" method="post">
+        <table>
+            <tr>
+                <th>이름</th>
+                <td><input type="text" th:value="${employee.name}" readonly></td>
+            </tr>
+            <tr>
+                <th>현재 부서</th>
+                <td><input type="text" th:value="${employee.department.name}" readonly></td>
+            </tr>
+            <tr>
+                <th>현재 직급</th>
+                <td><input type="text" th:value="${employee.position.name}" readonly></td>
+            </tr>
+            <tr>
+                <th>발령 부서</th>
+                <td>
+                    <select name="toDepartmentId">
+                        <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>발령 직급</th>
+                <td>
+                    <select name="toPositionId">
+                        <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>발령일</th>
+                <td><input type="date" name="transferDate"></td>
+            </tr>
+            <tr>
+                <th>발령 구분</th>
+                <td>
+                    <select name="personnelAppointment">
+                        <option value="승진">승진</option>
+                        <option value="강등">강등</option>
+                        <option value="부서 이동">부서 이동</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <button type="submit">신청</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</div>
 </body>
 </html>
