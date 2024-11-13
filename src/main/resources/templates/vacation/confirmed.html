@@ -1,103 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
+    <link rel="stylesheet" type="text/css" href="/css/vacationConfirmed.css" />
     <title>휴가 지급</title>
-    <style>
-        .sidebar {
-        width: 150px;
-        background-color: #4CAF50;
-        padding: 20px;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-      }
-      .sidebar h2 {
-        color: white;
-        text-align: center;
-        margin-bottom: 30px;
-      }
-      .sidebar li {
-        margin: 5px 0;
-      }
-
-      .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-      }
-
-      .sidebar ul li {
-        margin-bottom: 5px;
-      }
-
-      .open {
-         max-height: 0;
-         overflow: hidden;
-         transition: max-height 0.5s ease;
-         margin-left: 10px;
-         }
-
-      .active {
-            max-height: 1000px; /* 열렸을 때의 최대 높이 */
-      }
-
-      /* 상위 메뉴 스타일 */
-      .sidebar ul li a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        display: block;
-        padding: 12px; /* 상위 메뉴의 패딩을 더 크게 설정 */
-        text-align: center;
-        border-radius: 5px;
-        font-size: 16px; /* 상위 메뉴는 더 큰 글씨 */
-        background-color: #4CAF50; /* 상위 메뉴의 배경색 */
-      }
-
-      .sidebar ul li a:hover {
-        background-color: #45a049; /* 상위 메뉴 호버시 */
-      }
-
-      /* 상위 메뉴 스타일 */
-      .sidebar ul li a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        display: block;
-        padding: 10px; /* 상위 메뉴의 패딩을 더 크게 설정 */
-        text-align: center;
-        border-radius: 5px;
-        font-size: 16px; /* 상위 메뉴는 더 큰 글씨 */
-        background-color: #4CAF50; /* 상위 메뉴의 배경색 */
-      }
-
-      .sidebar ul li a:hover {
-        background-color: #45a049; /* 상위 메뉴 호버시 */
-      }
-
-      /* 하위 메뉴 스타일 */
-      .sidebar ul li ul li a {
-        padding: 10px;
-        font-size: 14px; /* 하위 메뉴는 작은 글씨 */
-        text-align: left; /* 하위 메뉴는 왼쪽 정렬 */
-        background-color: #66BB6A; /* 하위 메뉴의 배경색 */
-        margin-left: 15px; /* 하위 메뉴는 들여쓰기 */
-      }
-
-      .sidebar ul li ul li a:hover {
-        background-color: #60a865; /* 하위 메뉴 호버시 */
-      }
-
-      /* 하위 메뉴 들여쓰기 */
-      .sidebar ul li ul {
-        margin-left: 15px;
-      }
-
-      /* 하위 메뉴 아이템 간 간격 조정 */
-      .sidebar ul li ul li {
-        margin-bottom: 5px; /* 하위 메뉴 간격을 약간 추가 */
-      }
-    </style>
     <script>
         function toggleMenu(element) {
           // 클릭한 요소의 상위 메뉴를 확인
@@ -126,41 +32,37 @@
       }
     </script>
 </head>
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>승인된 휴가 목록</title>
-</head>
 <body>
-<h1>승인된 휴가 목록</h1>
+<div layout:fragment="content">
+    <h1>승인된 휴가 목록</h1>
 
-<table>
-    <thead>
-    <tr>
-        <th>사원 이름</th>
-        <th>사원 번호</th>
-        <th>직급</th>
-        <th>부서</th>
-        <th>휴가 종류</th>
-        <th>사유</th>
-        <th>시작일</th>
-        <th>종료일</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="vacation : ${confirmedVacations}">
-        <td th:text="${vacation.name}">사원 이름</td>
-        <td th:text="${vacation.employeeId}">사원 번호</td>
-        <td th:text="${vacation.position}">직급</td>
-        <td th:text="${vacation.department}">부서</td>
-        <td th:text="${vacation.leaveItemName}">휴가 종류</td>
-        <td th:text="${vacation.reason}">사유</td>
-        <td th:text="${vacation.startDate}">시작일</td>
-        <td th:text="${vacation.endDate}">종료일</td>
-    </tr>
-    </tbody>
-</table>
-
+    <table>
+        <thead>
+        <tr>
+            <th>사원 이름</th>
+            <th>사원 번호</th>
+            <th>직급</th>
+            <th>부서</th>
+            <th>휴가 종류</th>
+            <th>사유</th>
+            <th>시작일</th>
+            <th>종료일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="vacation : ${confirmedVacations}">
+            <td th:text="${vacation.name}">사원 이름</td>
+            <td th:text="${vacation.employeeId}">사원 번호</td>
+            <td th:text="${vacation.position}">직급</td>
+            <td th:text="${vacation.department}">부서</td>
+            <td th:text="${vacation.leaveItemName}">휴가 종류</td>
+            <td th:text="${vacation.reason}">사유</td>
+            <td th:text="${vacation.startDate}">시작일</td>
+            <td th:text="${vacation.endDate}">종료일</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 
 </html>
