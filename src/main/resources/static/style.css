@@ -96,7 +96,7 @@ body {
 
 /* 콘텐츠 영역 스타일 */
 .content {
-    margin-left: 220px; /* 사이드바 너비만큼 여백을 줌 */
+    margin-left: 200px; /* 사이드바 너비만큼 여백을 줌 */
     padding: 20px;
     background-color: #f0f2f5;
     height: calc(100vh - 60px); /* 헤더 높이를 제외한 전체 높이 */

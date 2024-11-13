@@ -1,0 +1,78 @@
+/* 전체 폼 스타일 */
+form {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 사진 미리보기 */
+#photoPreview {
+    width: 150px;
+    height: 200px;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+}
+
+/* 레이블과 필드를 감싸는 컨테이너 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+/* 레이블 스타일 */
+form label {
+    display: block;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #F2F4F7;
+    color: #333;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* 입력 필드 및 셀렉트 박스 */
+form input[type="text"],
+form input[type="email"],
+form input[type="date"],
+form input[type="number"],
+form select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 버튼 스타일 */
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #2726A6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: flex-end;
+}
+
+button[type="submit"]:hover {
+    background-color: #4E4DD1;
+}
+
+/* 버튼 컨테이너 (필요할 경우 추가) */
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
