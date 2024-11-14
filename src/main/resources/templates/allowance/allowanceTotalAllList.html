@@ -1,91 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
   <title>수당 전체 리스트</title>
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-    h1 { text-align: center; color: #333; }
+  <link rel="stylesheet" type="text/css" href="/css/allowanceTotalAllList.css">
 
-    /* 검색 폼 스타일 */
-    .search-form {
-        text-align: center;
-        margin-bottom: 20px;
-        padding: 10px;
+  <script>
+    function clearSearch() {
+        window.location.href = '/allowanceTotal/allList';
     }
-    .search-form label {
-        font-weight: bold;
-        margin-right: 10px;
-    }
-    .search-form input[type="text"],
-    .search-form input[type="month"],
-    .search-form button {
-        padding: 8px;
-        margin: 5px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-    .search-form button {
-        background-color: #4CAF50;
-        color: white;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    .search-form button:hover {
-        background-color: #45a049;
-    }
-
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; background-color: white; }
-    th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
-    th { background-color: #4CAF50; color: white; }
-  </style>
+  </script>
 </head>
 <body>
-<h1>수당 전체 리스트</h1>
+<div layout:fragment="content">
+  <h1>수당 전체 리스트</h1>
+  <div class="table-container">
+  <!-- 이름과 월을 기준으로 검색하는 폼 -->
+  <form th:action="@{/allowanceTotal/search}" method="get" style="text-align: center; margin-bottom: 20px;">
+    <label for="name">직원 이름:</label>
+    <input type="text" id="name" name="name" th:value="${name}" placeholder="직원 이름 입력">
 
-<!-- 이름과 월을 기준으로 검색하는 폼 -->
-<form th:action="@{/allowanceTotal/search}" method="get" style="text-align: center; margin-bottom: 20px;">
-  <label for="name">직원 이름:</label>
-  <input type="text" id="name" name="name" th:value="${name}" placeholder="직원 이름 입력">
+    <label for="month">월:</label>
+    <input type="month" id="month" name="month"
+           th:value="${month != null ? month.year + '-' + (month.monthValue < 10 ? '0' : '') + month.monthValue : ''}"
+           placeholder="YYYY-MM">
 
-  <label for="month">월:</label>
-  <input type="month" id="month" name="month"
-         th:value="${month != null ? month.year + '-' + (month.monthValue < 10 ? '0' : '') + month.monthValue : ''}"
-         placeholder="YYYY-MM">
+    <button type="submit">검색</button>
+    <button type="button" onclick="clearSearch()">초기화</button>
+  </form>
 
-  <button type="submit">검색</button>
-  <button type="button" onclick="clearSearch()">초기화</button>
-</form>
-
-<table>
-  <thead>
-  <tr>
-    <th>직원 ID</th>
-    <th>월</th>
-    <th>기본 급여</th>
-    <th>총 수당</th>
-    <th>상세 보기</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="allowance : ${allowanceTotals}">
-    <td th:text="${allowance.employee.name}"></td>
-    <td th:text="${allowance.month}"></td>
-    <td th:text="${allowance.basicSalary}"></td>
-    <td th:text="${allowance.totalAllowance}"></td>
-    <!-- 상세 페이지로 이동하는 링크 추가 -->
-    <td>
-      <a th:href="@{/allowanceTotal/view(employeeId=${allowance.employee.employeeId}, month=${allowance.month.year + '-' + (allowance.month.monthValue < 10 ? '0' : '') + allowance.month.monthValue})}">
-        보기
-      </a>
-    </td>
-  </tr>
-  </tbody>
-</table>
-<script>
-  function clearSearch() {
-      window.location.href = '/allowanceTotal/allList';
-  }
-</script>
+  <table>
+    <thead>
+    <tr>
+      <th>직원 ID</th>
+      <th>월</th>
+      <th>기본 급여</th>
+      <th>총 수당</th>
+      <th>상세 보기</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="allowance : ${allowanceTotals}">
+      <td th:text="${allowance.employee.name}"></td>
+      <td th:text="${allowance.month}"></td>
+      <td th:text="${allowance.basicSalary}"></td>
+      <td th:text="${allowance.totalAllowance}"></td>
+      <!-- 상세 페이지로 이동하는 링크 추가 -->
+      <td>
+        <a th:href="@{/allowanceTotal/view(employeeId=${allowance.employee.employeeId}, month=${allowance.month.year + '-' + (allowance.month.monthValue < 10 ? '0' : '') + allowance.month.monthValue})}">
+          보기
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</div>
 </body>
 </html>

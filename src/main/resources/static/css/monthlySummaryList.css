@@ -1,0 +1,57 @@
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+table tr:hover {
+    background-color: #e1f5fe;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+
+.month-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .month-navigation button {
+            font-size: 18px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #424242;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .month-display {
+            font-size: 20px;
+            margin: 0 15px;
+        }

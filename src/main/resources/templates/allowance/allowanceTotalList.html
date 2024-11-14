@@ -1,24 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
-  <title>월 급여 관리</title>
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-    h1 { text-align: center; color: #333; }
-  </style>
+  <title>추가 수당 설정</title>
+  <link rel="stylesheet" type="text/css" href="/css/transfernewstyle.css">
 </head>
 <body>
-<h1>월 급여 관리</h1>
+<div layout:fragment="content">
+  <h1>추가 수당 설정</h1>
 
-<div>
-  <form th:action="@{/allowanceTotal/view}" method="get" id="employeeForm">
-    <label for="employeeId">직원:</label>
-    <select id="employeeId" name="employeeId" required>
-      <option value="" disabled selected>직원을 선택하세요</option>
-      <option th:each="emp : ${employees}" th:value="${emp.employeeId}" th:text="${emp.name}"></option>
-    </select>
-    <button type="submit">조회</button>
-  </form>
+  <div>
+    <form th:action="@{/allowanceTotal/view}" method="get" id="employeeForm">
+      <select id="employeeId" name="employeeId" required>
+        <option value="" disabled selected>직원을 선택하세요</option>
+        <option th:each="emp : ${employees}" th:value="${emp.employeeId}" th:text="${emp.name}"></option>
+      </select>
+      <button type="submit">조회</button>
+    </form>
+  </div>
 </div>
 </body>
 </html>
