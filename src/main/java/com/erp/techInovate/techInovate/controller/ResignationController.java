@@ -13,10 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -68,7 +65,15 @@ public class ResignationController {
 
     @PostMapping("/resignation/reject/{resignationId}")
     public String rejectResignation(@PathVariable Long resignationId) {
+        Optional<ResignationEntity> entity = resignationService.findById(resignationId);
+        if(entity.isPresent()){
+            ResignationEntity resignation = entity.get();
+            EmployeeEntity employee = employeeService.getEmployeeById(resignation.getEmployee().getEmployeeId());
+            employee.setStatus("정규");
+            employeeService.updateEmployee(employee);
+        }
         resignationService.rejectResignation(resignationId); // 거부 처리
+
         return "redirect:/manage/resignations"; // 거부 후 퇴사자 조회 메뉴로 리다이렉트
     }
 

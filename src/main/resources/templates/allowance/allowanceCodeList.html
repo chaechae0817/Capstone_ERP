@@ -1,218 +1,135 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
   <title>수당 코드 관리</title>
-  <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 20px;
+  <link rel="stylesheet" type="text/css" href="/css/attendanceList.css">
+  <script>
+    function openDialog() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('addDialog').style.display = 'block';
     }
 
-    h1 {
-        text-align: center;
-        color: #333;
+    function closeDialog() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('addDialog').style.display = 'none';
     }
 
-    .overlay {
-        display: none;
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 999;
+    function updateFields() {
+        const calculationType = document.getElementById('calculationType').value;
+        document.getElementById('fixedAmountField').style.display = (calculationType === 'FIXED') ? 'block' : 'none';
+        document.getElementById('percentageField').style.display = (calculationType === 'PERCENTAGE') ? 'block' : 'none';
+        document.getElementById('dailyRateField').style.display = (calculationType === 'DAILY_RATE') ? 'block' : 'none';
     }
 
-    .dialog {
-        display: none;
-        position: fixed;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 400px;
-        padding: 20px;
-        background-color: white;
-        z-index: 1000;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
-    }
+    function addAllowanceCode() {
+        const code = document.getElementById('code').value;
+        const description = document.getElementById('description').value;
+        const calculationType = document.getElementById('calculationType').value;
+        const fixedAmount = document.getElementById('fixedAmount').value;
+        const percentage = document.getElementById('percentage').value;
+        const dailyRate = document.getElementById('dailyRate').value;
 
-    .dialog input, .dialog select {
-        width: 100%;
-        padding: 8px;
-        margin-top: 8px;
-        margin-bottom: 16px;
-        box-sizing: border-box;
+        // AJAX 요청을 통해 서버에 새 수당 코드 추가
+        fetch('/allowanceCode/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                code: code,
+                description: description,
+                calculationType: calculationType,
+                fixedAmount: calculationType === 'FIXED' ? fixedAmount : null,
+                percentage: calculationType === 'PERCENTAGE' ? percentage : null,
+                dailyRate: calculationType === 'DAILY_RATE' ? dailyRate : null
+            })
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('수당 코드 추가 실패');
+            }
+        });
     }
-
-    button {
-        padding: 8px 12px;
-        margin-right: 8px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .btn-primary {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .btn-secondary {
-        background-color: #ccc;
-        color: black;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        background-color: white;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    th, td {
-        text-align: left;
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    tr:hover {
-        background-color: #f1f1f1;
-    }
-  </style>
+  </script>
 </head>
 <body>
-<h1>수당 코드 관리</h1>
-<button class="btn-primary" onclick="openDialog()">수당 코드 추가</button>
+<div layout:fragment="content">
+  <h1>수당 코드 관리</h1>
+  <button class="btn-primary" onclick="openDialog()">수당 코드 추가</button>
 
-<div class="overlay" id="overlay" onclick="closeDialog()"></div>
+  <div class="overlay" id="overlay" onclick="closeDialog()"></div>
 
-<div class="dialog" id="addDialog">
-  <h2>수당 코드 추가</h2>
-  <label for="code">수당 코드:</label>
-  <input type="text" id="code" required />
+  <div class="dialog" id="addDialog">
+    <h2>수당 코드 추가</h2>
+    <label for="code">수당 코드:</label>
+    <input type="text" id="code" required />
 
-  <label for="description">설명:</label>
-  <input type="text" id="description" required />
+    <label for="description">설명:</label>
+    <input type="text" id="description" required />
 
-  <label for="calculationType">계산 방식:</label>
-  <select id="calculationType" onchange="updateFields()">
-    <option value="FIXED">고정 금액</option>
-    <option value="PERCENTAGE">비율 (%)</option>
-    <option value="DAILY_RATE">일일 계산</option>
-  </select>
+    <label for="calculationType">계산 방식:</label>
+    <select id="calculationType" onchange="updateFields()">
+      <option value="FIXED">고정 금액</option>
+      <option value="PERCENTAGE">비율 (%)</option>
+      <option value="DAILY_RATE">일일 계산</option>
+    </select>
 
-  <div id="fixedAmountField">
-    <label for="fixedAmount">고정 금액:</label>
-    <input type="number" id="fixedAmount" placeholder="예: 100000" />
+    <div id="fixedAmountField">
+      <label for="fixedAmount">고정 금액:</label>
+      <input type="number" id="fixedAmount" placeholder="예: 100000" />
+    </div>
+
+    <div id="percentageField" style="display: none;">
+      <label for="percentage">비율 (%):</label>
+      <input type="number" id="percentage" placeholder="예: 10" />
+    </div>
+
+    <div id="dailyRateField" style="display: none;">
+      <label for="dailyRate">일일 수당 금액:</label>
+      <input type="number" id="dailyRate" placeholder="예: 10000" />
+    </div>
+
+    <button class="btn-primary" onclick="addAllowanceCode()">추가</button>
+    <button class="btn-secondary" onclick="closeDialog()">취소</button>
   </div>
 
-  <div id="percentageField" style="display: none;">
-    <label for="percentage">비율 (%):</label>
-    <input type="number" id="percentage" placeholder="예: 10" />
-  </div>
+  <table>
+    <thead>
+    <tr>
+      <th>수당 코드</th>
+      <th>설명</th>
+      <th>계산 방식</th>
+      <th>고정 금액</th>
+      <th>일일 수당 금액</th>
+      <th>비율 (%)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="code : ${allowanceCodes}">
+      <td th:text="${code.code}"></td>
+      <td th:text="${code.description}"></td>
 
-  <div id="dailyRateField" style="display: none;">
-    <label for="dailyRate">일일 수당 금액:</label>
-    <input type="number" id="dailyRate" placeholder="예: 10000" />
-  </div>
+      <!-- ENUM 값에 따라 계산 방식 한글로 표시 -->
+      <td th:switch="${code.calculationType}">
+        <span th:case="${T(com.erp.techInovate.techInovate.entity.CalculationType).FIXED}">고정 금액</span>
+        <span th:case="${T(com.erp.techInovate.techInovate.entity.CalculationType).PERCENTAGE}">비율</span>
+        <span th:case="${T(com.erp.techInovate.techInovate.entity.CalculationType).DAILY_RATE}">일일 계산</span>
+        <span th:case="*">알 수 없음</span>
+      </td>
 
-  <button class="btn-primary" onclick="addAllowanceCode()">추가</button>
-  <button class="btn-secondary" onclick="closeDialog()">취소</button>
+      <!-- 소수점 제거하여 정수로 표시, 값이 없을 경우 'X'로 표시 -->
+      <td th:text="${code.fixedAmount != null ? #numbers.formatDecimal(code.fixedAmount, 0, 0) : 'X'}"></td>
+      <td th:text="${code.dailyRate != null ? #numbers.formatDecimal(code.dailyRate, 0, 0) : 'X'}"></td>
+      <td th:text="${code.percentage != null ? #numbers.formatDecimal(code.percentage, 0, 0) : 'X'}"></td>
+    </tr>
+    <tr th:if="${allowanceCodes == null or #lists.isEmpty(allowanceCodes)}">
+      <td colspan="6">수당 코드가 없습니다.</td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 
-<table>
-  <thead>
-  <tr>
-    <th>수당 코드</th>
-    <th>설명</th>
-    <th>계산 방식</th>
-    <th>고정 금액</th>
-    <th>일일 수당 금액</th>
-    <th>비율 (%)</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="code : ${allowanceCodes}">
-    <td th:text="${code.code}"></td>
-    <td th:text="${code.description}"></td>
-
-    <!-- ENUM 값에 따라 계산 방식 한글로 표시 -->
-    <td th:switch="${code.calculationType}">
-      <span th:case="${T(com.erp.techInovate.techInovate.entity.CalculationType).FIXED}">고정 금액</span>
-      <span th:case="${T(com.erp.techInovate.techInovate.entity.CalculationType).PERCENTAGE}">비율</span>
-      <span th:case="${T(com.erp.techInovate.techInovate.entity.CalculationType).DAILY_RATE}">일일 계산</span>
-      <span th:case="*">알 수 없음</span>
-    </td>
-
-    <!-- 소수점 제거하여 정수로 표시, 값이 없을 경우 'X'로 표시 -->
-    <td th:text="${code.fixedAmount != null ? #numbers.formatDecimal(code.fixedAmount, 0, 0) : 'X'}"></td>
-    <td th:text="${code.dailyRate != null ? #numbers.formatDecimal(code.dailyRate, 0, 0) : 'X'}"></td>
-    <td th:text="${code.percentage != null ? #numbers.formatDecimal(code.percentage, 0, 0) : 'X'}"></td>
-  </tr>
-  <tr th:if="${allowanceCodes == null or #lists.isEmpty(allowanceCodes)}">
-    <td colspan="6">수당 코드가 없습니다.</td>
-  </tr>
-  </tbody>
-</table>
-
-<script>
-  function openDialog() {
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('addDialog').style.display = 'block';
-  }
-
-  function closeDialog() {
-      document.getElementById('overlay').style.display = 'none';
-      document.getElementById('addDialog').style.display = 'none';
-  }
-
-  function updateFields() {
-      const calculationType = document.getElementById('calculationType').value;
-      document.getElementById('fixedAmountField').style.display = (calculationType === 'FIXED') ? 'block' : 'none';
-      document.getElementById('percentageField').style.display = (calculationType === 'PERCENTAGE') ? 'block' : 'none';
-      document.getElementById('dailyRateField').style.display = (calculationType === 'DAILY_RATE') ? 'block' : 'none';
-  }
-
-  function addAllowanceCode() {
-      const code = document.getElementById('code').value;
-      const description = document.getElementById('description').value;
-      const calculationType = document.getElementById('calculationType').value;
-      const fixedAmount = document.getElementById('fixedAmount').value;
-      const percentage = document.getElementById('percentage').value;
-      const dailyRate = document.getElementById('dailyRate').value;
-
-      // AJAX 요청을 통해 서버에 새 수당 코드 추가
-      fetch('/allowanceCode/add', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              code: code,
-              description: description,
-              calculationType: calculationType,
-              fixedAmount: calculationType === 'FIXED' ? fixedAmount : null,
-              percentage: calculationType === 'PERCENTAGE' ? percentage : null,
-              dailyRate: calculationType === 'DAILY_RATE' ? dailyRate : null
-          })
-      }).then(response => {
-          if (response.ok) {
-              window.location.reload();
-          } else {
-              alert('수당 코드 추가 실패');
-          }
-      });
-  }
-</script>
 </body>
 </html>
