@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>회사 정보/수정</title>
     <link rel="stylesheet" th:href="@{/css/companyListstyle.css}">
 </head>
 <body>
+<div layout:fragment="content">
 <h1>회사 정보</h1>
 
 <div class="company-info">
@@ -44,6 +46,6 @@
     <p>회사가 등록되어 있지 않습니다.</p>
     <a href="/company/new">회사를 등록하세요.</a>
 </div>
-
+</div>
 </body>
 </html>
