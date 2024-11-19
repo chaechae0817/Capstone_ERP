@@ -110,6 +110,9 @@
             });
         }
 
+    window.onload = function() {
+        loadAttendanceCodes();
+    };
     </script>
 </head>
 <body>
@@ -126,7 +129,7 @@
 
     <form id="addAttendanceForm" onsubmit="prepareConfirmation(event)">
         <label for="employee_id">직원 :</label>
-        <select id="employee_id" onchange="loadAttendanceCodes()" required>
+        <select id="employee_id"  required>
             <option value="">직원 선택</option>
             <option th:each="employee : ${employees}" th:value="${employee.employeeId}" th:text="${employee.name}"></option>
         </select>

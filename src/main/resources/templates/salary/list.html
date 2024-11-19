@@ -21,7 +21,27 @@
             }
 
             const newMonthStr = `${year}-${String(month).padStart(2, '0')}`;
-            window.location.href = `/salary/list?month=${newMonthStr}`;
+            document.getElementById("month").value = newMonthStr;
+
+
+            const employeeName = document.getElementById("employeeName").value;
+            const position = document.getElementById("position").value;
+            const department = document.getElementById("department").value;
+
+            // 기존 검색 조건을 URL에 포함
+            const params = new URLSearchParams({
+                month: newMonthStr,
+                employeeName: employeeName || '',
+                position: position || '',
+                department: department || ''
+            });
+
+
+            window.location.href = `/salary/search?${params.toString()}`;
+        }
+
+        function clearSearch() {
+            window.location.href = '/salary/list';
         }
     </script>
 </head>
@@ -29,7 +49,30 @@
 <div layout:fragment="content">
 <h1>월별 모든 직원 급여 내역</h1>
 
-<!-- 달 이동 버튼 -->
+    <form th:action="@{/salary/search}" method="get">
+        <label for="employeeName">직원 이름:</label>
+        <input type="text" id="employeeName" name="employeeName" placeholder="직원 이름 입력" th:value="${employeeName}">
+
+        <label for="position">직급:</label>
+        <select id="position" name="position">
+            <option value="">-- 선택 --</option>
+            <option th:each="position : ${positions}" th:value="${position.id}" th:text="${position.name}" th:selected="${position.id == positionId}">
+            </option>
+        </select>
+
+        <label for="department">부서:</label>
+        <select id="department" name="department">
+            <option value="">-- 선택 --</option>
+            <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}" th:selected="${department.id == departmentId}"></option>
+        </select>
+
+        <input type="hidden" id="month" name="month" th:value="${month}">
+
+        <button type="submit">검색</button>
+        <button type="button" onclick="clearSearch()">초기화</button>
+    </form>
+
+    <!-- 달 이동 버튼 -->
 <div class="navigate-month">
     <button onclick="navigateMonth(-1)">&#9664;</button>
     <span class="month-display" th:text="${month} + '월 급여 내역'"></span>

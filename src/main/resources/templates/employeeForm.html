@@ -1,7 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout.html}">
+
+
 <head>
+
+  <script>
+    function previewImage(event) {
+        const file = event.target.files[0]; // 선택한 파일
+        const reader = new FileReader(); // FileReader 객체 생성
+
+        reader.onload = function(e) {
+            const img = document.getElementById('photoPreview'); // 미리보기 이미지 요소
+            img.src = e.target.result; // 읽은 파일의 데이터 URL을 이미지의 src에 설정
+            img.style.display = 'block'; // 이미지 요소를 보이도록 설정
+        }
+
+        if (file) {
+            reader.readAsDataURL(file); // 파일을 Data URL로 읽기
+        }
+    }
+  </script>
   <title>직원 등록</title>
   <link rel="stylesheet" type="text/css" href="/css/formstyle.css" />
 </head>
@@ -83,22 +102,7 @@
   <button type="submit">등록</button>
 </form>
 </div>
-<script>
-  function previewImage(event) {
-      const file = event.target.files[0]; // 선택한 파일
-      const reader = new FileReader(); // FileReader 객체 생성
 
-      reader.onload = function(e) {
-          const img = document.getElementById('photoPreview'); // 미리보기 이미지 요소
-          img.src = e.target.result; // 읽은 파일의 데이터 URL을 이미지의 src에 설정
-          img.style.display = 'block'; // 이미지 요소를 보이도록 설정
-      }
-
-      if (file) {
-          reader.readAsDataURL(file); // 파일을 Data URL로 읽기
-      }
-  }
-</script>
 
 </body>
 </html>
