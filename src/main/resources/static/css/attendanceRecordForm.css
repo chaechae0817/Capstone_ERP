@@ -8,7 +8,12 @@ form {
     padding: 10px;
 
 }
-
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
 /* 라벨 스타일 */
 form label {
     font-weight: bold;
