@@ -25,6 +25,7 @@ public class SalaryCalculationService {
     private final MonthlyAttendanceSummaryRepository attendanceSummaryRepository;
     private final AttendanceRecordRepository attendanceRecordRepository;
     private final AllowanceTotalRepository allowanceTotalRepository;
+    private final AllowanceCodeRepository allowanceCodeRepository;
 
 
     @Transactional
@@ -51,7 +52,11 @@ public class SalaryCalculationService {
             totalSalary += monthlySalary;
         }
 
-        return totalSalary / 3.0; // 3개월 평균 급여
+        // 3개월 평균 급여 계산
+        double averageSalary = totalSalary / 3.0;
+
+        // 천 원 단위로 잘라내기
+        return Math.floor(averageSalary / 1000) * 1000;
     }
 
     // 월 급여 계산 로직 (기존에 사용 중이라면 재활용)
@@ -201,5 +206,6 @@ public class SalaryCalculationService {
         LocalDate firstDayOfMonth = month.atDay(1);
         return deductionSummaryRepository.findByMonth(firstDayOfMonth);
     }
+
 
 }

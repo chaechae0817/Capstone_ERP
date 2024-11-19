@@ -2,31 +2,44 @@ package com.erp.techInovate.techInovate.controller;
 
 import com.erp.techInovate.techInovate.dto.CareerCertificateDTO;
 import com.erp.techInovate.techInovate.dto.EmployeeCertificateDTO;
+import com.erp.techInovate.techInovate.entity.AllowanceCodeEntity;
 import com.erp.techInovate.techInovate.entity.CertificateIssueEntity;
+import com.erp.techInovate.techInovate.entity.DeductionCodeEntity;
+import com.erp.techInovate.techInovate.entity.EmployeeEntity;
+import com.erp.techInovate.techInovate.repository.AllowanceCodeRepository;
+import com.erp.techInovate.techInovate.repository.DeductionCodeRepository;
+import com.erp.techInovate.techInovate.repository.EmployeeRepository;
 import com.erp.techInovate.techInovate.service.CertificateIssueService;
 import com.erp.techInovate.techInovate.service.CertificateService;
+import com.erp.techInovate.techInovate.service.SalaryCalculationService;
+import com.erp.techInovate.techInovate.service.SalaryDetailService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/certificate")
 public class CertificateController {
 
-    @Autowired
-    private CertificateService certificateService;
+    private final CertificateService certificateService;
 
-    @Autowired
-    private CertificateIssueService certificateIssueService;
+    private final CertificateIssueService certificateIssueService;
+    private final SalaryDetailService salaryDetailService;
+    private final SalaryCalculationService salaryCalculationService;
+
+    private final EmployeeRepository employeeRepository;
 
 
     //경력증명서
@@ -91,4 +104,43 @@ public class CertificateController {
         certificateIssueService.recordIssue(employeeId, certificateType);
         return ResponseEntity.ok().body("발급 내역이 저장되었습니다.");
     }
+
+
+    @GetMapping("/salary")
+    public String generatePayrollCertificate(
+            HttpSession session,
+            @RequestParam(value = "month", required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth month,
+            Model model) {
+
+        if (month == null) {
+            month = YearMonth.of(2024, 10); // 기본값 설정
+        }
+
+        Long employeeId = (Long) session.getAttribute("employeeId");
+        if (employeeId == null) {
+            return "redirect:/login";
+        }
+        // 직원 정보 가져오기
+        EmployeeEntity employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("직원을 찾을 수 없습니다."));
+
+        //직원의 급여 정보를 가져옴
+        Map<String, Object> employeeSalaryDetails = salaryDetailService.getMonthlySalaryDetailsForEmployees(employeeId,month);
+
+        // 수당 항목과 공제 항목 헤더 리스트 가져오기
+        Set<String> allowanceHeaders = salaryDetailService.getAllowanceHeaders();
+        Set<String> deductionHeaders = salaryDetailService.getDeductionHeaders();
+
+        // 모델에 데이터 추가
+        model.addAttribute("employee",employee);
+        model.addAttribute("salaryDetails", employeeSalaryDetails);
+        model.addAttribute("allowanceHeaders", allowanceHeaders);
+        model.addAttribute("deductionHeaders", deductionHeaders);
+        model.addAttribute("month", month);
+        System.out.println("Salary Details: " + employeeSalaryDetails);
+        System.out.println("allowanceHeaders : "+ allowanceHeaders);
+
+        return "salary/payrollCertificate";
+    }
+
 }

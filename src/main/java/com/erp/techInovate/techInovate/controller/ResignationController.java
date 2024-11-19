@@ -8,12 +8,14 @@ import com.erp.techInovate.techInovate.service.EmployeeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -97,10 +99,12 @@ public class ResignationController {
 
     @GetMapping("/resignation/pay")
     public String resignationPay(Model model) {
+
+        // 검색 조건에 따라 퇴사자 목록 필터링
+        List<ResignationEntity> resignations = resignationService.findAll();
         List<Map<String, Object>> resignationDetails = new ArrayList<>();
 
         // 모든 퇴사자 목록을 가져와서 각 퇴사자에 대해 필요한 데이터 추가
-        List<ResignationEntity> resignations = resignationService.findAll();
         for (ResignationEntity resignation : resignations) {
             Map<String, Object> resignationData = new LinkedHashMap<>();
             EmployeeEntity employee = resignation.getEmployee();
@@ -112,10 +116,23 @@ public class ResignationController {
 
             // 3개월 급여 평균 계산
             double threeMonthAverageSalary = resignationService.getThreeMonthAverageSalary(employee, resignation.getResignationDate());
-            resignationData.put("threeMonthAverageSalary", threeMonthAverageSalary);
+            System.out.println("3개월 평균 급여: " + threeMonthAverageSalary);
 
-            // 퇴직금 (이미 사전 승인 단계에서 계산된 값이 있다면 사용)
-            double severancePay = resignation.getSeverancePay() != null ? resignation.getSeverancePay() : 0.0;
+            // 근무 기간 계산 (일 단위)
+            long workedDays = java.time.temporal.ChronoUnit.DAYS.between(employee.getHireDate(), resignation.getResignationDate());
+            System.out.println("근무 일수: " + workedDays);
+
+            // 퇴직금 계산: (근무 일수 / 365) * 3개월 평균 급여
+            double severancePay = (workedDays / 365.0) * threeMonthAverageSalary;
+            severancePay = Math.floor(severancePay / 1000) * 1000; // 천 원 단위 절삭
+            System.out.println("계산된 퇴직금: " + severancePay);
+
+            // 퇴직금 설정 및 저장
+            resignation.setSeverancePay(severancePay);
+            resignationService.save(resignation);
+
+            // 데이터 저장
+            resignationData.put("threeMonthAverageSalary", threeMonthAverageSalary);
             resignationData.put("severancePay", severancePay);
 
             resignationDetails.add(resignationData);
@@ -123,5 +140,57 @@ public class ResignationController {
 
         model.addAttribute("resignationDetails", resignationDetails);
         return "resignationPay"; // 해당 HTML 템플릿으로 이동
+    }
+
+    @GetMapping("/resignation/search")
+    public String searchPayResignation(
+            @RequestParam(required = false) String employeeName,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            Model model) {
+
+        // 퇴사자와 직원 데이터 가져오기
+        List<ResignationEntity> resignations = resignationService.findAll();
+
+        // 필터링: startDate와 endDate
+        if (startDate != null && endDate != null) {
+            resignations = resignations.stream()
+                    .filter(r -> !r.getResignationDate().isBefore(startDate) && !r.getResignationDate().isAfter(endDate))
+                    .collect(Collectors.toList());
+        } else if (startDate != null) { // startDate만 존재할 경우
+            resignations = resignations.stream()
+                    .filter(r -> !r.getResignationDate().isBefore(startDate)) // startDate 이후 퇴사한 사람
+                    .collect(Collectors.toList());
+        } else if (endDate != null) { // endDate만 존재할 경우
+            resignations = resignations.stream()
+                    .filter(r -> !r.getResignationDate().isAfter(endDate)) // endDate 이전에 퇴사한 사람
+                    .collect(Collectors.toList());
+        }
+
+        // 필터링: 이름 기준
+        if (employeeName != null && !employeeName.isEmpty()) {
+            resignations = resignations.stream()
+                    .filter(r -> r.getEmployee().getName().contains(employeeName))
+                    .collect(Collectors.toList());
+        }
+
+        // 결과 생성
+        List<Map<String, Object>> searchResults = new ArrayList<>();
+        for (ResignationEntity resignation : resignations) {
+            EmployeeEntity employee = resignation.getEmployee();
+            if (resignation.getResignationDate().isAfter(employee.getHireDate())) { // 입사일 < 퇴사일
+                Map<String, Object> resultData = new LinkedHashMap<>();
+                resultData.put("employeeName", employee.getName());
+                resultData.put("employeeHireDate", employee.getHireDate());
+                resultData.put("resignationDate", resignation.getResignationDate());
+                double threeMonthAverageSalary = resignationService.getThreeMonthAverageSalary(employee, resignation.getResignationDate());
+                resultData.put("threeMonthAverageSalary", threeMonthAverageSalary);
+                resultData.put("severancePay", resignation.getSeverancePay());
+                searchResults.add(resultData);
+            }
+        }
+
+        model.addAttribute("resignationDetails", searchResults);
+        return "resignationPay";
     }
 }

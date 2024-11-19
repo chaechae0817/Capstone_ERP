@@ -23,4 +23,26 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity,Long>, 
 
     Optional<EmployeeEntity> findByEmployeeNumberAndEmail(String employeeNumber, String email);
 
+
+    // 직원 이름으로 검색
+    List<EmployeeEntity> findByNameContaining(String name);
+
+    // 직급으로 검색
+    List<EmployeeEntity> findByPositionName(String positionName);
+
+    // 부서로 검색
+    List<EmployeeEntity> findByDepartmentName(String departmentName);
+
+    // 이름, 직급, 부서 조합으로 검색
+    List<EmployeeEntity> findByNameContainingAndPositionNameAndDepartmentName(
+            String name, String positionName, String departmentName);
+
+    // 이름과 직급으로 검색
+    List<EmployeeEntity> findByNameContainingAndPositionName(String name, String positionName);
+
+    // 이름과 부서로 검색
+    List<EmployeeEntity> findByNameContainingAndDepartmentName(String name, String departmentName);
+
+    // 직급과 부서로 검색
+    List<EmployeeEntity> findByPositionNameAndDepartmentName(String positionName, String departmentName);
 }

@@ -3,11 +3,32 @@
       layout:decorate="~{layout/layout.html}">
 <head>
   <title>퇴사자 명단 및 퇴직금</title>
-  <link rel="stylesheet" type="text/css" href="/css/resignationPay.css">
+  <link rel="stylesheet" type="text/css" href="/css/attendanceRecordList.css">
+  <script>
+    function clearSearch() {
+        window.location.href = '/resignation/pay';
+    }
+  </script>
 </head>
 <body>
 <div layout:fragment="content">
   <h1>퇴사자 명단 및 퇴직금</h1>
+
+  <!-- 검색 폼 추가 -->
+  <form th:action="@{/resignation/search}" method="get">
+    <label for="employeeName">직원 이름</label>
+    <input type="text" id="employeeName" name="employeeName" th:value="${employeeName}">
+
+    <label for="startDate">시작 범위</label>
+    <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+
+    <label for="endDate">끝 범위</label>
+    <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+
+    <button type="submit">검색</button>
+    <button type="button" onclick="clearSearch()">초기화</button>
+  </form>
+
   <table>
     <thead>
     <tr>

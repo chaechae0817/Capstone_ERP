@@ -27,13 +27,9 @@
             <td th:text="${resignation.employee.name}"></td>
             <td th:text="${resignation.resignationDate}"></td>
             <td th:text="${resignation.resignationReason}"></td>
-            <td>
+            <td colspan="2">
                 <form action="#" th:action="@{/resignation/approve/{resignationId}(resignationId=${resignation.resignationId})}" method="post">
                     <input type="text" name="notes" placeholder="비고 입력" />
-                </form>
-            </td>
-            <td>
-                <form action="#" th:action="@{/resignation/approve/{resignationId}(resignationId=${resignation.resignationId})}" method="post">
                     <button type="submit" class="approve-btn">승인</button>
                 </form>
             </td>
@@ -43,6 +39,7 @@
                 </form>
             </td>
         </tr>
+
         </tbody>
     </table>
 </div>
