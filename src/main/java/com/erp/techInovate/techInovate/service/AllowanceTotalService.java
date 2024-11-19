@@ -46,7 +46,7 @@ public class AllowanceTotalService {
             double monthlySalary = employee.getSalary() / 12.0;
             double roundedSalary = Math.round(monthlySalary / 1000)*1000;
             allowanceTotal.setBasicSalary(roundedSalary); // 월 기본 급여 만원 단위로 반올림
-            allowanceTotal.setTotalAllowance(roundedSalary);
+            allowanceTotal.setTotalAllowance(0.0);
             allowanceTotal.setAllowanceDetails(new HashMap<>()); // 빈 수당 내역 초기화
         }
 
