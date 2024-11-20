@@ -11,12 +11,14 @@ import com.erp.techInovate.techInovate.service.LeaveService;
 import com.erp.techInovate.techInovate.service.VacationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 @Controller
 @RequestMapping("/vacation")
@@ -76,11 +78,48 @@ public class VacationController {
     }
 
 
-
     @GetMapping("/confirmed")
     public String showConfirmedVacations(Model model) {
         List<VacationDTO> confirmedVacations = vacationService.getConfirmedVacations();
+        List<LeaveEntity> leaveItems = vacationService.getAllLeaveItems(); // 드롭다운용 휴가 종목 가져오기
+
         model.addAttribute("confirmedVacations", confirmedVacations);
+        model.addAttribute("leaveItems", leaveItems);
+
+        // 초기화된 검색 조건
+        model.addAttribute("employeeName", null);
+        model.addAttribute("startDate", null);
+        model.addAttribute("endDate", null);
+        model.addAttribute("leaveItemName", null);
+
         return "vacation/confirmed";
     }
+
+    @GetMapping("/confirmed/search")
+    public String searchConfirmedVacations(
+            @RequestParam(required = false) String employeeName,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam(required = false) String leaveItemName,
+            Model model) {
+
+        // 검색 조건으로 조회
+        List<VacationDTO> confirmedVacations = vacationService.searchConfirmedVacations(employeeName, startDate, endDate, leaveItemName);
+        List<LeaveEntity> leaveItems = vacationService.getAllLeaveItems(); // 드롭다운용 휴가 종목 가져오기
+
+        model.addAttribute("confirmedVacations", confirmedVacations);
+        model.addAttribute("leaveItems", leaveItems);
+
+        // 검색 조건 유지
+        model.addAttribute("employeeName", employeeName);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("leaveItemName", leaveItemName);
+
+        return "vacation/confirmed";
+    }
+
+
+
+
 }

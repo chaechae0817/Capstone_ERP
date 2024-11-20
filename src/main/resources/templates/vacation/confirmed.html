@@ -3,39 +3,61 @@
       layout:decorate="~{layout/layout.html}">
 <head>
     <link rel="stylesheet" type="text/css" href="/css/vacationConfirmed.css" />
-    <title>휴가 지급</title>
+    <title>휴가자 조회</title>
     <script>
-        function toggleMenu(element) {
-          // 클릭한 요소의 상위 메뉴를 확인
-          const parentMenu = element.closest('li').parentNode;
+        function clearSearch() {
+            window.location.href = '/vacation/confirmed';
+       }
+       function toggleMenu(element) {
+         // 클릭한 요소의 상위 메뉴를 확인
+         const parentMenu = element.closest('li').parentNode;
 
-          // 상위 메뉴(인사관리, 근태관리, 급여관리, 회사관리)를 선택
-          const allMainMenus = document.querySelectorAll('.sidebar > ul > li > a');
+         // 상위 메뉴(인사관리, 근태관리, 급여관리, 회사관리)를 선택
+         const allMainMenus = document.querySelectorAll('.sidebar > ul > li > a');
 
-          // 하위 메뉴가 있는지 확인
-          const nestedMenu = element.nextElementSibling;
+         // 하위 메뉴가 있는지 확인
+         const nestedMenu = element.nextElementSibling;
 
-          // 상위 메뉴 클릭 시, 다른 상위 메뉴의 하위 메뉴를 닫음
-          if (parentMenu === document.querySelector('.sidebar > ul')) {
-              allMainMenus.forEach(menu => {
-                  const siblingMenu = menu.nextElementSibling;
-                  if (siblingMenu && siblingMenu !== nestedMenu) {
-                      siblingMenu.classList.remove('active');
-                  }
-              });
-          }
+         // 상위 메뉴 클릭 시, 다른 상위 메뉴의 하위 메뉴를 닫음
+         if (parentMenu === document.querySelector('.sidebar > ul')) {
+             allMainMenus.forEach(menu => {
+                 const siblingMenu = menu.nextElementSibling;
+                 if (siblingMenu && siblingMenu !== nestedMenu) {
+                     siblingMenu.classList.remove('active');
+                 }
+             });
+         }
 
-          // 클릭된 메뉴의 하위 메뉴를 토글
-          if (nestedMenu) {
-              nestedMenu.classList.toggle('active');
-          }
-      }
+         // 클릭된 메뉴의 하위 메뉴를 토글
+         if (nestedMenu) {
+             nestedMenu.classList.toggle('active');
+         }
+     }
     </script>
 </head>
 <body>
 <div layout:fragment="content">
     <h1>승인된 휴가 목록</h1>
+    <form th:action="@{/vacation/confirmed/search}" method="get">
+        <label for="employeeName">사원 이름:</label>
+        <input type="text" id="employeeName" name="employeeName" th:value="${employeeName}">
 
+        <label for="startDate">시작일:</label>
+        <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+
+        <label for="endDate">종료일:</label>
+        <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+
+        <label for="leaveItemName">휴가 종류:</label>
+        <select id="leaveItemName" name="leaveItemName">
+            <option value="" th:selected="${leaveItemName == null}">전체</option>
+            <option th:each="item : ${leaveItems}" th:value="${item.name}" th:text="${item.name}"
+                    th:selected="${leaveItemName == item.name}"></option>
+        </select>
+
+        <button type="submit">검색</button>
+        <button type="button" onclick="clearSearch()">초기화</button>
+    </form>
     <table>
         <thead>
         <tr>
@@ -59,6 +81,9 @@
             <td th:text="${vacation.reason}">사유</td>
             <td th:text="${vacation.startDate}">시작일</td>
             <td th:text="${vacation.endDate}">종료일</td>
+        </tr>
+        <tr th:if="${confirmedVacations == null or #lists.isEmpty(confirmedVacations)}">
+            <td colspan="8">검색 결과가 없습니다.</td>
         </tr>
         </tbody>
     </table>

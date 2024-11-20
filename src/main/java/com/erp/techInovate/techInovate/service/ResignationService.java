@@ -1,8 +1,11 @@
 package com.erp.techInovate.techInovate.service;
 
+import com.erp.techInovate.techInovate.dto.ResignationDTO;
 import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.entity.ResignationEntity;
+import com.erp.techInovate.techInovate.repository.DepartmentRepository;
 import com.erp.techInovate.techInovate.repository.EmployeeRepository;
+import com.erp.techInovate.techInovate.repository.PositionRepository;
 import com.erp.techInovate.techInovate.repository.ResignationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +25,10 @@ public class ResignationService {
     private final EmployeeRepository employeeRepository;
     private final SalaryCalculationService salaryCalculationService;
 
+    @Autowired
+    private final DepartmentRepository departmentRepository;
+    @Autowired
+    private final PositionRepository positionRepository;
     public void save(ResignationEntity resignation) {
         resignationRepository.save(resignation);
     }
@@ -65,6 +73,75 @@ public class ResignationService {
 
         // 퇴직금 계산 공식 적용
         return threeMonthAverageSalary / 90 * 30 * (tenureDays / 365.0);
+    }
+    public List<ResignationDTO> searchResignedEmployees(
+            String employeeName, String contactInfo, String position, String department,
+            LocalDate startDate, LocalDate endDate) {
+
+        List<ResignationEntity> resignations = resignationRepository.findAll();
+
+        // 이름 필터링
+        if (employeeName != null && !employeeName.isEmpty()) {
+            resignations = resignations.stream()
+                    .filter(r -> r.getEmployee().getName().contains(employeeName))
+                    .collect(Collectors.toList());
+        }
+
+        // 전화번호 필터링
+        if (contactInfo != null && !contactInfo.isEmpty()) {
+            resignations = resignations.stream()
+                    .filter(r -> r.getEmployee().getContactInfo().contains(contactInfo))
+                    .collect(Collectors.toList());
+        }
+
+        // 직급 필터링
+        if (position != null && !position.isEmpty()) {
+            resignations = resignations.stream()
+                    .filter(r -> r.getLastPosition().getName().equals(position))
+                    .collect(Collectors.toList());
+        }
+
+        // 부서 필터링
+        if (department != null && !department.isEmpty()) {
+            resignations = resignations.stream()
+                    .filter(r -> r.getLastDepartment().getName().equals(department))
+                    .collect(Collectors.toList());
+        }
+
+        // 날짜 필터링
+        if (startDate != null) {
+            resignations = resignations.stream()
+                    .filter(r -> !r.getResignationDate().isBefore(startDate))
+                    .collect(Collectors.toList());
+        }
+        if (endDate != null) {
+            resignations = resignations.stream()
+                    .filter(r -> !r.getResignationDate().isAfter(endDate))
+                    .collect(Collectors.toList());
+        }
+
+        // DTO로 변환
+        return resignations.stream().map(resignation -> {
+            ResignationDTO dto = new ResignationDTO();
+            dto.setEmployeeId(resignation.getEmployee().getEmployeeId());
+            dto.setContactInfo(resignation.getEmployee().getContactInfo());
+            dto.setPosition(resignation.getLastPosition().getName());
+            dto.setDepartment(resignation.getLastDepartment().getName());
+            dto.setResignationDate(resignation.getResignationDate());
+            dto.setHireDate(resignation.getEmployee().getHireDate());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+    public List<String> getAllDepartments() {
+        return departmentRepository.findAll().stream()
+                .map(department -> department.getName())
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getAllPositions() {
+        return positionRepository.findAll().stream()
+                .map(position -> position.getName())
+                .collect(Collectors.toList());
     }
 }
 
