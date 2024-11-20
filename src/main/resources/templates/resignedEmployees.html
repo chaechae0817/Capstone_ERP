@@ -4,10 +4,48 @@
 <head>
     <title>퇴사자 목록</title>
     <link rel="stylesheet" type="text/css" href="/css/resignedEmployeestyle.css">
+    <script>
+        function clearSearch() {
+            window.location.href = '/resignation/advanced-search'; // 새로운 URL로 초기화
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
     <h1>퇴사자 목록</h1>
+
+    <!-- 검색 폼 -->
+    <form th:action="@{/resignation/advanced-search}" method="get">
+        <label for="employeeName">이름:</label>
+        <input type="text" id="employeeName" name="employeeName" th:value="${employeeName}">
+
+        <label for="contactInfo">전화번호:</label>
+        <input type="text" id="contactInfo" name="contactInfo" th:value="${contactInfo}">
+
+        <label for="position">직급:</label>
+        <select id="position" name="position">
+            <option value="" th:selected="${position == null}">전체</option>
+            <option th:each="pos : ${allPositions}" th:value="${pos}" th:text="${pos}"
+                    th:selected="${pos == position}"></option>
+        </select>
+
+        <label for="department">부서:</label>
+        <select id="department" name="department">
+            <option value="" th:selected="${department == null}">전체</option>
+            <option th:each="dep : ${allDepartments}" th:value="${dep}" th:text="${dep}"
+                    th:selected="${dep == department}"></option>
+        </select>
+
+        <label for="startDate">시작일:</label>
+        <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+
+        <label for="endDate">종료일:</label>
+        <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+
+        <button type="submit">검색</button>
+        <button type="button" onclick="clearSearch()">초기화</button>
+    </form>
+    <!-- 결과 테이블 -->
     <div class="table-container">
         <table>
             <thead>
@@ -24,7 +62,7 @@
             <tbody>
             <tr th:each="resignation : ${resignations}">
                 <td>
-                    <a th:href="@{/resignation/manage(resignationId=${resignation.resignationId})}" th:text="${resignation.employee.name}"></a>
+                    <a th:href="@{/resignation/manage(resignationId=${resignation.employeeId})}" th:text="${resignation.employee.name}"></a>
                 </td>
                 <td th:text="${resignation.employee.contactInfo}"></td>
                 <td th:text="${resignation.lastPosition.name}"></td>
@@ -32,6 +70,9 @@
                 <td th:text="${resignation.resignationDate}"></td>
                 <td th:text="${resignation.employee.hireDate}"></td>
                 <td th:text="${resignation.notes}"></td>
+            </tr>
+            <tr th:if="${resignations == null or #lists.isEmpty(resignations)}">
+                <td colspan="7">검색 결과가 없습니다.</td>
             </tr>
             </tbody>
         </table>

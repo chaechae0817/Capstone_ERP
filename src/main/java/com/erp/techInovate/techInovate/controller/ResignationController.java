@@ -193,4 +193,37 @@ public class ResignationController {
         model.addAttribute("resignationDetails", searchResults);
         return "resignationPay";
     }
+    @GetMapping("/advanced-search")
+    public String searchResignedEmployees(
+            @RequestParam(required = false) String employeeName,
+            @RequestParam(required = false) String contactInfo,
+            @RequestParam(required = false) String position,
+            @RequestParam(required = false) String department,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            Model model) {
+
+        // 검색 조건에 따른 퇴사자 목록 조회
+        List<ResignationDTO> searchResults = resignationService.searchResignedEmployees(
+                employeeName, contactInfo, position, department, startDate, endDate);
+
+        // 부서와 직급 드롭다운 데이터를 추가
+        List<String> allDepartments = resignationService.getAllDepartments();
+        List<String> allPositions = resignationService.getAllPositions();
+
+        model.addAttribute("resignations", searchResults);
+        model.addAttribute("allDepartments", allDepartments); // 부서 드롭다운 데이터
+        model.addAttribute("allPositions", allPositions);     // 직급 드롭다운 데이터
+
+        // 검색 조건 유지
+        model.addAttribute("employeeName", employeeName);
+        model.addAttribute("contactInfo", contactInfo);
+        model.addAttribute("position", position);
+        model.addAttribute("department", department);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+
+        return "resignedEmployees";
+    }
+
 }

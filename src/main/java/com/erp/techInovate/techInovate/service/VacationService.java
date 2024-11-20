@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -99,4 +100,23 @@ public class VacationService {
             return dto;
         }).collect(Collectors.toList());
     }
+
+    public List<VacationDTO> searchConfirmedVacations(String employeeName, LocalDate startDate, LocalDate endDate, String leaveItemName) {
+        List<VacationEntity> confirmedVacations = vacationRepository.searchConfirmedVacations(employeeName, startDate, endDate, leaveItemName);
+        return confirmedVacations.stream().map(vacation -> {
+            VacationDTO dto = new VacationDTO();
+            dto.setEmployeeId(vacation.getEmployee().getEmployeeId());
+            dto.setName(vacation.getEmployee().getName());
+            dto.setPosition(vacation.getEmployee().getPosition().getName());
+            dto.setDepartment(vacation.getEmployee().getDepartment().getName());
+            dto.setLeaveItemName(vacation.getLeaveItem().getName());
+            dto.setReason(vacation.getReason());
+            dto.setStartDate(vacation.getStartDate());
+            dto.setEndDate(vacation.getEndDate());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+
+
 }
