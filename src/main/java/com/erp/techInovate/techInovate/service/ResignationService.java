@@ -123,12 +123,15 @@ public class ResignationService {
         // DTO로 변환
         return resignations.stream().map(resignation -> {
             ResignationDTO dto = new ResignationDTO();
-            dto.setEmployeeId(resignation.getEmployee().getEmployeeId());
-            dto.setContactInfo(resignation.getEmployee().getContactInfo());
-            dto.setPosition(resignation.getLastPosition().getName());
-            dto.setDepartment(resignation.getLastDepartment().getName());
+            dto.setResignationId(resignation.getResignationId());
+            dto.setEmployee(resignation.getEmployee());
+            dto.setLastPosition(resignation.getLastPosition());
+            dto.setLastDepartment(resignation.getLastDepartment());
             dto.setResignationDate(resignation.getResignationDate());
-            dto.setHireDate(resignation.getEmployee().getHireDate());
+            dto.setResignationReason(resignation.getResignationReason());
+            dto.setSeverancePay(resignation.getSeverancePay());
+            dto.setNotes(resignation.getNotes());
+
             return dto;
         }).collect(Collectors.toList());
     }

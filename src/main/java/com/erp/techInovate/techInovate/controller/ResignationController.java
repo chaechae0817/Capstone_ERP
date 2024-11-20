@@ -83,6 +83,12 @@ public class ResignationController {
     @GetMapping("/manage/resignations")
     public String manageResignations(Model model) {
         List<ResignationEntity> resignations = resignationService.findAll(); // 모든 퇴사자 목록 조회
+
+        List<String> allDepartments = resignationService.getAllDepartments();
+        List<String> allPositions = resignationService.getAllPositions();
+        model.addAttribute("allDepartments", allDepartments); // 부서 드롭다운 데이터
+        model.addAttribute("allPositions", allPositions);     // 직급 드롭다운 데이터
+
         model.addAttribute("resignations", resignations); // 모델에 추가
         return "resignedEmployees"; //퇴사자 명단
     }
@@ -193,7 +199,7 @@ public class ResignationController {
         model.addAttribute("resignationDetails", searchResults);
         return "resignationPay";
     }
-    @GetMapping("/advanced-search")
+    @GetMapping("/resignation/advanced-search")
     public String searchResignedEmployees(
             @RequestParam(required = false) String employeeName,
             @RequestParam(required = false) String contactInfo,
