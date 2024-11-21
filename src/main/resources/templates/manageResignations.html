@@ -28,8 +28,8 @@
             <td th:text="${resignation.resignationDate}"></td>
             <td th:text="${resignation.resignationReason}"></td>
             <td colspan="2">
-                <form action="#" th:action="@{/resignation/approve/{resignationId}(resignationId=${resignation.resignationId})}" method="post">
-                    <input type="text" name="notes" placeholder="비고 입력" />
+                <form action="#" th:action="@{/resignation/approve/{resignationId}(resignationId=${resignation.resignationId})}" method="post" style="display: flex; align-items: center;">
+                    <input type="text" name="notes" placeholder="비고 입력" style="margin-right: 10px;" />
                     <button type="submit" class="approve-btn">승인</button>
                 </form>
             </td>
