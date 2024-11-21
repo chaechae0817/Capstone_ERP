@@ -104,77 +104,48 @@
                 <th>지급액 합계</th>
                 <td th:text="${salaryDetails['totalAllowance']} + ${salaryDetails['monthlySalary']}"></td>
                 <th>공제액 합계</th>
-                <td th:text="${salaryDetails['totalDeductions']}"></td>
+                <td th:text="${#numbers.formatDecimal(salaryDetails['totalDeductions'], 0, 0)}"></td>
             </tr>
             <tr>
-                <td>월 기본급</td>
-                <td th:text="${#numbers.formatDecimal(salaryDetails['monthlySalary'],0,0)}"></td>
+                <td colspan="2">실수령액</td>
+                <td colspan="2" th:text="${salaryDetails['monthlySalary']} + ${salaryDetails['totalAllowance']} - ${salaryDetails['totalDeductions']}"></td>
             </tr>
-            <!-- 수당 -->
-            <tr th:each="allowanceHeader : ${allowanceHeaders}">
-                <td th:text="${allowanceHeader}"></td>
-                <td th:text="${#numbers.formatDecimal(salaryDetails['allowanceDetails'].getOrDefault(allowanceHeader, 0.0),0,0)}"></td>
+        </table>
+
+        <h3>근로 시간 요약</h3>
+        <table class="details-container">
+            <thead>
+            <tr>
+                <th>근로일수</th>
+                <th>총 근로시간수</th>
+                <th>야간근로시간수</th>
+                <th>휴일근로시간수</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${salaryDetails['totalPaidDays']}"></td>
+                <td th:text="${salaryDetails['totalPaidHours']}"></td>
+                <td th:text="${salaryDetails['overTimeHours']}"></td>
+                <td th:text="${salaryDetails['holidayWorkHours']}"></td>
             </tr>
             </tbody>
+
         </table>
-        <!-- 공제 -->
-        <tr th:each="deductionHeader : ${deductionHeaders}">
-            <td th:text="${deductionHeader}"></td>
-            <td th:text="${#numbers.formatDecimal(salaryDetails['deductionDetails'].getOrDefault(deductionHeader, 0.0),0,0)}"></td>
-        </tr>
-        </tbody>
-        </table>
+
         <div class="footer-text">
             상기와 같이 재직하고 있음을 증명함
         </div>
         <div class="footer-signature">
-            <p><span th:text="${salaryDetails['issueDate']}"></span></p>
-            <p>주식회사 <span th:text="${careerCertificate.company_name}"></span></p>
-            <p>대표이사 <span th:text="${careerCertificate.representative_name}"></span><img src="/image/TechInnovate.png" class="TechInnovate"></p>
+            <p>주식회사 <span th:text="${company != null ? company.name : '회사 정보 없음'}"></span></p>
+            <p>대표이사 <span th:text="${company.representativeName}"></span><img src="/image/TechInnovate.png" class="TechInnovate"></p>
         </div>
         <button onclick="issueCertificate()" class="print-button">
             인쇄하기
         </button>
     </div>
 
-    <!-- 합계 테이블 -->
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px; border: 1px solid black;">
-        <tfoot>
-        <tr>
-        <tr>
-            <td>지급액 합계</td>
-            <td th:text="${salaryDetails['totalAllowance']} + ${salaryDetails['monthlySalary']}"></td>
-            <td>공제액 합계</td>
-            <td th:text="${#numbers.formatDecimal(salaryDetails['totalDeductions'], 0, 0)}"></td>
-
-        </tr>
-        <tr>
-            <td colspan="2">실수령액</td>
-            <td colspan="2" th:text="${salaryDetails['monthlySalary']} + ${salaryDetails['totalAllowance']} - ${salaryDetails['totalDeductions']}"></td>
-        </tr>
-        </tfoot>
-    </table>
-
-
-    <h3>근로 시간 요약</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>근로일수</th>
-            <th>총 근로시간수</th>
-            <th>야간근로시간수</th>
-            <th>휴일근로시간수</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td th:text="${salaryDetails['totalPaidDays']}"></td>
-            <td th:text="${salaryDetails['totalPaidHours']}"></td>
-            <td th:text="${salaryDetails['overTimeHours']}"></td>
-            <td th:text="${salaryDetails['holidayWorkHours']}"></td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 </body>
 </html>
