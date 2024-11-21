@@ -61,7 +61,7 @@
   <input type="date" id="hireDate" th:field="*{hireDate}" required />
 
   <label for="contactInfo">연락처:</label>
-  <input type="text" id="contactInfo" th:field="*{contactInfo}" required />
+  <input type="text" id="contactInfo" th:field="*{contactInfo}" placeholder="'-'를 포함해 입력" required />
 
   <label for="email">이메일:</label>
   <input type="email" id="email" th:field="*{email}" required />
@@ -70,13 +70,13 @@
   <input type="date" id="birthDate" th:field="*{birthDate}" required />
 
   <label for="address">주소:</label>
-  <input type="text" id="address" th:field="*{address}" required />
+  <input type="text" id="address" th:field="*{address}" placeholder="서울시 강남구 " required />
 
   <label for="experience">경력:</label>
-  <input type="text" id="experience" th:field="*{experience}" />
+  <input type="text" id="experience" th:field="*{experience}" placeholder="숫자로만 입력 , 신입은 0"/>
 
   <label for="accountNumber">계좌 번호:</label>
-  <input type="text" id="accountNumber" th:field="*{accountNumber}" />
+  <input type="text" id="accountNumber" th:field="*{accountNumber}" placeholder="'-'를 포함해 입력" />
 
   <label for="bank">은행:</label>
   <select id="bank" th:field="*{bank}" />
@@ -92,6 +92,8 @@
   <label for="salary">연봉:</label>
   <input type="number" id="salary" th:field="*{salary}" placeholder="연봉 입력" step="100000" required />
 
+  <label for="family">가족</label>
+  <input type="text" id="family" th:field="*{family}" placeholder="부양 가족 입력" />
 
   <label for="photo">사진 업로드:</label>
   <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)" />

@@ -15,25 +15,15 @@ public class TaxService {
     private final TaxBracketRepository taxBracketRepository;
 
     // 연 소득 기준 소득세 계산
-    public Long calculateAnnualIncomeTax(Long annualIncome) {
-        TaxBracketEntity bracket = taxBracketRepository.findTaxBracketByIncome(annualIncome);
+    // 월 소득 기준 소득세 계산 (2024 간이세액표)
+    public Long calculateSimplifiedMonthlyTax(Long monthlySalary, int dependentCount) {
+        TaxBracketEntity tax = taxBracketRepository
+                .findTaxBySalaryAndDependents(monthlySalary, dependentCount)
+                .orElseThrow(() -> new IllegalArgumentException("해당 급여와 부양가족 수에 해당하는 간이세액을 찾을 수 없습니다."));
 
-        if (bracket == null) {
-            throw new IllegalArgumentException("과세 구간을 찾을 수 없습니다.");
-        }
-
-        Long excessIncome = annualIncome - bracket.getMinIncome();
-        Long annualTax = bracket.getFixedAmount() + Math.round(excessIncome * (bracket.getRate() / 100.0));
-
-        return annualTax;
+        return tax.getSimplifiedTaxAmount();
     }
 
-    // 월 소득 기준 소득세 계산
-    public Long calculateMonthlyIncomeTax(Long monthlyIncome) {
-        Long annualIncome = monthlyIncome * 12;
-        Long annualTax = calculateAnnualIncomeTax(annualIncome);
-        return Math.round(annualTax / 12.0);
-    }
 
     // 과세표준 구간 추가
     @Transactional

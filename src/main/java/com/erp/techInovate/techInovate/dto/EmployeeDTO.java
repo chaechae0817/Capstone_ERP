@@ -30,6 +30,8 @@ public class EmployeeDTO {
     private String bank; // 은행
     private MultipartFile photo; //사진
     private Double salary; // 추가된 연봉 필드
+    private Integer family; //부양 가족 수
+
 
 
 }
