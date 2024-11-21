@@ -9,7 +9,7 @@
         function issueCertificate() {
             // 발급 내역 저장 요청을 보낼 데이터 구성
             const requestData = {
-                certificateType: "경력 증명서"
+                certificateType: "급여 증명서"
             };
 
             // 발급 내역 저장을 위한 서버 요청
@@ -113,7 +113,7 @@
         </table>
 
         <h3>근로 시간 요약</h3>
-        <table class="details-container">
+        <table class="details-container2">
             <thead>
             <tr>
                 <th>근로일수</th>
@@ -131,7 +131,6 @@
                 <td th:text="${salaryDetails['holidayWorkHours']}"></td>
             </tr>
             </tbody>
-
         </table>
 
         <div class="footer-text">
@@ -141,11 +140,8 @@
             <p>주식회사 <span th:text="${company != null ? company.name : '회사 정보 없음'}"></span></p>
             <p>대표이사 <span th:text="${company.representativeName}"></span><img src="/image/TechInnovate.png" class="TechInnovate"></p>
         </div>
-        <button onclick="issueCertificate()" class="print-button">
-            인쇄하기
-        </button>
+        <button onclick="issueCertificate()" class="print-button">인쇄하기</button>
     </div>
-
 </div>
 </body>
 </html>
