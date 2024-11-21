@@ -2,10 +2,7 @@ package com.erp.techInovate.techInovate.controller;
 
 import com.erp.techInovate.techInovate.dto.CareerCertificateDTO;
 import com.erp.techInovate.techInovate.dto.EmployeeCertificateDTO;
-import com.erp.techInovate.techInovate.entity.AllowanceCodeEntity;
-import com.erp.techInovate.techInovate.entity.CertificateIssueEntity;
-import com.erp.techInovate.techInovate.entity.DeductionCodeEntity;
-import com.erp.techInovate.techInovate.entity.EmployeeEntity;
+import com.erp.techInovate.techInovate.entity.*;
 import com.erp.techInovate.techInovate.repository.AllowanceCodeRepository;
 import com.erp.techInovate.techInovate.repository.DeductionCodeRepository;
 import com.erp.techInovate.techInovate.repository.EmployeeRepository;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -127,8 +125,12 @@ public class CertificateController {
         // 수당 항목과 공제 항목 헤더 리스트 가져오기
         Set<String> allowanceHeaders = salaryDetailService.getAllowanceHeaders();
         Set<String> deductionHeaders = salaryDetailService.getDeductionHeaders();
+        Optional<CompanyEntity> companyOpt = companyService.getCompany();
 
-        model.addAttribute("company",companyService.getCompany());
+        if(companyOpt.isPresent()){
+            CompanyEntity company = companyOpt.get();
+            model.addAttribute("company",company);
+        }
         // 모델에 데이터 추가
         model.addAttribute("employee",employee);
         model.addAttribute("salaryDetails", employeeSalaryDetails);
