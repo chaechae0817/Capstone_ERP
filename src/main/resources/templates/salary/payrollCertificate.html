@@ -116,13 +116,13 @@
                 <td th:text="${#numbers.formatDecimal(salaryDetails['allowanceDetails'].getOrDefault(allowanceHeader, 0.0),0,0)}"></td>
             </tr>
             </tbody>
-        </table>      
-            <!-- 공제 -->
-            <tr th:each="deductionHeader : ${deductionHeaders}">
-                <td th:text="${deductionHeader}"></td>
-                <td th:text="${#numbers.formatDecimal(salaryDetails['deductionDetails'].getOrDefault(deductionHeader, 0.0),0,0)}"></td>
-            </tr>
-            </tbody>
+        </table>
+        <!-- 공제 -->
+        <tr th:each="deductionHeader : ${deductionHeaders}">
+            <td th:text="${deductionHeader}"></td>
+            <td th:text="${#numbers.formatDecimal(salaryDetails['deductionDetails'].getOrDefault(deductionHeader, 0.0),0,0)}"></td>
+        </tr>
+        </tbody>
         </table>
         <div class="footer-text">
             상기와 같이 재직하고 있음을 증명함
