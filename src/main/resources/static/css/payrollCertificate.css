@@ -66,6 +66,26 @@ body {
     margin: 20px 0;
 }
 
+.details-container2 {
+    width: 100%; /* 전체 너비로 확장 */
+    margin: 20px 0; /* 위아래 간격 추가 */
+    border-collapse: collapse; /* 테두리 중첩 제거 */
+    /*border: 1px solid #ccc; /* 부드러운 테두리 */
+    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+.details-container2 th, .details-container2 td {
+    border: 1px solid black; /* 셀 테두리 */
+    padding: 12px; /* 셀 내부 여백 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    font-size: 14px; /* 텍스트 크기 */
+}
+
+.details-container2 th {
+    font-weight: bold; /* 헤더 텍스트 굵게 */
+    color: #333; /* 헤더 텍스트 색상 */
+}
+
 .details-table {
     width: 48%;
     border-collapse: collapse;
@@ -96,7 +116,7 @@ body {
         display: none;
     }
     .print-button {
-        display: none;
+        display: none !important;
     }
     .certificate-container {
         margin: 0;
