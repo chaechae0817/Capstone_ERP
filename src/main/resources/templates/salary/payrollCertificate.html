@@ -40,12 +40,12 @@
             <tbody>
             <tr>
                 <td>월 기본급</td>
-                <td th:text="${salaryDetails['monthlySalary']}"></td>
+                <td th:text="${#numbers.formatDecimal(salaryDetails['monthlySalary'],0,0)}"></td>
             </tr>
             <!-- 수당 -->
             <tr th:each="allowanceHeader : ${allowanceHeaders}">
                 <td th:text="${allowanceHeader}"></td>
-                <td th:text="${salaryDetails['allowanceDetails'].getOrDefault(allowanceHeader, 0.0)}"></td>
+                <td th:text="${#numbers.formatDecimal(salaryDetails['allowanceDetails'].getOrDefault(allowanceHeader, 0.0),0,0)}"></td>
             </tr>
             </tbody>
         </table>
@@ -62,7 +62,7 @@
             <!-- 공제 -->
             <tr th:each="deductionHeader : ${deductionHeaders}">
                 <td th:text="${deductionHeader}"></td>
-                <td th:text="${salaryDetails['deductionDetails'].getOrDefault(deductionHeader, 0.0)}"></td>
+                <td th:text="${#numbers.formatDecimal(salaryDetails['deductionDetails'].getOrDefault(deductionHeader, 0.0),0,0)}"></td>
             </tr>
             </tbody>
         </table>
@@ -72,10 +72,12 @@
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px; border: 1px solid black;">
         <tfoot>
         <tr>
+        <tr>
             <td>지급액 합계</td>
             <td th:text="${salaryDetails['totalAllowance']} + ${salaryDetails['monthlySalary']}"></td>
             <td>공제액 합계</td>
-            <td th:text="${salaryDetails['totalDeductions']}"></td>
+            <td th:text="${#numbers.formatDecimal(salaryDetails['totalDeductions'], 0, 0)}"></td>
+
         </tr>
         <tr>
             <td colspan="2">실수령액</td>
@@ -91,18 +93,16 @@
         <tr>
             <th>근로일수</th>
             <th>총 근로시간수</th>
-            <th>연장근로시간수</th>
             <th>야간근로시간수</th>
             <th>휴일근로시간수</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td th:text="${salaryDetails['totalPaidHours'] / 8.0}"></td>
+            <td th:text="${salaryDetails['totalPaidDays']}"></td>
             <td th:text="${salaryDetails['totalPaidHours']}"></td>
-            <td>0</td> <!-- 연장 근로 데이터 추가 필요 -->
-            <td>0</td> <!-- 야간 근로 데이터 추가 필요 -->
-            <td>0</td> <!-- 휴일 근로 데이터 추가 필요 -->
+            <td th:text="${salaryDetails['overTimeHours']}"></td>
+            <td th:text="${salaryDetails['holidayWorkHours']}"></td>
         </tr>
         </tbody>
     </table>
