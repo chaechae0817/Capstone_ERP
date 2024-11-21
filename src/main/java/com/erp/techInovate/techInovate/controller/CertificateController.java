@@ -9,10 +9,7 @@ import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.repository.AllowanceCodeRepository;
 import com.erp.techInovate.techInovate.repository.DeductionCodeRepository;
 import com.erp.techInovate.techInovate.repository.EmployeeRepository;
-import com.erp.techInovate.techInovate.service.CertificateIssueService;
-import com.erp.techInovate.techInovate.service.CertificateService;
-import com.erp.techInovate.techInovate.service.SalaryCalculationService;
-import com.erp.techInovate.techInovate.service.SalaryDetailService;
+import com.erp.techInovate.techInovate.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ public class CertificateController {
     private final CertificateIssueService certificateIssueService;
     private final SalaryDetailService salaryDetailService;
     private final SalaryCalculationService salaryCalculationService;
-
+    private final CompanyService companyService;
     private final EmployeeRepository employeeRepository;
 
 
@@ -131,6 +128,7 @@ public class CertificateController {
         Set<String> allowanceHeaders = salaryDetailService.getAllowanceHeaders();
         Set<String> deductionHeaders = salaryDetailService.getDeductionHeaders();
 
+        model.addAttribute("company",companyService.getCompany());
         // 모델에 데이터 추가
         model.addAttribute("employee",employee);
         model.addAttribute("salaryDetails", employeeSalaryDetails);
