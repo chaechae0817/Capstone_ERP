@@ -24,8 +24,6 @@ public class SalaryCalculationService {
     private final MonthlyDeductionSummaryRepository deductionSummaryRepository;
     private final MonthlyAttendanceSummaryRepository attendanceSummaryRepository;
     private final AttendanceRecordRepository attendanceRecordRepository;
-    private final AllowanceTotalRepository allowanceTotalRepository;
-    private final AllowanceCodeRepository allowanceCodeRepository;
 
 
     @Transactional
@@ -90,10 +88,14 @@ public class SalaryCalculationService {
         // 월 급여 계산
         double hourlyWage = calculateHourlyWage(employee.getSalary()); //15625
         double monthlySalary = getMonthlyPaidHours(employee, month) * hourlyWage; //3601563
+        Integer family = employee.getFamily();
+        if(family == null){
+            family = 0;
+        }
 
         // 소득세 계산
-        double incomeTax = calculateIncomeTax(monthlySalary);
-
+        double incomeTax = calculateIncomeTax(monthlySalary,family);
+        System.out.println("소득세 : "+ incomeTax);
         // 공제 세부 내역 저장
         MonthlyDeductionSummaryEntity deductionSummary = new MonthlyDeductionSummaryEntity();
         deductionSummary.setEmployee(employee);
@@ -116,6 +118,9 @@ public class SalaryCalculationService {
 
                 case "국민연금":
                     deductionAmount = Math.round(monthlySalary * (deductionCode.getPercentage() / 100.0));
+                    System.out.println("월급 : "+ monthlySalary);
+                    System.out.println("국민연금%"+ deductionCode.getPercentage());
+                    System.out.println("국민연금"+ deductionAmount);
                     break;
 
                 case "건강보험료":
@@ -139,7 +144,7 @@ public class SalaryCalculationService {
             }
 
 
-            deductionAmount = roundToNearestThousand(deductionAmount); // 천원 단위로 반올림
+            deductionAmount = Math.round(deductionAmount / 10.0) * 10.0;
             // 총 공제액 누적
             totalDeductions += deductionAmount;
 
@@ -156,24 +161,26 @@ public class SalaryCalculationService {
     /**
      * 소득세 계산
      */
-    private double calculateIncomeTax(double monthlySalary) {
-        double annualSalary = monthlySalary * 12;
-        TaxBracketEntity taxBracket = taxBracketRepository.findBracketByIncome(annualSalary)
-                .orElseThrow(() -> new IllegalArgumentException("해당 연봉에 맞는 과세 구간을 찾을 수 없습니다."));
+    private double calculateIncomeTax(double monthlySalary, int familyCount) {
+        // 가족 수와 연봉에 맞는 과세 구간을 찾음
+        TaxBracketEntity taxBracket = taxBracketRepository.findTaxBySalaryAndDependents((long) monthlySalary, familyCount)
+                .orElseThrow(() -> new IllegalArgumentException("해당 연봉과 가족 수에 맞는 과세 구간을 찾을 수 없습니다."));
 
-        double excessIncome = annualSalary - taxBracket.getMinIncome();
-        double annualIncomeTax = taxBracket.getFixedAmount() + (excessIncome * (taxBracket.getRate() / 100.0));
-        return roundToNearestThousand(annualIncomeTax / 12.0);
+
+        double annualIncomeTax = taxBracket.getSimplifiedTaxAmount();
+
+        // 연간 소득세를 천 원 단위로 반올림하여 월 소득세로 반환
+        return annualIncomeTax;
     }
+
 
     /**
      * 시급 계산
      */
     private double calculateHourlyWage(double annualSalary) {
-        double monthlyBaseSalary = annualSalary / 12.0;
-        double dailyWage = monthlyBaseSalary / 20.0;
-        return Math.round(dailyWage / 8.0);
-        //연봉 3천 -> 시급 15625
+        double monthlyBaseSalary = (annualSalary / 12.0);
+        double dailyWage = (monthlyBaseSalary / 20.0);
+        return Math.round(dailyWage/8.0);
     }
 
     /**
@@ -198,6 +205,7 @@ public class SalaryCalculationService {
         return detail;
     }
 
+    //천원 단위로 반올림
     private double roundToNearestThousand(double amount) {
         return Math.round(amount / 1000.0) * 1000.0;
     }

@@ -82,6 +82,16 @@ public class SalaryDetailService {
             double totalPaidHours = getTotalPaidHours(employeeId, month).orElse(0.0);
             double monthlySalary = roundToNearestThousand(totalPaidHours * hourlyWage);
             double totalPaidDays = getMonthlyWorkDays(employee,month);
+            Optional<MonthlyAttendanceSummaryEntity> monthlyOpt = attendanceSummaryRepository.findByEmployeeAndMonth(employee,month.atDay(1));
+            if(monthlyOpt.isPresent()){
+                MonthlyAttendanceSummaryEntity summary = monthlyOpt.get();
+                double overTimeHours = summary.getOvertimeHours();
+                double holidayWorkHours = summary.getHolidayWorkDays()*8;
+
+                salaryDetails.put("overTimeHours",overTimeHours);
+                salaryDetails.put("holidayWorkHours",holidayWorkHours);
+            }
+
             // 2. 추가 수당 정보
             AllowanceTotalEntity allowanceTotal = allowanceTotalRepository.findByEmployeeAndMonth(employee, month.atDay(1)).orElse(null);
             double totalAllowance = allowanceTotal != null ? allowanceTotal.getTotalAllowance() : 0.0;
@@ -140,6 +150,7 @@ public class SalaryDetailService {
             salaryDetails.put("monthlySalary", monthlySalary);
             salaryDetails.put("hourlyWage", hourlyWage);
             salaryDetails.put("totalPaidHours", totalPaidHours);
+            salaryDetails.put("totalPaidDays",totalPaidDays);
             salaryDetails.put("totalAllowance", totalAllowance);
             salaryDetails.put("allowanceDetails", allowanceDetails);
             salaryDetails.put("totalDeductions", totalDeductions);
@@ -148,10 +159,6 @@ public class SalaryDetailService {
             salaryDetails.put("allowanceFixedAmounts", allowanceFixedAmounts);
             salaryDetails.put("allowancePercentages", allowancePercentages);
             salaryDetails.put("allowanceDailyRates", allowanceDailyRates);
-
-
-
-//            allEmployeeSalaryDetails.add(salaryDetails);
 
         }
 

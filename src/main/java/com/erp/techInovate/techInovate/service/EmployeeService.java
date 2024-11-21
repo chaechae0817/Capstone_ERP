@@ -65,6 +65,7 @@ public class EmployeeService {
         employeeEntity.setBank(employeeDTO.getBank());
         employeeEntity.setPhoto("/files/"+fileName);
         employeeEntity.setSalary(employeeDTO.getSalary()); // 연봉 필드 설정
+        employeeEntity.setFamily(employeeDTO.getFamily());
         return employeeRepository.save(employeeEntity);
     }
 

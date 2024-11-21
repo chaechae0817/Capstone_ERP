@@ -15,14 +15,14 @@ public class TaxBracketEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long minIncome;  //연봉 최솟값 기준
+    private Long minSalary; // 월 급여 구간 최소
 
-    @Column
-    private Long maxIncome; //연봉 최댓값 기준
-
-    @Column(nullable = false)
-    private Long fixedAmount; //고정 새액
+    @Column(nullable = true)
+    private Long maxSalary; // 월 급여 구간 최대 (무한대일 경우 null)
 
     @Column(nullable = false)
-    private Double rate; //초과 금액에 대한 비율 (%)
+    private int dependentCount; // 부양가족 수
+
+    @Column(nullable = false)
+    private Long simplifiedTaxAmount; // 간이세액 (고정)
 }

@@ -10,11 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface TaxBracketRepository extends JpaRepository<TaxBracketEntity, Long> {
-
-    @Query("SELECT t FROM TaxBracketEntity t WHERE :income >= t.minIncome AND (:income < t.maxIncome OR t.maxIncome IS NULL)")
-    TaxBracketEntity findTaxBracketByIncome(@Param("income") Long income);
-
-    // 연봉이 특정 구간에 포함된 TaxBracketEntity를 조회
-    @Query("SELECT t FROM TaxBracketEntity t WHERE :annualSalary BETWEEN t.minIncome AND t.maxIncome")
-    Optional<TaxBracketEntity> findBracketByIncome(@Param("annualSalary") double annualSalary);
+    @Query("SELECT s FROM TaxBracketEntity s WHERE :salary BETWEEN s.minSalary AND s.maxSalary AND s.dependentCount = :dependentCount")
+    Optional<TaxBracketEntity> findTaxBySalaryAndDependents(@Param("salary") Long salary, @Param("dependentCount") int dependentCount);
 }
