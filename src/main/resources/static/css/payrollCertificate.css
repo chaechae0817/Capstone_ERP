@@ -1,0 +1,133 @@
+body {
+    font-family: 'Malgun Gothic', Arial, sans-serif;
+    
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.certificate-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid black;
+    box-sizing: border-box;
+}
+
+.certificate-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.certificate-header p {
+    text-align: right;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.certificate-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.certificate-table th, .certificate-table td {
+    border: 1px solid black;
+    padding: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.footer-text {
+    margin-top: 30px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.footer-signature {
+    margin-top: 20px;
+    font-size: 14px;
+    text-align: center;
+}
+.details-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.details-table {
+    width: 48%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid black;
+}
+
+.details-table th, .details-table td {
+    border: 1px solid black;
+    padding: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.details-table th {
+    background-color: #f4f4f9;
+    font-weight: bold;
+}
+.TechInnovate {
+    margin-top:5px;
+    vertical-align:middle;
+}
+@media print {
+    .sidebar {
+        display: none;
+    }
+    .header {
+        display: none;
+    }
+    .print-button {
+        display: none;
+    }
+    .certificate-container {
+        margin: 0;
+        padding: 20px;
+        max-width: 800px; /* 인쇄 시에도 중앙에 맞추기 위한 최대 너비 */
+        box-sizing: border-box;
+        transform: translate(-50%, 0);
+        position: absolute;
+        left: 50%;
+    }
+}
+.print-button {
+    display: block; /* 버튼을 화면에 표시 */
+    visibility: visible; /* 버튼을 숨기지 않음 */
+    margin-top: 20px; /* 여유 공간 추가 */
+    padding: 10px 20px; /* 버튼 크기 조정 */
+    font-size: 16px; /* 텍스트 크기 조정 */
+    cursor: pointer; /* 클릭 가능한 커서 표시 */
+}
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #424242;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #333333;
+}
