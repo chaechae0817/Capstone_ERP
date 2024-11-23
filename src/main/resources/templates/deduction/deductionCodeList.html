@@ -85,6 +85,11 @@
             <td th:text="${deduction.description}"></td>
             <td th:text="${deduction.percentage}"></td>
         </tr>
+        <tr>
+            <td>소득세</td>
+            <td>간이세액표에 의함</td>
+            <td></td>
+        </tr>
         <tr th:if="${deductions == null or #lists.isEmpty(deductions)}">
             <td colspan="3">공제 코드가 없습니다.</td>
         </tr>

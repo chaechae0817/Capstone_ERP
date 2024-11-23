@@ -139,4 +139,9 @@ public class AttendanceRecordService {
     public List<AttendanceRecordEntity> searchRecords(String employeeName, LocalDate startDate, LocalDate endDate, Long attendanceId) {
         return attendanceRecordRepository.findByCriteria(employeeName, startDate, endDate, attendanceId);
     }
+
+
+    public List<AttendanceRecordEntity> getAttendanceRecordsByEmployeeAndMonth(Long employeeId, int month) {
+        return attendanceRecordRepository.findByEmployeeIdAndMonth(employeeId, month);
+    }
 }

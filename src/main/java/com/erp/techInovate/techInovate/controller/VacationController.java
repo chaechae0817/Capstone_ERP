@@ -120,6 +120,13 @@ public class VacationController {
     }
 
 
+    // 특정 직원의 모든 휴가 정보 조회
+    @GetMapping("/android/{employeeId}")
+    @ResponseBody
+    public ResponseEntity<List<VacationEntity>> getAllVacationsByEmployee(@PathVariable Long employeeId) {
+        List<VacationEntity> vacations = vacationService.getAllVacationsByEmployeeId(employeeId);
+        return ResponseEntity.ok(vacations);
+    }
 
 
 }

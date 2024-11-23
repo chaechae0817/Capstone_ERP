@@ -1,5 +1,6 @@
 package com.erp.techInovate.techInovate.controller;
 
+import com.erp.techInovate.techInovate.dto.SalaryDTO;
 import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.repository.EmployeeRepository;
 import com.erp.techInovate.techInovate.service.DepartmentService;
@@ -8,11 +9,10 @@ import com.erp.techInovate.techInovate.service.SalaryCalculationService;
 import com.erp.techInovate.techInovate.service.SalaryDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.YearMonth;
 import java.util.LinkedHashMap;
@@ -110,5 +110,15 @@ public class SalaryDetailController {
         return "salary/list";
     }
 
+
+    @GetMapping("/android/{employeeId}/{month}")
+    @ResponseBody
+    public ResponseEntity<SalaryDTO> getSalaryDetails(
+            @PathVariable Long employeeId,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM") YearMonth month) {
+
+        SalaryDTO salaryDetails = salaryDetailService.getSalaryDetailsForEmployee(employeeId, month);
+        return ResponseEntity.ok(salaryDetails);
+    }
 
 }

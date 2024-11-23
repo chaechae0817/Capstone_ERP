@@ -108,8 +108,9 @@ public class CertificateController {
             Model model) {
 
         if (month == null) {
-            month = YearMonth.of(2024, 10); // 기본값 설정
+            month = YearMonth.now(); // 기본값: 현재 월
         }
+
 
         Long employeeId = (Long) session.getAttribute("employeeId");
         if (employeeId == null) {
@@ -122,8 +123,16 @@ public class CertificateController {
         //직원의 급여 정보를 가져옴
         Map<String, Object> employeeSalaryDetails = salaryDetailService.getMonthlySalaryDetailsForEmployees(employeeId,month);
 
+        // 데이터 유무에 따라 처리
+        boolean noData = employeeSalaryDetails == null || employeeSalaryDetails.isEmpty();
+        model.addAttribute("noData", noData);
+
+        if (!noData) {
+            model.addAttribute("salaryDetails", employeeSalaryDetails);
+        }
+
         // 수당 항목과 공제 항목 헤더 리스트 가져오기
-        Set<String> allowanceHeaders = salaryDetailService.getAllowanceHeaders();
+        Set<String> allowanceHeaders = salaryDetailService.getAllowanceHeadersForEmployee(employee,month);
         Set<String> deductionHeaders = salaryDetailService.getDeductionHeaders();
         Optional<CompanyEntity> companyOpt = companyService.getCompany();
 
@@ -133,12 +142,9 @@ public class CertificateController {
         }
         // 모델에 데이터 추가
         model.addAttribute("employee",employee);
-        model.addAttribute("salaryDetails", employeeSalaryDetails);
         model.addAttribute("allowanceHeaders", allowanceHeaders);
         model.addAttribute("deductionHeaders", deductionHeaders);
         model.addAttribute("month", month);
-        System.out.println("Salary Details: " + employeeSalaryDetails);
-        System.out.println("allowanceHeaders : "+ allowanceHeaders);
 
         return "salary/payrollCertificate";
     }

@@ -1,5 +1,6 @@
 package com.erp.techInovate.techInovate.service;
 
+import com.erp.techInovate.techInovate.dto.SalaryDTO;
 import com.erp.techInovate.techInovate.entity.*;
 import com.erp.techInovate.techInovate.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -187,6 +188,8 @@ public class SalaryDetailService {
     }
 
 
+
+
     private double calculateHourlyWage(double annualSalary) {
         double monthlyBaseSalary = annualSalary / 12.0;
         double dailyWage = monthlyBaseSalary / 20.0;
@@ -242,6 +245,47 @@ public class SalaryDetailService {
         return attendanceSummaryRepository.findByEmployeeAndMonth(employee, month.atDay(1))
                 .map(MonthlyAttendanceSummaryEntity::getTotalWorkDays)
                 .orElse(0.0); // 근태 요약이 없으면 기본값 0.0 반환
+    }
+
+    public SalaryDTO getSalaryDetailsForEmployee(Long employeeId, YearMonth month) {
+        Optional<EmployeeEntity> employeeOpt = employeeRepository.findById(employeeId);
+
+        if (employeeOpt.isEmpty()) {
+            throw new IllegalArgumentException("Invalid employeeId: " + employeeId);
+        }
+
+        EmployeeEntity employee = employeeOpt.get();
+
+        // 월 기본급 계산
+        double hourlyWage = calculateHourlyWage(employee.getSalary());
+        double totalPaidHours = getTotalPaidHours(employeeId, month).orElse(0.0);
+        String monthlySalary = String.format("%.2f", totalPaidHours * hourlyWage);
+
+        // 추가 수당 정보
+        AllowanceTotalEntity allowanceTotal = allowanceTotalRepository.findByEmployeeAndMonth(employee, month.atDay(1)).orElse(null);
+        Map<String, Double> allowanceDetails = allowanceTotal != null ? allowanceTotal.getAllowanceDetails() : Map.of();
+        double totalAllowance = allowanceTotal != null ? allowanceTotal.getTotalAllowance() : 0.0;
+
+        // 공제 정보
+        MonthlyDeductionSummaryEntity deductionSummary = deductionSummaryRepository.findByEmployeeAndMonth(employee, month.atDay(1)).orElse(null);
+        Map<String, Double> deductionDetails = deductionSummary != null ? deductionSummary.getDeductionDetails().stream()
+                .collect(Collectors.toMap(
+                        MonthlyDeductionDetailEntity::getDeductionName,
+                        MonthlyDeductionDetailEntity::getDeductionAmount
+                )) : Map.of();
+        double totalDeductions = deductionSummary != null ? deductionSummary.getTotalDeductions() : 0.0;
+
+        // DTO 생성
+        SalaryDTO salaryDTO = new SalaryDTO();
+        salaryDTO.setEmployeeId(employee.getEmployeeId());
+        salaryDTO.setEmployeeName(employee.getName());
+        salaryDTO.setMonthlySalary(monthlySalary);
+        salaryDTO.setAllowanceDetails(allowanceDetails);
+        salaryDTO.setTotalAllowance(totalAllowance);
+        salaryDTO.setDeductionDetails(deductionDetails);
+        salaryDTO.setTotalDeductions(totalDeductions);
+
+        return salaryDTO;
     }
 
 }
