@@ -118,5 +118,9 @@ public class VacationService {
     }
 
 
+    // 특정 직원의 모든 휴가 정보 조회
+    public List<VacationEntity> getAllVacationsByEmployeeId(Long employeeId) {
+        return vacationRepository.findByEmployeeEmployeeId(employeeId);
+    }
 
 }

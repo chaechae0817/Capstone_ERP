@@ -30,117 +30,150 @@
                 })
                 .catch(error => console.error("Error:", error));
         }
+
+        function navigateMonth(offset) {
+            const currentMonthStr = document.getElementById("currentMonth").value; // hidden 필드에서 현재 달 가져오기
+            let [year, month] = currentMonthStr.split('-').map(Number);
+
+            month += offset;
+            if (month < 1) {
+                month = 12;
+                year -= 1;
+            } else if (month > 12) {
+                month = 1;
+                year += 1;
+            }
+
+            const newMonthStr = `${year}-${String(month).padStart(2, '0')}`;
+            window.location.href = `/certificate/salary?month=${newMonthStr}`;
+        }
     </script>
 </head>
 <body>
 <div layout:fragment="content">
+
+    <div class="navigate-month">
+        <button onclick="navigateMonth(-1)">&#9664;</button>
+        <span class="month-display" th:text="${month} + '월 급여명세서'"></span>
+        <button onclick="navigateMonth(1)">&#9654;</button>
+    </div>
+
+    <input type="hidden" id="currentMonth" th:value="${month}">
+
     <div class="certificate-container">
         <div class="certificate-title">급 여 명 세 서</div>
 
         <!-- 지급일 및 기본 정보 -->
-        <div class="certificate-header">
-            <p>지급일: <span th:text="${month + '-01'}"></span></p>
+        <div th:if="${noData}" class="no-data-message">
+            <p style="color: red; text-align: center;">해당 월의 급여 데이터가 없습니다.</p>
+        </div>
+
+        <!-- 지급일 및 기본 정보 -->
+        <div th:if="${!noData}">
+            <div class="certificate-header">
+                <p>지급일: <span th:text="${month + '-01'}"></span></p>
+                <table class="certificate-table">
+                    <tr>
+                        <th>성 명</th>
+                        <td th:text="${employee.name}"></td>
+                        <th>생년월일</th>
+                        <td th:text="${employee.birthDate}"></td>
+                    </tr>
+                    <tr>
+                        <th>부 서</th>
+                        <td th:text="${employee.department.name}"></td>
+                        <th>직 급</th>
+                        <td th:text="${employee.position.name}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3 class="section-title">세부 내역</h3>
+            <div class="details-container">
+                <!-- 지급 항목 테이블 -->
+                <table class="details-table">
+                    <thead>
+                    <tr>
+                        <th>지급 항목</th>
+                        <th>금액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>월 기본급</td>
+                        <td th:text="${salaryDetails['monthlySalary']}"></td>
+                    </tr>
+                    <!-- 수당 -->
+                    <tr th:each="allowanceHeader : ${allowanceHeaders}">
+                        <td th:text="${allowanceHeader}"></td>
+                        <td th:text="${salaryDetails['allowanceDetails'].getOrDefault(allowanceHeader, 0.0)}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- 공제 항목 테이블 -->
+                <table class="details-table">
+                    <thead>
+                    <tr>
+                        <th>공제 항목</th>
+                        <th>금액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="deductionHeader : ${deductionHeaders}">
+                        <td th:text="${deductionHeader}"></td>
+                        <td th:text="${salaryDetails['deductionDetails'].getOrDefault(deductionHeader, 0.0)}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!-- 합계 -->
+            <h3 class="section-title">합계</h3>
             <table class="certificate-table">
                 <tr>
-                    <th>성 명</th>
-                    <td th:text="${employee.name}"></td>
-                    <th>생년월일</th>
-                    <td th:text="${employee.birthDate}"></td>
+                    <th>지급액 합계</th>
+                    <td th:text="${salaryDetails['totalAllowance']} + ${salaryDetails['monthlySalary']}"></td>
+                    <th>공제액 합계</th>
+                    <td th:text="${#numbers.formatDecimal(salaryDetails['totalDeductions'], 0, 0)}"></td>
                 </tr>
                 <tr>
-                    <th>부 서</th>
-                    <td th:text="${employee.department.name}"></td>
-                    <th>직 급</th>
-                    <td th:text="${employee.position.name}"></td>
+                    <td colspan="2">실수령액</td>
+                    <td colspan="2" th:text="${salaryDetails['monthlySalary']} + ${salaryDetails['totalAllowance']} - ${salaryDetails['totalDeductions']}"></td>
                 </tr>
             </table>
-        </div>
 
-        <h3 class="section-title">세부 내역</h3>
-        <div class="details-container">
-            <!-- 지급 항목 테이블 -->
-            <table class="details-table">
+            <h3>근로 시간 요약</h3>
+            <table class="details-container2">
                 <thead>
                 <tr>
-                    <th>지급 항목</th>
-                    <th>금액</th>
+                    <th>근로일수</th>
+                    <th>총 근로시간수</th>
+                    <th>야간근로시간수</th>
+                    <th>휴일근로시간수</th>
                 </tr>
+
                 </thead>
                 <tbody>
                 <tr>
-                    <td>월 기본급</td>
-                    <td th:text="${salaryDetails['monthlySalary']}"></td>
-                </tr>
-                <!-- 수당 -->
-                <tr th:each="allowanceHeader : ${allowanceHeaders}">
-                    <td th:text="${allowanceHeader}"></td>
-                    <td th:text="${salaryDetails['allowanceDetails'].getOrDefault(allowanceHeader, 0.0)}"></td>
+                    <td th:text="${salaryDetails['totalPaidDays']}"></td>
+                    <td th:text="${salaryDetails['totalPaidHours']}"></td>
+                    <td th:text="${salaryDetails['overTimeHours']}"></td>
+                    <td th:text="${salaryDetails['holidayWorkHours']}"></td>
                 </tr>
                 </tbody>
             </table>
 
-            <!-- 공제 항목 테이블 -->
-            <table class="details-table">
-                <thead>
-                <tr>
-                    <th>공제 항목</th>
-                    <th>금액</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="deductionHeader : ${deductionHeaders}">
-                    <td th:text="${deductionHeader}"></td>
-                    <td th:text="${salaryDetails['deductionDetails'].getOrDefault(deductionHeader, 0.0)}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="footer-text">
+                상기와 같이 재직하고 있음을 증명함
+            </div>
+            <div class="footer-signature">
+                <p>주식회사 <span th:text="${company != null ? company.name : '회사 정보 없음'}"></span></p>
+                <p>대표이사 <span th:text="${company.representativeName}"></span><img src="/image/TechInnovate.png" class="TechInnovate"></p>
+            </div>
+            <button onclick="issueCertificate()" class="print-button">인쇄하기</button>
         </div>
-
-
-        <!-- 합계 -->
-        <h3 class="section-title">합계</h3>
-        <table class="certificate-table">
-            <tr>
-                <th>지급액 합계</th>
-                <td th:text="${salaryDetails['totalAllowance']} + ${salaryDetails['monthlySalary']}"></td>
-                <th>공제액 합계</th>
-                <td th:text="${#numbers.formatDecimal(salaryDetails['totalDeductions'], 0, 0)}"></td>
-            </tr>
-            <tr>
-                <td colspan="2">실수령액</td>
-                <td colspan="2" th:text="${salaryDetails['monthlySalary']} + ${salaryDetails['totalAllowance']} - ${salaryDetails['totalDeductions']}"></td>
-            </tr>
-        </table>
-
-        <h3>근로 시간 요약</h3>
-        <table class="details-container2">
-            <thead>
-            <tr>
-                <th>근로일수</th>
-                <th>총 근로시간수</th>
-                <th>야간근로시간수</th>
-                <th>휴일근로시간수</th>
-            </tr>
-
-            </thead>
-            <tbody>
-            <tr>
-                <td th:text="${salaryDetails['totalPaidDays']}"></td>
-                <td th:text="${salaryDetails['totalPaidHours']}"></td>
-                <td th:text="${salaryDetails['overTimeHours']}"></td>
-                <td th:text="${salaryDetails['holidayWorkHours']}"></td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div class="footer-text">
-            상기와 같이 재직하고 있음을 증명함
-        </div>
-        <div class="footer-signature">
-            <p>주식회사 <span th:text="${company != null ? company.name : '회사 정보 없음'}"></span></p>
-            <p>대표이사 <span th:text="${company.representativeName}"></span><img src="/image/TechInnovate.png" class="TechInnovate"></p>
-        </div>
-        <button onclick="issueCertificate()" class="print-button">인쇄하기</button>
     </div>
 </div>
 </body>

@@ -25,4 +25,7 @@ public interface VacationRepository extends JpaRepository<VacationEntity, Long> 
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             @Param("leaveItemName") String leaveItemName);
+
+    List<VacationEntity> findByEmployeeEmployeeId(Long employeeId);
+
 }

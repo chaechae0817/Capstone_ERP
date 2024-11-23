@@ -9,6 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -41,10 +45,29 @@ public class LoginController {
         }
     }
 
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate(); // 세션 무효화
         return "redirect:/login"; // 로그인 페이지로 리다이렉트
+    }
+
+    //안드로이드
+    @PostMapping("/android/login")
+    @ResponseBody
+    public Map<String,Object> androidLogin(@RequestParam String employeeNumber, @RequestParam String email) {
+        Optional<EmployeeEntity> employee = employeeService.login(employeeNumber, email);
+        Map<String, Object> response = new HashMap<>();
+        if (employee.isPresent()) {
+            // 로그인 성공 시
+            response.put("success", true);
+            response.put("employee", employee.get());
+        } else {
+            // 로그인 실패 시
+            response.put("success", false);
+        }
+
+        return response;
     }
 }
 

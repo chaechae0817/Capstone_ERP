@@ -84,4 +84,15 @@ public class AttendanceRecordController {
     }
 
 
+    // 특정 직원의 특정 월 근태 기록 조회
+    @GetMapping("/android/list/{employeeId}/{month}")
+    @ResponseBody
+    public ResponseEntity<List<AttendanceRecordEntity>> getAttendanceRecordsByEmployeeAndMonth(
+            @PathVariable Long employeeId,
+            @PathVariable int month) {
+
+        List<AttendanceRecordEntity> records = attendanceRecordService.getAttendanceRecordsByEmployeeAndMonth(employeeId, month);
+        return ResponseEntity.ok(records);
+    }
+
 }

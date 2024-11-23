@@ -52,5 +52,8 @@ public interface AttendanceRecordRepository extends JpaRepository<AttendanceReco
             @Param("startOfMonth") LocalDate startOfMonth,
             @Param("endOfMonth") LocalDate endOfMonth);
 
+    // 특정 직원의 특정 월 근태 기록 조회
+    @Query("SELECT a FROM AttendanceRecordEntity a WHERE a.employee.employeeId = :employeeId AND MONTH(a.date) = :month")
+    List<AttendanceRecordEntity> findByEmployeeIdAndMonth(@Param("employeeId") Long employeeId, @Param("month") int month);
 }
 

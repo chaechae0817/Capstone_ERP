@@ -151,3 +151,26 @@ button {
 button:hover {
     background-color: #333333;
 }
+
+
+.navigate-month {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+.navigate-month button {
+        font-size: 18px;
+        padding: 5px 10px;
+        cursor: pointer;
+        background-color: #424242;
+        color: white;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .month-display {
+        font-size: 20px;
+        margin: 0 15px;
+    }
