@@ -1,6 +1,7 @@
 package com.erp.techInovate.techInovate.service;
 
 import com.erp.techInovate.techInovate.entity.AttendanceEntity;
+import com.erp.techInovate.techInovate.entity.AttendanceType;
 import com.erp.techInovate.techInovate.repository.AttendanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,10 @@ public class AttendanceService {
 
     public void delete(Long id) {
         attendanceRepository.deleteById(id);
+    }
+
+    public AttendanceEntity findByAttendanceType(AttendanceType type) {
+        return attendanceRepository.findByType(type)
+                .orElseThrow(() -> new IllegalArgumentException("Attendance with type " + type + " not found."));
     }
 }
