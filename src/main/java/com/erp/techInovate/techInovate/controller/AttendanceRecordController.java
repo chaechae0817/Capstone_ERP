@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -93,6 +94,39 @@ public class AttendanceRecordController {
 
         List<AttendanceRecordEntity> records = attendanceRecordService.getAttendanceRecordsByEmployeeAndMonth(employeeId, month);
         return ResponseEntity.ok(records);
+    }
+
+
+    @PostMapping("/qr/register")
+    @ResponseBody
+    public ResponseEntity<String> registerAttendance(@RequestBody Map<String, Long> payload) {
+        Long employeeId = payload.get("employeeId");
+        if (employeeId == null) {
+            return ResponseEntity.badRequest().body("{\"status\":\"error\", \"message\":\"employeeId가 누락되었습니다.\"}");
+        }
+
+        try {
+            EmployeeEntity employee = employeeService.getEmployeeById(employeeId);
+            if (employee == null) {
+                return ResponseEntity.badRequest().body("{\"status\":\"error\", \"message\":\"해당 직원이 존재하지 않습니다.\"}");
+            }
+
+            AttendanceRecordEntity record = attendanceRecordService.recordAttendance(employeeId);
+            String message = (record.getCheckOutTime() == null)
+                    ? employee.getName() + "님, 출근 처리 완료되었습니다"
+                    : employee.getName() + "님, 퇴근 처리 완료되었습니다.";
+
+            return ResponseEntity.ok("{\"status\":\"success\", \"message\":\"" + message + "\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+
+    // QR 스캔 페이지 매핑
+    @GetMapping("/qr-scanner")
+    public String showQRScannerPage() {
+        return "qr/attendanceQRScanner";
     }
 
 }

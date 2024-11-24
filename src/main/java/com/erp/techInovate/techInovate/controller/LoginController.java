@@ -36,7 +36,7 @@ public class LoginController {
         if (employee.isPresent()) {
             // 로그인 성공 시 세션에 employeeId 저장
             session.setAttribute("employeeId", employee.get().getEmployeeId()); // employeeId를 세션에 저장
-
+            session.setAttribute("username", employee.get().getName()); // username(직원 이름)을 세션에 저장
             model.addAttribute("message", "로그인 성공!");
             return "redirect:/employee/list"; // 홈 페이지로 리다이렉트
         } else {

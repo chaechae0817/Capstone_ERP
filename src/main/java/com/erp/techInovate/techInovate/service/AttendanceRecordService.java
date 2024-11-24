@@ -1,8 +1,6 @@
 package com.erp.techInovate.techInovate.service;
 
-import com.erp.techInovate.techInovate.entity.AttendanceRecordEntity;
-import com.erp.techInovate.techInovate.entity.EmployeeEntity;
-import com.erp.techInovate.techInovate.entity.MonthlyAttendanceSummaryEntity;
+import com.erp.techInovate.techInovate.entity.*;
 import com.erp.techInovate.techInovate.repository.AttendanceRecordRepository;
 import com.erp.techInovate.techInovate.repository.AttendanceRepository;
 import com.erp.techInovate.techInovate.repository.MonthlyAttendanceSummaryRepository;
@@ -10,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -22,6 +21,8 @@ public class AttendanceRecordService {
     private final AttendanceRecordRepository attendanceRecordRepository;
     private final MonthlyAttendanceSummaryRepository monthlyAttendanceSummaryRepository;
     private final SalaryCalculationService salaryCalculationService;
+    private final EmployeeService employeeService;
+    private final AttendanceService attendanceService;
 
 
     public List<AttendanceRecordEntity> findAll() {
@@ -133,7 +134,71 @@ public class AttendanceRecordService {
 
 
     public void delete(Long id) {
+        Optional<AttendanceRecordEntity> entity = attendanceRecordRepository.findById(id);
+        if(entity.isPresent()) {
+            boolean alreadyCounted = isAlreadyCounted(entity.get().getEmployee(), entity.get().getDate());
+            deleteMonthlySummary(entity.get(),alreadyCounted);
+        }
         attendanceRecordRepository.deleteById(id);
+
+    }
+
+    private void deleteMonthlySummary(AttendanceRecordEntity attendanceRecord,boolean alreadyCounted) {
+        LocalDate recordDate = attendanceRecord.getDate();
+        YearMonth month = YearMonth.from(recordDate);
+        Optional<MonthlyAttendanceSummaryEntity> summary = monthlyAttendanceSummaryRepository.findByEmployeeAndMonth(
+                attendanceRecord.getEmployee(),
+                month.atDay(1)  // Month의 첫 번째 날로 설정
+        );
+
+        if(summary.isPresent()) {
+            // 근태 유형에 따른 요약 데이터 업데이트
+            double workHours = attendanceRecord.getTotalWorkHours(); //삭제할 날의 총 근무 시간을 가져옴
+            double multiplier = attendanceRecord.getAttendance().getMultiplier(); //근무 배수
+
+            // 요약 데이터 업데이트 -> 다시 천천히..
+            switch (attendanceRecord.getAttendance().getType()) {
+                case NORMAL: //정상 근무
+                    if (!alreadyCounted) {
+                        if (workHours + 1 >= 8) {
+                            summary.get().setNormalWorkDays(summary.get().getNormalWorkDays() - 1);
+                        } else if (workHours + 0.5 >= 4) {
+                            summary.get().setHalfWorkDays(summary.get().getHalfWorkDays() - 0.5);
+                        }
+                    }
+                    summary.get().setTotalPaidWorkHours(summary.get().getTotalPaidWorkHours() - (workHours * multiplier));
+                    break;
+                case ABSENCE: //조퇴 , 결근
+                    if (!alreadyCounted) {
+                        summary.get().setTotalAbsenceDays(summary.get().getTotalAbsenceDays() - 1);
+                    }
+                    summary.get().setTotalPaidWorkHours(summary.get().getTotalPaidWorkHours() - (workHours * multiplier));
+                    break;
+                case SPECIAL: //특수 근무 -> 시간당 1.5배
+                    summary.get().setSpecialWorkDays(summary.get().getSpecialWorkDays() - 1);
+                    summary.get().setTotalPaidWorkHours(summary.get().getTotalPaidWorkHours() - (workHours * multiplier));
+                    break;
+                case HOLIDAY: //휴일 근무
+                    if (!alreadyCounted) {
+                        summary.get().setHolidayWorkDays(summary.get().getHolidayWorkDays() - 1);
+                    }
+                    summary.get().setTotalPaidWorkHours(summary.get().getTotalPaidWorkHours() - (workHours * multiplier));
+                    break;
+            }
+
+            // 총 근무 시간과 근무 일수 업데이트
+            summary.get().setTotalWorkHours(summary.get().getTotalWorkHours() - workHours);
+            summary.get().setTotalWorkDays(summary.get().getNormalWorkDays() + summary.get().getHalfWorkDays() + summary.get().getHolidayWorkDays());
+
+            // 야근 시간 계산 시간 당 x2로 계산
+            if (attendanceRecord.getCheckOutTime().isAfter(LocalTime.parse("18:00"))) {
+                double overtimeHours = LocalTime.parse("18:00").until(attendanceRecord.getCheckOutTime(), java.time.temporal.ChronoUnit.HOURS);
+                summary.get().setOvertimeHours(summary.get().getOvertimeHours() - (Math.max(0, overtimeHours)) * 2);
+                summary.get().setTotalPaidWorkHours(summary.get().getTotalPaidWorkHours() - summary.get().getOvertimeHours());
+            }
+
+            monthlyAttendanceSummaryRepository.save(summary.get());
+        }
     }
 
     public List<AttendanceRecordEntity> searchRecords(String employeeName, LocalDate startDate, LocalDate endDate, Long attendanceId) {
@@ -144,4 +209,72 @@ public class AttendanceRecordService {
     public List<AttendanceRecordEntity> getAttendanceRecordsByEmployeeAndMonth(Long employeeId, int month) {
         return attendanceRecordRepository.findByEmployeeIdAndMonth(employeeId, month);
     }
+
+
+    public AttendanceRecordEntity recordAttendance(Long employeeId) {
+        LocalDate today = LocalDate.now();
+        DayOfWeek dayOfWeek = today.getDayOfWeek(); // 요일 가져오기
+
+        boolean isWeekend = (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY);
+
+        YearMonth currentMonth = YearMonth.from(today); // YearMonth로 변환
+        EmployeeEntity employee = employeeService.getEmployeeById(employeeId);
+
+        // 요일에 따라 AttendanceType 설정
+        AttendanceType attendanceType = (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY)
+                ? AttendanceType.HOLIDAY // 주말인 경우 HOLIDAY 설정
+                : AttendanceType.NORMAL; // 평일인 경우 NORMAL 설정
+
+        AttendanceEntity attendance = attendanceService.findByAttendanceType(attendanceType);
+
+        // 오늘 날짜의 근태 기록 조회
+        AttendanceRecordEntity record = attendanceRecordRepository.findByEmployeeAndDate(employee, today)
+                .stream().findFirst().orElse(null);
+
+        if (record == null) {
+            // 출근 기록 생성
+            record = new AttendanceRecordEntity();
+            record.setEmployee(employee);
+            record.setDate(today);
+            record.setCheckInTime(LocalTime.now());
+            record.setAttendance(attendance); // Attendance 설정
+            attendanceRecordRepository.save(record);
+        } else if (record.getCheckOutTime() == null) {
+            // 퇴근 시간 기록
+            record.setCheckOutTime(LocalTime.now());
+            record.setAttendance(attendance); // Attendance 설정
+            record.setTotalWorkHours(calculateWorkHours(record.getCheckInTime(), record.getCheckOutTime()));
+            attendanceRecordRepository.save(record);
+
+            // 월별 근태 요약 업데이트
+            boolean alreadyCounted = isAlreadyCounted(employee, today);
+            updateMonthlySummary(record, alreadyCounted);
+
+            salaryCalculationService.updateMonthlyDeductions(employee.getEmployeeId(), currentMonth);
+        } else {
+            throw new IllegalStateException("오늘 근태 기록이 이미 완료되었습니다.");
+        }
+
+        return record;
+    }
+
+    private double calculateWorkHours(LocalTime checkInTime, LocalTime checkOutTime) {
+        // 총 근무 시간 계산
+        double totalHours = (double) java.time.Duration.between(checkInTime, checkOutTime).toMinutes() / 60;
+
+        // 점심시간 제외 로직 추가
+        if (totalHours >= 4 && totalHours < 8) {
+            totalHours -= 0.5; // 4시간 이상 8시간 미만 근무 시 30분 제외
+        } else if (totalHours >= 8) {
+            totalHours -= 1; // 8시간 이상 근무 시 1시간 제외
+        }
+
+        // 유효성 검사: 퇴근 시간이 출근 시간보다 늦어야 함
+        if (totalHours < 0) {
+            throw new IllegalArgumentException("퇴근 시간은 출근 시간보다 늦어야 합니다.");
+        }
+
+        return totalHours;
+    }
+
 }

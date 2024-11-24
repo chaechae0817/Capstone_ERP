@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>출입 QR</title>
+    <script src="https://unpkg.com/@zxing/library@0.18.6/umd/index.js"></script>
+    <style>
+        #video {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        #result {
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            margin-top: 10px;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        .content {
+            display:flex;
+            justify-content:center;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="videoDiv">
+
+
+        <h1>출입 QR을 스캔해주세요</h1>
+        <video id="video"></video>
+        <div id="result"></div>
+        <button id="stop-scan">스캔 종료</button>
+
+        <audio id="beep-sound" src="/audio/beep.mp3" preload="auto"></audio>
+    </div>
+<script>
+    const codeReader = new ZXing.BrowserQRCodeReader();
+    const videoElement = document.getElementById('video');
+    const resultElement = document.getElementById('result');
+    const stopButton = document.getElementById('stop-scan');
+    const beepSound = document.getElementById('beep-sound'); // 오디오 태그
+
+
+    // QR 스캔 시작
+    codeReader
+        .listVideoInputDevices()
+        .then(videoInputDevices => {
+            if (videoInputDevices.length > 0) {
+                const selectedDeviceId = videoInputDevices[0].deviceId; // 기본 카메라 선택
+                codeReader.decodeFromVideoDevice(
+                    selectedDeviceId,
+                    videoElement,
+                    (result, error) => {
+                        if (result) {
+                            resultElement.textContent = `스캔된 데이터: ${result.text}`;
+                            beepSound.play();
+
+                            // 서버로 데이터 전송
+                            fetch('/record/qr/register', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ employeeId: result.text })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    resultElement.textContent = data.message; // 서버 응답 메시지 표시
+                                } else {
+                                    alert(`오류: ${data.message}`);
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                alert("서버와의 연결에 실패했습니다.");
+                            });
+                        }
+
+                        if (error) {
+                            console.warn("QR 스캔 오류:", error);
+                        }
+                    }
+                );
+            } else {
+                alert("카메라가 감지되지 않았습니다.");
+            }
+        })
+        .catch(err => {
+            console.error("카메라 초기화 실패:", err);
+        });
+
+    // 스캔 중지
+    stopButton.addEventListener('click', () => {
+
+        codeReader.reset();
+        alert("스캔이 중지되었습니다.");
+    });
+</script>
+</div>
+</body>
+</html>
