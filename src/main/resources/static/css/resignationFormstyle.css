@@ -78,3 +78,12 @@ button {
 button:hover {
     background-color: #333333;
 }
+.content {
+    margin: auto;
+    width: 500px;
+    padding: 20px;
+    background-color: #f0f2f5;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    box-sizing: border-box;
+}

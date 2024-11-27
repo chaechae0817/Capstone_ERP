@@ -168,6 +168,7 @@ button:hover {
         color: white;
         border: none;
         border-radius: 4px;
+        width:40px;
     }
 
     .month-display {
