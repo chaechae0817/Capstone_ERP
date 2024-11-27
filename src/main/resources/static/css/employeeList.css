@@ -104,13 +104,13 @@ a:hover {
 /* 직원 등록 링크 */
 a[href="/employee/new"].register {
     display: inline-block;
-    margin-top: 20px;
     background-color: #424242;
     color: #fff;
     padding: 8px 16px;
     border-radius: 4px;
     text-align: center;
     text-decoration: none;
+    float:right;
 }
 
 a[href="/employee/new"].register:hover {

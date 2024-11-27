@@ -75,7 +75,7 @@
 <div layout:fragment="content">
     <h1>직원 목록</h1>
         <div class="search-fields" id="searchFields">
-            <form id="searchForm" action="/employee/search" method="get">
+            <form id="searchForm" action="/employee/search" method="get" style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
                 <div class="search-field">
                     <label for="searchField">선택</label>
                     <select id="searchField" name="searchField" onchange="toggleFields(this.value)">
@@ -160,6 +160,7 @@
 
                 <button type="submit">검색</button>
                 <button type="button" onclick="clearSearch()">초기화</button>
+                <a href="/employee/new" class="register" style="margin-left: auto;">직원 등록하기</a>
             </form>
         </div>
 
@@ -193,7 +194,6 @@
             <td th:text="${employee.experience}"></td>
         </tr>
     </table>
-    <a href="/employee/new" class="register">직원 등록하기</a>
 </div>
 
 </body>

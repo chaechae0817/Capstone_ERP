@@ -3,12 +3,12 @@
       layout:decorate="~{layout/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>인사 발령 목록</title>
+    <title>인사 발령 조회</title>
     <link rel="stylesheet" type="text/css" href="/css/transferliststyle.css">
 </head>
 <body>
 <div layout:fragment="content">
-<h1>발령 리스트</h1>
+<h1>인사 발령 조회</h1>
 <div class="table-container">
     <form th:action="@{/transfer/search}" method="get">
         <label for="employeeName">직원 이름:</label>

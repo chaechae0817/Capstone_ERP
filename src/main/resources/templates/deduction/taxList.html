@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout.html}">
 <head>
-    <title>소득세 관리</title>
+    <title>소득세 범위 설정</title>
     <link rel="stylesheet" type="text/css" href="/css/attendanceList.css">
     <script>
         function openAddBracketDialog() {
@@ -60,7 +60,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>소득세 구간 관리</h1>
+    <h1>소득세 범위 설정</h1>
     <button class="btn-primary" onclick="openAddBracketDialog()">새 소득세 구간 추가</button>
 
     <div class="overlay" id="overlay" onclick="closeDialog()"></div>
