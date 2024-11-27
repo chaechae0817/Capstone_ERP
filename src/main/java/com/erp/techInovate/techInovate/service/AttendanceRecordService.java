@@ -1,5 +1,6 @@
 package com.erp.techInovate.techInovate.service;
 
+import com.erp.techInovate.techInovate.dto.AttendanceRecordDTO;
 import com.erp.techInovate.techInovate.entity.*;
 import com.erp.techInovate.techInovate.repository.AttendanceRecordRepository;
 import com.erp.techInovate.techInovate.repository.AttendanceRepository;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -206,8 +208,21 @@ public class AttendanceRecordService {
     }
 
 
-    public List<AttendanceRecordEntity> getAttendanceRecordsByEmployeeAndMonth(Long employeeId, int month) {
-        return attendanceRecordRepository.findByEmployeeIdAndMonth(employeeId, month);
+    public List<AttendanceRecordDTO> getAttendanceRecordsByEmployeeAndMonth(Long employeeId, int month) {
+        List<AttendanceRecordEntity> attendanceRecordEntityList = attendanceRecordRepository.findByEmployeeIdAndMonth(employeeId,month);
+        return attendanceRecordEntityList.stream().map(attedance -> {
+            AttendanceRecordDTO dto = new AttendanceRecordDTO();
+            dto.setRecordId(attedance.getRecordId());
+            dto.setEmployeeId(attedance.getEmployee().getEmployeeId());
+            dto.setEmployeeName(attedance.getEmployee().getName());
+            dto.setDate(attedance.getDate());
+            dto.setCheckInTime(attedance.getCheckInTime());
+            dto.setCheckOutTime(attedance.getCheckOutTime());
+            dto.setAttendanceType(attedance.getAttendance().getName());
+            dto.setNotes(attedance.getNotes());
+            dto.setTotalWorkHours(attedance.getTotalWorkHours());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 

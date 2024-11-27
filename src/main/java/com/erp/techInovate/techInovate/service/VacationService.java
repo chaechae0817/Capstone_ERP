@@ -119,8 +119,21 @@ public class VacationService {
 
 
     // 특정 직원의 모든 휴가 정보 조회
-    public List<VacationEntity> getAllVacationsByEmployeeId(Long employeeId) {
-        return vacationRepository.findByEmployeeEmployeeId(employeeId);
+    public List<VacationDTO> getAllVacationsByEmployeeId(Long employeeId) {
+        List<VacationEntity> confirmedVacations = vacationRepository.findByEmployeeEmployeeId(employeeId);
+        return confirmedVacations.stream().map(vacation -> {
+            VacationDTO dto = new VacationDTO();
+            dto.setId(vacation.getId());
+            dto.setEmployeeId(vacation.getEmployee().getEmployeeId());
+            dto.setName(vacation.getEmployee().getName());
+            dto.setPosition(vacation.getEmployee().getPosition().getName());
+            dto.setDepartment(vacation.getEmployee().getDepartment().getName());
+            dto.setLeaveItemName(vacation.getLeaveItem().getName());
+            dto.setReason(vacation.getReason());
+            dto.setStartDate(vacation.getStartDate());
+            dto.setEndDate(vacation.getEndDate());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 }
