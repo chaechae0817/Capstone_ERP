@@ -127,6 +127,9 @@ body {
         position: absolute;
         left: 50%;
     }
+    .navigate-month{
+        display: none !important;
+    }
 }
 .print-button {
     display: block; /* 버튼을 화면에 표시 */
@@ -169,6 +172,7 @@ button:hover {
         border: none;
         border-radius: 4px;
         width:40px;
+        margin-top:1px;
     }
 
     .month-display {

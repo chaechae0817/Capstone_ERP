@@ -3,7 +3,7 @@
       layout:decorate="~{layout/layout.html}">
 
 <head>
-    <title>월별 모든 직원 급여 내역</title>
+    <title>총 급여 조회</title>
     <style>
         /* 검색 폼 스타일 */
         form {
@@ -91,7 +91,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-<h1>월별 모든 직원 급여 내역</h1>
+<h1>총 급여 조회</h1>
 
     <form th:action="@{/salary/search}" method="get">
         <label for="employeeName">직원 이름:</label>

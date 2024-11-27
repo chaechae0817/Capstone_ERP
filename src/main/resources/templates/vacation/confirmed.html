@@ -81,7 +81,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>승인된 휴가 목록</h1>
+    <h1>휴가자 조회</h1>
     <form th:action="@{/vacation/confirmed/search}" method="get">
         <label for="employeeName">사원 이름:</label>
         <input type="text" id="employeeName" name="employeeName" th:value="${employeeName}">
