@@ -1,5 +1,6 @@
 package com.erp.techInovate.techInovate.controller;
 
+import com.erp.techInovate.techInovate.dto.AttendanceRecordDTO;
 import com.erp.techInovate.techInovate.entity.AttendanceEntity;
 import com.erp.techInovate.techInovate.entity.AttendanceRecordEntity;
 import com.erp.techInovate.techInovate.entity.EmployeeEntity;
@@ -88,11 +89,11 @@ public class AttendanceRecordController {
     // 특정 직원의 특정 월 근태 기록 조회
     @GetMapping("/android/list/{employeeId}/{month}")
     @ResponseBody
-    public ResponseEntity<List<AttendanceRecordEntity>> getAttendanceRecordsByEmployeeAndMonth(
+    public ResponseEntity<List<AttendanceRecordDTO>> getAttendanceRecordsByEmployeeAndMonth(
             @PathVariable Long employeeId,
             @PathVariable int month) {
 
-        List<AttendanceRecordEntity> records = attendanceRecordService.getAttendanceRecordsByEmployeeAndMonth(employeeId, month);
+        List<AttendanceRecordDTO> records = attendanceRecordService.getAttendanceRecordsByEmployeeAndMonth(employeeId, month);
         return ResponseEntity.ok(records);
     }
 
