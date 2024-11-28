@@ -9,16 +9,16 @@ body {
 }
 
 /* 헤더 스타일 */
- .header {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     padding: 10px 20px;
-     background-color: #ffffff;
-     border-bottom: 1px solid #ddd;
-     height: 60px; /* 헤더의 고정 높이 */
-     box-sizing: border-box;
- }
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    height: 60px; /* 헤더의 고정 높이 */
+    box-sizing: border-box;
+}
 
 .company-logo {
     max-height: 40px;
@@ -54,11 +54,21 @@ body {
     overflow: hidden;
 }
 
+/* 콘텐츠 영역 스타일 */
+.content {
+    margin-left: 200px; /* 사이드바 너비만큼 여백을 줌 */
+    padding: 20px;
+    background-color: #f0f2f5;
+    height: calc(100vh - 60px); /* 헤더 높이를 제외한 전체 높이 */
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
 /* 사이드바 스타일 */
 .sidebar {
     width: 200px;
     background-color: #2c3e50;
-    color:white;
+    color: white;
     padding: 20px;
     height: calc(100vh - 60px); /* 헤더 높이를 제외한 전체 높이 */
     position: fixed;
@@ -68,40 +78,20 @@ body {
     box-sizing: border-box;
 }
 
-
-.sidebar h2 {
-    font-size: 18px;
-    color: #ecf0f1;
-    margin-bottom: 20px;
-}
-
 .sidebar ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar ul li {
-    margin: 15px 0;
+    margin: 25px 0;
 }
 
 .sidebar ul li a {
+    font-size: 16px; /* 기본 글자 크기 */
     color: #ecf0f1;
     text-decoration: none;
-    font-size: 16px;
-}
-
-.sidebar ul li a:hover {
-    text-decoration: underline;
-}
-
-/* 콘텐츠 영역 스타일 */
-.content {
-    margin-left: 200px; /* 사이드바 너비만큼 여백을 줌 */
-    padding: 20px;
-    background-color: #f0f2f5;
-    height: calc(100vh - 60px); /* 헤더 높이를 제외한 전체 높이 */
-    overflow-y: auto;
-    box-sizing: border-box;
 }
 
 /* 하위 메뉴를 보이게 하는 스타일 */
@@ -113,4 +103,48 @@ body {
     display: block; /* active 클래스가 있을 때 보이도록 설정 */
 }
 
+/* 1단계 메뉴 스타일 */
+.sidebar > ul > li > a {
+    font-size: 18px; /* 1단계 메뉴: 18px */
+    font-weight: bold;
+}
 
+/* 2단계 메뉴 스타일 */
+.sidebar > ul > li > ul > li > a {
+    font-size: 16px; /* 2단계 메뉴: 16px */
+    color: #bdc3c7; /* 밝은 회색 */
+    padding-left: 10px; /* 들여쓰기 */
+}
+
+/* 3단계 메뉴 스타일 */
+.sidebar > ul > li > ul > li > ul > li > a {
+    font-size: 14px; /* 3단계 메뉴: 14px */
+    color: #95a5a6; /* 더 밝은 회색 */
+    padding-left: 20px; /* 더 깊은 들여쓰기 */
+}
+
+/* 선택된 메뉴 강조 */
+.sidebar ul li > a.active {
+    background-color: #1f2a36; /* 배경색: 어두운 색 */
+    color: #ecf0f1; /* 텍스트: 밝은 색 */
+    border-radius: 5px;
+    padding: 8px;
+    margin: 2px 0;
+}
+
+.sidebar ul ul > li > a.active,
+.sidebar ul ul ul > li > a.active {
+    background-color: #1f2a36; /* 동일 배경색 */
+    color: #ecf0f1; /* 동일 텍스트 색상 */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* 호버 효과 */
+.sidebar ul li a:hover,
+.sidebar ul ul li a:hover,
+.sidebar ul ul ul li a:hover {
+    background-color: #34495e;
+    color: #ecf0f1;
+    text-decoration: none;
+}
