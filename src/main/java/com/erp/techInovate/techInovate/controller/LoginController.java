@@ -61,7 +61,8 @@ public class LoginController {
         if (employee.isPresent()) {
             // 로그인 성공 시
             response.put("success", true);
-            response.put("employee", employee.get());
+            response.put("employeeId", employee.get().getEmployeeId().toString());
+            response.put("employee",employee.get());
         } else {
             // 로그인 실패 시
             response.put("success", false);
