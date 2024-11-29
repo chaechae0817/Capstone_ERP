@@ -12,6 +12,7 @@
 <div class="table-container">
     <form id="select" action="/transfer/apply" method="post">
         <table>
+            <input type="hidden" name="employeeId" th:value="${employeeId}">
             <tr>
                 <th>이름</th>
                 <td><input type="text" th:value="${employee.name}" readonly></td>

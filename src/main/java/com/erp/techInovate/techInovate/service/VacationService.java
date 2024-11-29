@@ -1,5 +1,6 @@
 package com.erp.techInovate.techInovate.service;
 
+import com.erp.techInovate.techInovate.dto.VacationAndroidDTO;
 import com.erp.techInovate.techInovate.dto.VacationDTO;
 import com.erp.techInovate.techInovate.entity.*;
 import com.erp.techInovate.techInovate.repository.*;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -119,10 +121,11 @@ public class VacationService {
 
 
     // 특정 직원의 모든 휴가 정보 조회
-    public List<VacationDTO> getAllVacationsByEmployeeId(Long employeeId) {
+    public List<VacationAndroidDTO> getAllVacationsByEmployeeId(Long employeeId) {
         List<VacationEntity> confirmedVacations = vacationRepository.findByEmployeeEmployeeId(employeeId);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM-dd"); // 날짜 포맷
         return confirmedVacations.stream().map(vacation -> {
-            VacationDTO dto = new VacationDTO();
+            VacationAndroidDTO dto = new VacationAndroidDTO();
             dto.setId(vacation.getId());
             dto.setEmployeeId(vacation.getEmployee().getEmployeeId());
             dto.setName(vacation.getEmployee().getName());
@@ -130,8 +133,8 @@ public class VacationService {
             dto.setDepartment(vacation.getEmployee().getDepartment().getName());
             dto.setLeaveItemName(vacation.getLeaveItem().getName());
             dto.setReason(vacation.getReason());
-            dto.setStartDate(vacation.getStartDate());
-            dto.setEndDate(vacation.getEndDate());
+            dto.setStartDate(vacation.getStartDate().format(dateFormatter));
+            dto.setEndDate(vacation.getEndDate().format(dateFormatter));
             return dto;
         }).collect(Collectors.toList());
     }

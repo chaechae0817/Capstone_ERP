@@ -9,10 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -210,17 +212,24 @@ public class AttendanceRecordService {
 
     public List<AttendanceRecordDTO> getAttendanceRecordsByEmployeeAndMonth(Long employeeId, int month) {
         List<AttendanceRecordEntity> attendanceRecordEntityList = attendanceRecordRepository.findByEmployeeIdAndMonth(employeeId,month);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM-dd"); // 날짜 포맷
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm"); // 시간 포맷
+        DecimalFormat decimalFormat = new DecimalFormat("0.#"); // 소수점 아래 0 제거 포맷
+
         return attendanceRecordEntityList.stream().map(attedance -> {
             AttendanceRecordDTO dto = new AttendanceRecordDTO();
             dto.setRecordId(attedance.getRecordId());
             dto.setEmployeeId(attedance.getEmployee().getEmployeeId());
             dto.setEmployeeName(attedance.getEmployee().getName());
-            dto.setDate(attedance.getDate());
-            dto.setCheckInTime(attedance.getCheckInTime());
-            dto.setCheckOutTime(attedance.getCheckOutTime());
+            dto.setDate(attedance.getDate().format(dateFormatter));
+            dto.setCheckInTime(attedance.getCheckInTime().format(timeFormatter));
+            dto.setCheckOutTime(attedance.getCheckOutTime().format(timeFormatter));
             dto.setAttendanceType(attedance.getAttendance().getName());
             dto.setNotes(attedance.getNotes());
-            dto.setTotalWorkHours(attedance.getTotalWorkHours());
+            // 소수점 아래가 0이면 소수점 없이 출력
+            double totalWorkHours =attedance.getTotalWorkHours();
+            dto.setTotalWorkHours(decimalFormat.format(totalWorkHours));
+
             return dto;
         }).collect(Collectors.toList());
     }
@@ -246,17 +255,20 @@ public class AttendanceRecordService {
         AttendanceRecordEntity record = attendanceRecordRepository.findByEmployeeAndDate(employee, today)
                 .stream().findFirst().orElse(null);
 
+
+        LocalTime now = LocalTime.now().withSecond(0).withNano(0);
+
         if (record == null) {
             // 출근 기록 생성
             record = new AttendanceRecordEntity();
             record.setEmployee(employee);
             record.setDate(today);
-            record.setCheckInTime(LocalTime.now());
+            record.setCheckInTime(now);
             record.setAttendance(attendance); // Attendance 설정
             attendanceRecordRepository.save(record);
         } else if (record.getCheckOutTime() == null) {
             // 퇴근 시간 기록
-            record.setCheckOutTime(LocalTime.now());
+            record.setCheckOutTime(now);
             record.setAttendance(attendance); // Attendance 설정
             record.setTotalWorkHours(calculateWorkHours(record.getCheckInTime(), record.getCheckOutTime()));
             attendanceRecordRepository.save(record);

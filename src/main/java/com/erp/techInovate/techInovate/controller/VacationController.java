@@ -1,5 +1,6 @@
 package com.erp.techInovate.techInovate.controller;
 
+import com.erp.techInovate.techInovate.dto.VacationAndroidDTO;
 import com.erp.techInovate.techInovate.dto.VacationDTO;
 import com.erp.techInovate.techInovate.entity.EmployeeEntity;
 import com.erp.techInovate.techInovate.entity.LeaveEntity;
@@ -123,8 +124,8 @@ public class VacationController {
     // 특정 직원의 모든 휴가 정보 조회
     @GetMapping("/android/{employeeId}")
     @ResponseBody
-    public ResponseEntity<List<VacationDTO>> getAllVacationsByEmployee(@PathVariable Long employeeId) {
-        List<VacationDTO> vacations = vacationService.getAllVacationsByEmployeeId(employeeId);
+    public ResponseEntity<List<VacationAndroidDTO>> getAllVacationsByEmployee(@PathVariable Long employeeId) {
+        List<VacationAndroidDTO> vacations = vacationService.getAllVacationsByEmployeeId(employeeId);
         return ResponseEntity.ok(vacations);
     }
 

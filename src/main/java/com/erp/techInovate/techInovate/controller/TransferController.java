@@ -51,6 +51,7 @@ public class TransferController {
         List<DepartmentEntity> departments = departmentService.getAllDepartments(); // 부서 목록 가져오기
 
         model.addAttribute("employee", employee); // 선택된 직원 정보 모델에 추가
+        model.addAttribute("employeeId",employeeId);
         model.addAttribute("positions", positions); // 직급 목록 모델에 추가
         model.addAttribute("departments", departments); // 부서 목록 모델에 추가
 
