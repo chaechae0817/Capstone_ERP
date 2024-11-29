@@ -11,10 +11,10 @@ public class AttendanceRecordDTO {
     private Long recordId;
     private Long employeeId;
     private String employeeName;
-    private LocalDate date;
-    private LocalTime checkInTime;
-    private LocalTime checkOutTime;
+    private String date;
+    private String checkInTime;
+    private String checkOutTime;
     private String attendanceType;
     private String notes;
-    private Double totalWorkHours;
+    private String totalWorkHours;
 }
