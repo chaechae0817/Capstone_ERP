@@ -17,4 +17,5 @@ public class VacationAndroidDTO {
     private String startDate;   // 시작일
     private String endDate;     // 종료일
     private String reason;         // 신청 사유
+    private String status;
 }
