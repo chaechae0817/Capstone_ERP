@@ -132,6 +132,7 @@ public class VacationService {
             dto.setPosition(vacation.getEmployee().getPosition().getName());
             dto.setDepartment(vacation.getEmployee().getDepartment().getName());
             dto.setLeaveItemName(vacation.getLeaveItem().getName());
+            dto.setStatus(vacation.getStatus());
             dto.setReason(vacation.getReason());
             dto.setStartDate(vacation.getStartDate().format(dateFormatter));
             dto.setEndDate(vacation.getEndDate().format(dateFormatter));
