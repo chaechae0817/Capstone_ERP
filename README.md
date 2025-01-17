@@ -26,5 +26,7 @@
 
 
 ## 서비스 UI
+<image src="images/appinfo_1.png" width="70%"/>
+<image src="images/appinfo_2.png" width="70%"/>
 
 
