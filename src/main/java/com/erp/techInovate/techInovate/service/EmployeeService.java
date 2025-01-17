@@ -9,6 +9,7 @@ import com.erp.techInovate.techInovate.repository.EmployeeRepository;
 import com.erp.techInovate.techInovate.repository.PositionRepository;
 import com.erp.techInovate.techInovate.specification.EmployeeSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +30,9 @@ public class EmployeeService {
     private final PositionRepository positionRepository;
 
     private final DepartmentRepository departmentRepository;
+
+    @Value("${image.upload.dir}")  // 설정 파일에서 경로 주입
+    private String uploadDir;
 
     public Optional<EmployeeEntity> login(String employeeNumber, String email) {
         return employeeRepository.findByEmployeeNumberAndEmail(employeeNumber, email);
@@ -71,16 +75,21 @@ public class EmployeeService {
 
     public String write(MultipartFile file) throws Exception{
 
-        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files";
+//        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files";
+//
+//        String fileName =  file.getOriginalFilename();
+//
+//        File saveFile = new File(projectPath, fileName);
+//
+//        Files.createDirectories(Paths.get(projectPath));
+//        file.transferTo(saveFile);
+//
+////        boardDTO.setFilePath(file);  // 파일 경로 설정
+        String fileName = file.getOriginalFilename();
+        File saveFile = new File(uploadDir, fileName);
 
-        String fileName =  file.getOriginalFilename();
-
-        File saveFile = new File(projectPath, fileName);
-
-        Files.createDirectories(Paths.get(projectPath));
+        Files.createDirectories(Paths.get(uploadDir)); // 경로가 없으면 디렉토리 생성
         file.transferTo(saveFile);
-
-//        boardDTO.setFilePath(file);  // 파일 경로 설정
 
         return fileName;
     }

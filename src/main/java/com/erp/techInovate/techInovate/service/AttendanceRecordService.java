@@ -27,6 +27,7 @@ public class AttendanceRecordService {
     private final SalaryCalculationService salaryCalculationService;
     private final EmployeeService employeeService;
     private final AttendanceService attendanceService;
+    private final NotificationService notificationService;
 
 
     public List<AttendanceRecordEntity> findAll() {
@@ -265,14 +266,25 @@ public class AttendanceRecordService {
             record.setDate(today);
             record.setCheckInTime(now);
             record.setAttendance(attendance); // Attendance 설정
-            attendanceRecordRepository.save(record);
+            record = attendanceRecordRepository.save(record);
+            // 출근 알림 추가
+            notificationService.addNotification(
+                    employee.getEmployeeId(),
+                    "attendance_checkIn", // 알림 유형
+                    record.getRecordId()
+            );
         } else if (record.getCheckOutTime() == null) {
             // 퇴근 시간 기록
             record.setCheckOutTime(now);
             record.setAttendance(attendance); // Attendance 설정
             record.setTotalWorkHours(calculateWorkHours(record.getCheckInTime(), record.getCheckOutTime()));
-            attendanceRecordRepository.save(record);
+            record = attendanceRecordRepository.save(record);
 
+            notificationService.addNotification(
+                    employee.getEmployeeId(),
+                    "attendance_checkout", // 알림 유형
+                    record.getRecordId()
+            );
             // 월별 근태 요약 업데이트
             boolean alreadyCounted = isAlreadyCounted(employee, today);
             updateMonthlySummary(record, alreadyCounted);

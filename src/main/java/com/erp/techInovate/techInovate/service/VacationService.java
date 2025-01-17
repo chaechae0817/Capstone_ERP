@@ -25,6 +25,9 @@ public class VacationService {
 
     @Autowired
     private VacationRepository vacationRepository;
+
+    @Autowired
+    private NotificationService notificationService;
     public void applyForVacation(VacationDTO vacationDTO) {
         System.out.println("applyForVacation called with Employee ID: " + vacationDTO.getEmployeeId());
 
@@ -49,7 +52,8 @@ public class VacationService {
         // days 필드 설정 - 예를 들어, 기본값으로 0을 설정
         vacation.setDays(0);
         vacation.setStatus("PENDING");
-        vacationRepository.save(vacation);
+        vacation = vacationRepository.save(vacation);
+        notificationService.addNotification(vacation.getEmployee().getEmployeeId(),"vacation_pending",vacation.getId());
         System.out.println("Vacation saved with ID: " + vacation.getId());
     }
 
@@ -79,11 +83,15 @@ public class VacationService {
         VacationEntity vacation = vacationRepository.findById(vacationId)
                 .orElseThrow(() -> new RuntimeException("Vacation not found"));
         vacation.setStatus("APPROVED"); // 상태를 "APPROVED"로 설정
+        notificationService.addNotification(vacation.getEmployee().getEmployeeId(),"vacation_approve",vacationId);
         vacationRepository.save(vacation); // 변경 사항 저장
     }
 
     // deleteVacation 메서드 추가
     public void deleteVacation(Long vacationId) {
+        VacationEntity vacation = vacationRepository.findById(vacationId)
+                .orElseThrow(() -> new RuntimeException("Vacation not found"));
+        notificationService.addNotification(vacation.getEmployee().getEmployeeId(),"vacation_reject",vacationId);
         vacationRepository.deleteById(vacationId); // 해당 휴가 신청 삭제
     }
 

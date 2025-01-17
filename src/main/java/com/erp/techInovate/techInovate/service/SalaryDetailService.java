@@ -259,7 +259,7 @@ public class SalaryDetailService {
         // 월 기본급 계산
         double hourlyWage = calculateHourlyWage(employee.getSalary());
         double totalPaidHours = getTotalPaidHours(employeeId, month).orElse(0.0);
-        String monthlySalary = String.format("%.2f", totalPaidHours * hourlyWage);
+        String monthlySalary = String.valueOf(Math.round((totalPaidHours * hourlyWage) / 10) * 10);
 
         // 추가 수당 정보
         AllowanceTotalEntity allowanceTotal = allowanceTotalRepository.findByEmployeeAndMonth(employee, month.atDay(1)).orElse(null);
