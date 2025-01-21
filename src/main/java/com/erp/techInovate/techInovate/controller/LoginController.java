@@ -62,6 +62,10 @@ public class LoginController {
             // 로그인 성공 시
             response.put("success", true);
             response.put("employeeId", employee.get().getEmployeeId().toString());
+            response.put("employeeName",employee.get().getName());
+            response.put("department",employee.get().getDepartment().getName());
+            response.put("position",employee.get().getPosition().getName());
+            response.put("photo",employee.get().getPhoto());
             response.put("employee",employee.get());
         } else {
             // 로그인 실패 시
